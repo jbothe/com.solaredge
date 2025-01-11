@@ -4,9 +4,34 @@
   },
   "class": "solarpanel",
   "capabilities": [
+    "measure_power",
     "meter_power",
-    "measure_power"
+    "meter_power.day",
+    "meter_power.month",
+    "meter_power.year"
   ],
+  "capabilitiesOptions": {
+    "meter_power": {
+      "title": {
+        "en": "Generated Energy (Total)"
+      }
+    },
+    "meter_power.day": {
+      "title": {
+        "en": "Generated Energy (Today)"
+      }
+    },
+    "meter_power.month": {
+      "title": {
+        "en": "Generated Energy (This Month)"
+      }
+    },
+    "meter_power.year": {
+      "title": {
+        "en": "Generated Energy (This Year)"
+      }
+    }
+  },
   "platforms": [
     "local",
     "cloud"
