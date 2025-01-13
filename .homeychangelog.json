@@ -7,5 +7,8 @@
   },
   "1.0.2": {
     "en": "Improved the reconnection algorithm."
+  },
+  "1.0.3": {
+    "en": "Fixed an issue where meter values would be 1000x too high (kWh instead of Wh)."
   }
 }
