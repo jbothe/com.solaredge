@@ -10,5 +10,8 @@
   },
   "1.0.3": {
     "en": "Fixed an issue where meter values would be 1000x too high (kWh instead of Wh)."
+  },
+  "1.0.4": {
+    "en": "Increased the polling interval from once every minute, to once every ten seconds."
   }
 }
