@@ -46,22 +46,22 @@
       "capabilitiesOptions": {
         "meter_power": {
           "title": {
-            "en": "Generated Energy (Total)"
+            "en": "Generated Total"
           }
         },
         "meter_power.day": {
           "title": {
-            "en": "Generated Energy (Today)"
+            "en": "Generated Today"
           }
         },
         "meter_power.month": {
           "title": {
-            "en": "Generated Energy (This Month)"
+            "en": "Generated This Month"
           }
         },
         "meter_power.year": {
           "title": {
-            "en": "Generated Energy (This Year)"
+            "en": "Generated This Year"
           }
         }
       },
