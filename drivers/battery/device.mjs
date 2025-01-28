@@ -10,8 +10,6 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
       siteId: this.getData().siteId,
     });
 
-    console.log('sitePowerflow', sitePowerflow)
-
     if (typeof sitePowerflow.storage?.currentPower === 'number') {
       await this.setCapabilityValue('measure_power', Math.round(sitePowerflow.storage.currentPower * 1000)).catch(this.error);
     }
