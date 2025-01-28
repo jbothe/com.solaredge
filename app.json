@@ -103,6 +103,65 @@
         "cloud"
       ],
       "images": {
+        "small": "/drivers/evcharger/assets/images/small.png",
+        "large": "/drivers/evcharger/assets/images/large.png",
+        "xlarge": "/drivers/evcharger/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "login_credentials",
+          "template": "login_credentials",
+          "options": {
+            "logo": "logo.svg"
+          }
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "id": "username",
+          "type": "text",
+          "label": {
+            "en": "Username"
+          }
+        },
+        {
+          "id": "password",
+          "type": "password",
+          "label": {
+            "en": "Password"
+          }
+        }
+      ],
+      "name": {
+        "en": "EV Charger"
+      },
+      "class": "evcharger",
+      "capabilities": [
+        "measure_battery",
+        "measure_power"
+      ],
+      "id": "evcharger"
+    },
+    {
+      "platforms": [
+        "local",
+        "cloud"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
         "small": "/drivers/inverter/assets/images/small.png",
         "large": "/drivers/inverter/assets/images/large.png",
         "xlarge": "/drivers/inverter/assets/images/xlarge.png"
@@ -177,6 +236,67 @@
         }
       },
       "id": "inverter"
+    },
+    {
+      "platforms": [
+        "local",
+        "cloud"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/meter/assets/images/small.png",
+        "large": "/drivers/meter/assets/images/large.png",
+        "xlarge": "/drivers/meter/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "login_credentials",
+          "template": "login_credentials",
+          "options": {
+            "logo": "logo.svg"
+          }
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "id": "username",
+          "type": "text",
+          "label": {
+            "en": "Username"
+          }
+        },
+        {
+          "id": "password",
+          "type": "password",
+          "label": {
+            "en": "Password"
+          }
+        }
+      ],
+      "name": {
+        "en": "Meter"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "measure_power"
+      ],
+      "energy": {
+        "cumulative": true
+      },
+      "id": "meter"
     }
   ]
 }

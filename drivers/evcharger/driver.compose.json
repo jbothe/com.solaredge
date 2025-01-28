@@ -1,0 +1,11 @@
+{
+  "$extends": "solaredge",
+  "name": {
+    "en": "EV Charger"
+  },
+  "class": "evcharger",
+  "capabilities": [
+    "measure_battery",
+    "measure_power"
+  ]
+}

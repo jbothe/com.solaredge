@@ -39,6 +39,12 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
         }
       }
     }
+
+    if (sitePowerflow.solarProduction?.isActive) {
+      await this.setAvailable();
+    } else {
+      await this.setUnavailable();
+    }
   }
 
 };

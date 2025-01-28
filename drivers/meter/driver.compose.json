@@ -1,0 +1,13 @@
+{
+  "$extends": "solaredge",
+  "name": {
+    "en": "Meter"
+  },
+  "class": "sensor",
+  "capabilities": [
+    "measure_power"
+  ],
+  "energy": {
+    "cumulative": true
+  }
+}

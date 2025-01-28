@@ -32,6 +32,12 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
         break;
       }
     }
+
+    if (sitePowerflow.storage?.isActive) {
+      await this.setAvailable();
+    } else {
+      await this.setUnavailable();
+    }
   }
 
 };
