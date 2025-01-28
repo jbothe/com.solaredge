@@ -1,0 +1,15 @@
+{
+  "$extends": "solaredge",
+  "name": {
+    "en": "Battery"
+  },
+  "class": "battery",
+  "capabilities": [
+    "measure_battery",
+    "measure_power",
+    "battery_charging_state"
+  ],
+  "energy": {
+    "homeBattery": true
+  }
+}

@@ -1,3 +1,5 @@
 import SolarEdgeDriver from '../../lib/SolarEdgeDriver.mjs';
 
-export default SolarEdgeDriver;
+export default class SolarEdgeDriverInverter extends SolarEdgeDriver {
+
+};
