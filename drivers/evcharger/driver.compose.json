@@ -5,7 +5,6 @@
   },
   "class": "evcharger",
   "capabilities": [
-    "measure_battery",
     "measure_power"
   ]
 }
