@@ -19,5 +19,8 @@
   },
   "1.1.0": {
     "en": "Added Battery, EV Charger and Meter."
+  },
+  "1.1.1": {
+    "en": "Small improvements."
   }
 }
