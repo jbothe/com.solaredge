@@ -22,6 +22,68 @@ export default class SolarEdgeDeviceMeter extends SolarEdgeDevice {
     } else {
       await this.setUnavailable();
     }
+
+    // Get measurements for each previous year
+    const measurements = {};
+    const currentYear = new Date().getFullYear();
+    let previousYear = currentYear;
+    while (true) {
+      try {
+        previousYear--;
+
+        let storedResult = await this.getStoreValue(`measurements-${previousYear}`);
+        if (storedResult === null) {
+          this.log(`Fetching measurements for ${previousYear}...`);
+          const result = await this.api.getSiteMeasurements({
+            siteId: this.getData().siteId,
+            startDate: `${previousYear}-01-01`,
+            endDate: `${previousYear}-12-31`,
+          }).then(result => ({
+            imported: result.summary.import,
+            exported: result.summary.export,
+          }));
+
+          await this.setStoreValue(`measurements-${previousYear}`, result);
+          storedResult = result;
+        }
+
+        if (storedResult.imported === null && storedResult.exported === null) break;
+
+        measurements[previousYear] = storedResult;
+
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Get live measurement for this year
+    measurements[currentYear] = await this.api.getSiteMeasurements({
+      siteId: this.getData().siteId,
+      startDate: `${currentYear}-01-01`,
+      endDate: `${currentYear}-12-31`,
+    }).then(result => ({
+      imported: result.summary.import,
+      exported: result.summary.export,
+    }));
+
+    let totalImported = 0;
+    let totalExported = 0;
+    for (const year in measurements) {
+      totalImported += measurements[year].imported;
+      totalExported += measurements[year].exported;
+    }
+
+    if (!this.hasCapability('meter_power.imported')) {
+      await this.addCapability('meter_power.imported');
+    }
+
+    await this.setCapabilityValue('meter_power.imported', Math.round(totalImported / 1000));
+
+    if (!this.hasCapability('meter_power.exported')) {
+      await this.addCapability('meter_power.exported');
+    }
+
+    await this.setCapabilityValue('meter_power.exported', Math.round(totalExported / 1000));
   }
 
 };
