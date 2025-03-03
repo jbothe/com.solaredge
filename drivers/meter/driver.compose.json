@@ -12,12 +12,12 @@
   "capabilitiesOptions": {
     "meter_power.imported": {
       "title": {
-        "en": "Imported Power"
+        "en": "Imported Energy"
       }
     },
     "meter_power.exported": {
       "title": {
-        "en": "Exported Power"
+        "en": "Exported Energy"
       }
     }
   },
