@@ -12,6 +12,11 @@
     "meter_power.year"
   ],
   "capabilitiesOptions": {
+    "measure_power": {
+      "en": "Generated Power",
+      "nl": "Opgewekte energie",
+      "de": "Energieproduktion"
+    },
     "meter_power": {
       "title": {
         "en": "Generated Total"

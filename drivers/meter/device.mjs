@@ -10,11 +10,10 @@ export default class SolarEdgeDeviceMeter extends SolarEdgeDevice {
       siteId: this.getData().siteId,
     });
 
-    this.log('sitePowerflow.consumption', sitePowerflow.consumption);
-
     if (sitePowerflow.consumption?.currentPower === null) {
       await this.setCapabilityValue('measure_power', 0).catch(this.error);
     } else if (typeof sitePowerflow.consumption?.currentPower === 'number') {
+      // TODO: Maybe use sitePowerflow.consumption.isConsuming to flip the sign?
       await this.setCapabilityValue('measure_power', Math.round(sitePowerflow.consumption.currentPower * 1000)).catch(this.error);
     }
 

@@ -11,7 +11,14 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
     });
 
     if (typeof sitePowerflow.storage?.currentPower === 'number') {
-      await this.setCapabilityValue('measure_power', Math.round(sitePowerflow.storage.currentPower * 1000)).catch(this.error);
+      let power = Math.round(sitePowerflow.storage.currentPower * 1000);
+
+      // Invert the value when discharging
+      if (sitePowerflow.storage?.status === 'discharging') {
+        power = power * -1;
+      }
+
+      await this.setCapabilityValue('measure_power', power).catch(this.error);
     }
 
     if (typeof sitePowerflow.storage?.chargeLevel === 'number') {
@@ -23,11 +30,11 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
         await this.setCapabilityValue('battery_charging_state', 'charging').catch(this.error);
         break;
       }
-      case 'discharging': { // TODO: Verify
+      case 'discharging': {
         await this.setCapabilityValue('battery_charging_state', 'discharging').catch(this.error);
         break;
       }
-      case 'idle': { // TODO: Verify
+      case 'idle': {
         await this.setCapabilityValue('battery_charging_state', 'idle').catch(this.error);
         break;
       }
