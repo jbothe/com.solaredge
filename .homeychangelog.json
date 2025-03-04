@@ -22,5 +22,8 @@
   },
   "1.1.1": {
     "en": "Small improvements."
+  },
+  "1.2.0": {
+    "en": "Added kWh values to the Meter."
   }
 }
