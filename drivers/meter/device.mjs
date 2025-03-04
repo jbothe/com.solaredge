@@ -73,17 +73,37 @@ export default class SolarEdgeDeviceMeter extends SolarEdgeDevice {
       totalExported += measurements[year].exported;
     }
 
+    const energyObject = await this.getEnergy();
+
+    // TODO: Remove this in April
     if (!this.hasCapability('meter_power.imported')) {
       await this.addCapability('meter_power.imported');
     }
 
-    await this.setCapabilityValue('meter_power.imported', Math.round(totalImported / 1000));
+    // TODO: Remove this in April
+    if (!energyObject.cumulativeImportedCapability) {
+      await this.setEnergy({
+        ...energyObject,
+        cumulativeImportedCapability: 'meter_power.imported',
+      });
+    }
 
+    await this.setCapabilityValue('meter_power.imported', Math.round(totalImported / 1000)).catch(this.error);
+
+    // TODO: Remove this in April
     if (!this.hasCapability('meter_power.exported')) {
       await this.addCapability('meter_power.exported');
     }
 
-    await this.setCapabilityValue('meter_power.exported', Math.round(totalExported / 1000));
+    // TODO: Remove this in April
+    if (!energyObject.cumulativeExportedCapability) {
+      await this.setEnergy({
+        ...energyObject,
+        cumulativeExportedCapability: 'meter_power.exported',
+      });
+    }
+
+    await this.setCapabilityValue('meter_power.exported', Math.round(totalExported / 1000)).catch(this.error);
   }
 
 };
