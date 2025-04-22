@@ -25,5 +25,8 @@
   },
   "1.2.0": {
     "en": "Added kWh values to the Meter."
+  },
+  "1.2.1": {
+    "en": "Improved reliability."
   }
 }
