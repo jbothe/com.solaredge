@@ -5,6 +5,25 @@
   },
   "class": "evcharger",
   "capabilities": [
-    "measure_power"
-  ]
+    "measure_power",
+    "meter_power.charged",
+    "meter_power.discharged"
+  ],
+  "capabilitiesOptions": {
+    "meter_power.charged": {
+      "title": {
+        "en": "Total Charged Energy"
+      }
+    },
+    "meter_power.discharged": {
+      "title": {
+        "en": "Total Discharged Energy"
+      }
+    }
+  },
+  "energy": {
+    "evCharger": true,
+    "meterPowerImportedCapability": "meter_power.charged",
+    "meterPowerExportedCapability": "meter_power.discharged"
+  }
 }

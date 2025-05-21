@@ -5,11 +5,13 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
   async onPoll() {
     await super.onPoll();
 
-    // Get Powerflow
-    const sitePowerflow = await this.api.getSitePowerflow({
-      siteId: this.getData().siteId,
-    });
+    const {
+      siteId,
+      reporterId,
+    } = this.getData();
 
+    // Get Powerflow
+    const sitePowerflow = await this.api.getSitePowerflow({ siteId });
     this.log('sitePowerflow.evCharger', sitePowerflow.evCharger);
 
     if (sitePowerflow.evCharger?.currentPower === null) {
@@ -35,6 +37,38 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
     } else {
       await this.setUnavailable();
     }
+
+    // Get Appliance Sessions History
+    if (reporterId) {
+      const applianceSessionsHistory = await this.api.getSiteDeviceApplianceSessionsHistory({
+        siteId: this.getData().siteId,
+        reporterId: this.getData().reporterId,
+      });
+
+      let totalCharged = 0;
+      let totalDischarged = 0;
+      applianceSessionsHistory.applianceDetails.forEach(applianceDetails => {
+        const statisticsConsumedEnergy = applianceDetails.statistics.find(statistic => statistic.subjectEnum === 'CONSUMED_ENERGY');
+        if (typeof statisticsConsumedEnergy?.totalValue === 'number') {
+          totalCharged += statisticsConsumedEnergy.totalValue;
+        }
+      });
+
+      // Set Total Charged
+      if (!this.hasCapability('meter_power.charged')) {
+        await this.addCapability('meter_power.charged');
+      }
+      await this.setCapabilityValue('meter_power.charged', totalCharged / 1000).catch(this.error);
+
+      // Set Total Discharged
+      if (!this.hasCapability('meter_power.discharged')) {
+        await this.addCapability('meter_power.discharged');
+      }
+      await this.setCapabilityValue('meter_power.discharged', totalDischarged / 1000).catch(this.error);
+    } else {
+      await this.setWarning('Please remove & re-add this device to get kWh values.');
+    }
+
   }
 
 };

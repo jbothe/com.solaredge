@@ -2,9 +2,21 @@ import SolarEdgeDriver from '../../lib/SolarEdgeDriver.mjs';
 
 export default class SolarEdgeDriverEVCharger extends SolarEdgeDriver {
 
-  async onPairFilterSite({ api, site }) {
-    const sitePowerflow = await api.getSitePowerflow({ siteId: site.id });
-    return sitePowerflow?.evCharger?.isActive === true;
+  async onPairListDevices({ api, site }) {
+    const siteDevices = await api.getSiteDevices({
+      siteId: site.id,
+    });
+
+    console.log('siteDevices', siteDevices);
+
+    const evChargers = siteDevices.devicesByType.EV_CHARGER ?? [];
+    return evChargers.map(device => ({
+      name: device.name,
+      data: {
+        reporterId: device.reporterId,
+        serialNumber: device.serialNumber,
+      },
+    }));
   }
 
 };
