@@ -31,5 +31,8 @@
   },
   "1.3.0": {
     "en": "Fixed an issue where all devices would become unavailable, if the Meter was paired."
+  },
+  "1.4.0": {
+    "en": "Added kWh measurements for EV Chargers."
   }
 }
