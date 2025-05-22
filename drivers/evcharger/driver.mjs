@@ -7,8 +7,6 @@ export default class SolarEdgeDriverEVCharger extends SolarEdgeDriver {
       siteId: site.id,
     });
 
-    console.log('siteDevices', siteDevices);
-
     const evChargers = siteDevices.devicesByType.EV_CHARGER ?? [];
     return evChargers.map(device => ({
       name: device.name,
