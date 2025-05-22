@@ -12,26 +12,43 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
 
     // Get Powerflow
     const sitePowerflow = await this.api.getSitePowerflow({ siteId });
-    this.log('sitePowerflow.evCharger', sitePowerflow.evCharger);
 
+    // Set measure_power
     if (sitePowerflow.evCharger?.currentPower === null) {
       await this.setCapabilityValue('measure_power', 0).catch(this.error);
     } else if (typeof sitePowerflow.evCharger?.currentPower === 'number') {
       await this.setCapabilityValue('measure_power', Math.round(sitePowerflow.evCharger.currentPower * 1000)).catch(this.error);
     }
 
-    switch (sitePowerflow.evCharger?.connectionStatus) {
-      case 'disconnected': {
-        // TODO
-        break;
+
+    // Set evcharger_charging_state
+    if (sitePowerflow.evCharger?.connectionStatus) {
+      if (!this.hasCapability('evcharger_charging_state')) {
+        await this.addCapability('evcharger_charging_state');
       }
-      case 'connected': {
-        // TODO
-        break;
+
+      switch (sitePowerflow.evCharger?.connectionStatus) {
+        case 'connected': {
+          await this.setCapabilityValue('evcharger_charging_state', 'plugged_in').catch(this.error);
+          break;
+        }
+        case 'charging': {
+          await this.setCapabilityValue('evcharger_charging_state', 'plugged_in_charging').catch(this.error);
+          break;
+        }
+        case 'disconnected': {
+          await this.setCapabilityValue('evcharger_charging_state', 'plugged_out').catch(this.error);
+          break;
+        }
+        default: {
+          this.log('Unknown EV Charger connection status', sitePowerflow.evCharger?.connectionStatus);
+          await this.setCapabilityValue('evcharger_charging_state', null).catch(this.error);
+          break;
+        }
       }
-      // TODO
     }
 
+    // Availability
     if (sitePowerflow.evCharger?.isActive) {
       await this.setAvailable();
     } else {

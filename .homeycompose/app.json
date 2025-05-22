@@ -1,7 +1,7 @@
 {
   "id": "com.solaredge",
   "version": "1.4.0",
-  "compatibility": ">=12.2.0",
+  "compatibility": ">=12.4.5",
   "brandColor": "#D82F37",
   "sdk": 3,
   "platforms": [

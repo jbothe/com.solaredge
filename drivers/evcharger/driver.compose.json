@@ -7,7 +7,8 @@
   "capabilities": [
     "measure_power",
     "meter_power.charged",
-    "meter_power.discharged"
+    "meter_power.discharged",
+    "evcharger_charging_state"
   ],
   "capabilitiesOptions": {
     "meter_power.charged": {
