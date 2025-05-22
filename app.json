@@ -154,6 +154,7 @@
         "measure_power",
         "meter_power.charged",
         "meter_power.discharged",
+        "evcharger_charging",
         "evcharger_charging_state"
       ],
       "capabilitiesOptions": {

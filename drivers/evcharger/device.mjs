@@ -2,6 +2,31 @@ import SolarEdgeDevice from '../../lib/SolarEdgeDevice.mjs';
 
 export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
 
+  async onInit() {
+    await super.onInit();
+
+    this.registerCapabilityListener('evcharger_charging', async (value) => {
+      await this.onCapabilityEVChargerState(value);
+    });
+  }
+
+  async onCapabilityEVChargerState(value) {
+    const {
+      siteId,
+      reporterId,
+    } = this.getData();
+
+    await this.api.setSiteDeviceApplianceActivationState({
+      siteId,
+      reporterId,
+      state: {
+        mode: 'MANUAL',
+        level: value ? 100 : 0,
+        duration: null
+      },
+    });
+  }
+
   async onPoll() {
     await super.onPoll();
 
@@ -20,29 +45,36 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
       await this.setCapabilityValue('measure_power', Math.round(sitePowerflow.evCharger.currentPower * 1000)).catch(this.error);
     }
 
-
-    // Set evcharger_charging_state
+    // Set evcharger_charging & evcharger_charging_state
     if (sitePowerflow.evCharger?.connectionStatus) {
       if (!this.hasCapability('evcharger_charging_state')) {
         await this.addCapability('evcharger_charging_state');
       }
 
+      if (!this.hasCapability('evcharger_charging')) {
+        await this.addCapability('evcharger_charging');
+      }
+
       switch (sitePowerflow.evCharger?.connectionStatus) {
         case 'connected': {
           await this.setCapabilityValue('evcharger_charging_state', 'plugged_in').catch(this.error);
+          await this.setCapabilityValue('evcharger_charging', false).catch(this.error);
           break;
         }
         case 'charging': {
           await this.setCapabilityValue('evcharger_charging_state', 'plugged_in_charging').catch(this.error);
+          await this.setCapabilityValue('evcharger_charging', true).catch(this.error);
           break;
         }
         case 'disconnected': {
           await this.setCapabilityValue('evcharger_charging_state', 'plugged_out').catch(this.error);
+          await this.setCapabilityValue('evcharger_charging', false).catch(this.error);
           break;
         }
         default: {
           this.log('Unknown EV Charger connection status', sitePowerflow.evCharger?.connectionStatus);
           await this.setCapabilityValue('evcharger_charging_state', null).catch(this.error);
+          await this.setCapabilityValue('evcharger_charging', null).catch(this.error);
           break;
         }
       }
