@@ -34,5 +34,8 @@
   },
   "1.4.0": {
     "en": "Added kWh measurements for EV Chargers."
+  },
+  "1.5.0": {
+    "en": "The EV Charger now shows the plugged in state."
   }
 }
