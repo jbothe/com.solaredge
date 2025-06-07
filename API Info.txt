@@ -1,0 +1,803 @@
+/*
+API data
+
+Inverter:
+
+Meter:
+Import/Export
+
+Battery:
+Power
+SOC
+
+
+
+Old API:
+https://knowledge-center.solaredge.com/sites/kc/files/se_monitoring_api.pdf
+
+
+  getSites = async (): Promise<SitesResponse> => {
+    const sitesUrl = `${this.baseUrl}/sites/list?api_key=${this.apiKey}&format=json`;
+
+    return this.fetchApiEndpoint(sitesUrl);
+  };
+
+  getPowerData = async (): Promise<PowerResponse> => {
+    const currentIsoString = this.getCurrentIsoString();
+
+    // Power values
+    const startTime = this.getIsoStringFromPast(15);
+    const powerDataUrl = `${this.baseUrl}/site/${this.siteId}/powerDetails?api_key=${this.apiKey}&format=json&meters=Production,Consumption&startTime=${startTime}&endTime=${currentIsoString}`;
+
+    return this.fetchApiEndpoint<PowerResponse>(powerDataUrl);
+  };
+
+  getEnergyData = async (): Promise<EnergyResponse> => {
+    const currentDateString = this.getCurrentDateString();
+
+    const energyDataUrl = `${this.baseUrl}/site/${this.siteId}/energyDetails?api_key=${this.apiKey}&format=json&meters=Production,Consumption&startTime=${currentDateString} 00:00:00&endTime=${currentDateString} 23:59:59`;
+
+    return this.fetchApiEndpoint<EnergyResponse>(energyDataUrl);
+  };
+
+  getEquipmentList = async (): Promise<EquipmentListResponse> => {
+    const equipmentUrl = `${this.baseUrl}/equipment/${this.siteId}/list?api_key=${this.apiKey}&format=json`;
+
+    return this.fetchApiEndpoint<EquipmentListResponse>(equipmentUrl);
+  };
+
+https://monitoringapi.solaredge.com/equipment/320341/list?&format=json&api_key=C06IHWZG9L36SFJ1FIW9K7G6D6I7TOTC
+{
+   "reporters" : {
+      "count" : 1,
+      "list" : [
+         {
+            "kWpDC" : null,
+            "manufacturer" : "SolarEdge",
+            "model" : "SE5000-RWS00NNB2",
+            "name" : "Inverter 1",
+            "serialNumber" : "7F150323-BA"
+         }
+      ]
+   }
+}
+
+  // temp, voltage, etc
+  getEquipmentData = async (): Promise<EquipmentDataResponse> => {
+    const currentIsoString = this.getCurrentIsoString();
+    const startTime = this.getIsoStringFromPast(15);
+
+    const equipmentDataUrl = `${this.baseUrl}/equipment/${this.siteId}/${this.serialNumber}/data?api_key=${this.apiKey}&format=json&startTime=${startTime}&endTime=${currentIsoString}`;
+
+    return this.fetchApiEndpoint<EquipmentDataResponse>(equipmentDataUrl);
+  };
+
+  https://monitoringapi.solaredge.com/equipment/320341/7F150323-BA/data?format=json&api_key=C06IHWZG9L36SFJ1FIW9K7G6D6I7TOTC&startTime=2025-05-31%2014%3A45%3A09&endTime=2025-05-31%2014%3A55%3A09
+  {
+   "data" : {
+      "count" : 2,
+      "telemetries" : [
+         {
+            "L1Data" : {
+               "acCurrent" : 16.125,
+               "acFrequency" : 50.0128,
+               "acVoltage" : 240.297,
+               "activePower" : 3871,
+               "apparentPower" : 3875,
+               "cosPhi" : 1,
+               "reactivePower" : -165.5
+            },
+            "date" : "2025-05-31 14:49:43",
+            "dcVoltage" : 408.688,
+            "groundFaultResistance" : 5570.87,
+            "inverterMode" : "MPPT",
+            "operationMode" : 0,
+            "powerLimit" : 100,
+            "temperature" : 30.8778,
+            "totalActivePower" : 3871,
+            "totalEnergy" : 62075500
+         },
+         {
+            "L1Data" : {
+               "acCurrent" : 13.2969,
+               "acFrequency" : 50.0146,
+               "acVoltage" : 240.094,
+               "activePower" : 3178,
+               "apparentPower" : 3183,
+               "cosPhi" : 1,
+               "reactivePower" : 172
+            },
+            "date" : "2025-05-31 14:54:43",
+            "dcVoltage" : 411.562,
+            "groundFaultResistance" : 5570.87,
+            "inverterMode" : "MPPT",
+            "operationMode" : 0,
+            "powerLimit" : 100,
+            "temperature" : 31.3443,
+            "totalActivePower" : 3178,
+            "totalEnergy" : 62075800
+         }
+      ]
+   }
+}
+
+// Storage data (5 min samples)
+https://monitoringapi.solaredge.com/site/320341/storageData?format=json&api_key=C06IHWZG9L36SFJ1FIW9K7G6D6I7TOTC&startTime=2025-05-31%2014%3A55%3A00&endTime=2025-05-31%2015%3A00%3A00
+{
+   "storageData" : {
+      "batteries" : [
+         {
+            "modelNumber" : "1067000-00-B",
+            "nameplate" : 6400,
+            "serialNumber" : "T16C0005575",
+            "telemetries" : [
+               {
+                  "ACGridCharging" : 0,
+                  "batteryPercentageState" : 60.176105,
+                  "batteryState" : 4,
+                  "fullPackEnergyAvailable" : 4997,
+                  "internalTemp" : 33,
+                  "lifeTimeEnergyCharged" : 13953284,
+                  "lifeTimeEnergyDischarged" : 13326510,
+                  "power" : -3230,
+                  "timeStamp" : "2025-05-31 14:59:43"
+               }
+            ],
+            "telemetryCount" : 1
+         }
+      ],
+      "batteryCount" : 1
+   }
+}
+
+  New API:
+
+  https://monitoring.solaredge.com/services/m/so/sites/
+  {
+  "count": 1,
+  "sites": [
+    {
+      "id": 320341,
+      "status": "ACTIVE",
+      "name": "133660 16 MADDISON AVENUE MOUNT ELIZA",
+      "peakPower": 5.72,
+      "address": "Maddison Avenue 16",
+      "address2": null,
+      "fieldCity": null,
+      "zip": null,
+      "country": "Australia",
+      "state": "Victoria",
+      "city": "Mount Eliza",
+      "installationDate": "2016-10-26T00:00:00Z",
+      "image": null
+    }
+  ]
+}
+
+https://monitoring.solaredge.com/services/m/so/sites/320341/
+{
+  "id": 320341,
+  "status": "ACTIVE",
+  "name": "133660 16 MADDISON AVENUE MOUNT ELIZA",
+  "peakPower": 5.72,
+  "address": "Maddison Avenue 16",
+  "address2": null,
+  "fieldCity": null,
+  "zip": null,
+  "country": "Australia",
+  "state": "Victoria",
+  "city": "Mount Eliza",
+  "installationDate": "2016-10-26T00:00:00Z",
+  "image": null
+}
+
+
+https://monitoring.solaredge.com/services/m/so/dashboard/site/320341/details
+{
+  "hasStorage": true,
+  "hasConsumptionAndGrid": true,
+  "hasSmartDevices": false,
+  "hasEVChargers": false,
+  "connectivity": "ETHERNET",
+  "minBlockingVersion": "2.3",
+  "minRecommendedVersion": "2.35"
+}
+
+https://monitoring.solaredge.com/services/dashboard/site-details/320341/details
+ {
+  "siteId": 320341,
+  "siteName": "133660 16 MADDISON AVENUE MOUNT ELIZA",
+  "accountName": "CSR Bradford - VIC",
+  "accountGuid": "69b5ab82-0cbb-4178-8d7c-eaa3c7e8fce8",
+  "address": "Maddison Avenue 16",
+  "city": "Mount Eliza",
+  "state": "VIC",
+  "country": "AU",
+  "isAdvantedgeActive": false,
+  "installationDate": "2016-10-26T00:00:00+10:00",
+  "peakPower": 5.72,
+  "longitude": 145.0906436,
+  "latitude": -38.2101208,
+  "isFavorite": false,
+  "status": "active"
+}
+
+https://monitoring.solaredge.com/services/dashboard/v2/site-details/320341/equipment
+  {
+    "inverters": {
+        "totalCount": 1,
+        "details": [
+            {
+                "modelName": "SE5000",
+                "serialNumbers": [
+                    "7F150323-BA"
+                ]
+            }
+        ]
+    },
+    "optimizers": {
+        "totalCount": 22,
+        "details": [
+            {
+                "modelName": "P300",
+                "totalCount": 22
+            }
+        ]
+    },
+    "storage": {
+        "totalCount": 1,
+        "details": [
+            {
+                "manufacturer": "TESLA",
+                "capacity": 6.4,
+                "serialNumber": null
+            }
+        ]
+    },
+    "smartHome": null,
+    "meters": {
+        "totalCount": 1,
+        "details": [
+            {
+                "serialNumber": "4013603",
+                "meterTypes": [
+                    "import",
+                    "export"
+                ]
+            }
+        ]
+    },
+    "gateways": null,
+    "buis": null,
+    "evChargers": null,
+    "localControllers": null,
+    "cssOd": null
+}
+
+https://monitoring.solaredge.com/services/dashboard/site-details/320341/equipment-inverter/7F150323-BA
+{
+  "serialNumber": "7F150323-BA",
+  "status": null,
+  "communication": "ETHERNET",
+  "dsp1": "1.210.1068",
+  "dsp2": "2.52.410",
+  "dsp3": "NA",
+  "commBord": "3.2016.0",
+  "pidData": null,
+  "houseBackup": "ready",
+  "isEvChargerActive": null,
+  "partNumber": "SE5000"
+}
+
+https://monitoring.solaredge.com/services/m/so/dashboard/v2/site/320341/powerflow/latest?components=consumption,grid,storage
+{
+  "updateRefreshRate": 3,
+  "isRealTime": true,
+  "isCommunicating": true,
+  "lastUpdateTime": "2025-05-03T12:03:39+10:00",
+  "unit": "kW",
+  "grid": {
+    "isActive": true,
+    "currentPower": 3.61,
+    "status": "import",
+    "hasPowerOutage": false
+  },
+  "consumption": {
+    "isActive": true,
+    "currentPower": 7.01,
+    "isConsuming": true
+  },
+  "solarProduction": {
+    "isActive": true,
+    "currentPower": 3.4,
+    "isProducing": true
+  },
+  "storage": {
+    "isActive": true,
+    "currentPower": 0,
+    "chargeLevel": 100,
+    "status": "idle",
+    "storagePlan": "by-storage-policy"
+  },
+  "energyConsumers": [
+    "solar",
+    "grid"
+  ],
+  "batteryConsumers": []
+}
+
+https://monitoring.solaredge.com/services/dashboard/site-details/320341/component
+{
+  "viewerType": "installer",
+  "siteType": "residential",
+  "hasStorage": true,
+  "hasConsumptionAndGrid": true,
+  "hasPerformanceRatio": false,
+  "hasSmartDevices": false,
+  "hasEVChargers": false,
+  "hasBillingCycleProgram": false,
+  "canNormalizeInvertersData": false,
+  "canEditBillingPeriod": true,
+  "hasCommercialPerformanceRatio": false,
+  "internationalSystemUnits": "METRIC",
+  "inverterCount": 1
+}
+
+https://monitoring.solaredge.com/services/dashboard/energy/sites/320341?start-date=2016-10-27&end-date=2025-05-03&chart-time-unit=none&measurement-types=production,consumption,import,export,yield
+{
+  "summary": {
+    "production": 59471456,
+    "productionDistribution": null,
+    "consumption": 113085580,
+    "consumptionDistribution": null,
+    "performanceRatio": null,
+    "averagePowerFactor": null,
+    "siteAvailability": null,
+    "export": 5811900,
+    "lateProductionStartDate": null,
+    "lateProductionDistributionStartDate": null,
+    "lateConsumptionStartDate": null,
+    "lateConsumptionDistributionStartDate": null,
+    "latePerformanceRatioStartDate": null,
+    "lateYieldStartDate": null,
+    "yield": 10397.107,
+    "import": 59426028
+  },
+  "chart": {
+    "measurements": null
+  }
+}
+
+https://monitoring.solaredge.com/services/dashboard/data-availability/sites/320341
+{
+  "productionDataAvailableFrom": "2016-10-27",
+  "consumptionDataAvailableFrom": "2016-10-27",
+  "lastUpdateTime": "2025-05-03T10:38:51+10:00",
+  "productionDataAvailableUntil": "2025-05-03T10:38:51+10:00"
+}
+
+https://monitoring.solaredge.com/services/m/so/dashboard/site/320341/measurements?period=YEAR&measurement-unit=WATT_HOUR&end-date=2025-05-03&start-date=2025-01-01
+{
+  "summary": {
+    "measurementUnit": "WATT_HOUR",
+    "production": 6404196,
+    "productionSummary": {
+      "productionToHome": 4903799,
+      "productionToHomePercentage": 77,
+      "productionUnknown": 0.5,
+      "productionUnknownPercentage": 0,
+      "productionToBattery": 723299.25,
+      "productionToBatteryPercentage": 11,
+      "productionToGrid": 777097.44,
+      "productionToGridPercentage": 12
+    },
+    "consumption": 19164832,
+    "consumptionSummary": {
+      "consumptionFromBattery": 2317293,
+      "consumptionFromBatteryPercentage": 12,
+      "consumptionFromSolar": 4903799,
+      "consumptionFromSolarPercentage": 26,
+      "selfConsumption": null,
+      "selfConsumptionPercentage": null,
+      "consumptionUnknown": 0,
+      "consumptionUnknownPercentage": 0,
+      "consumptionFromGrid": 11943740,
+      "consumptionFromGridPercentage": 62
+    },
+    "import": 13583157,
+    "export": 822520
+  },
+  "measurements": {
+    "measurementUnit": "WATT_HOUR",
+    "measurementsList": [
+      {
+        "measurementTime": "2024-06-01T00:00:00",
+        "production": 220325,
+        "productionSummary": {
+          "productionToHome": 189328.58,
+          "productionToHomePercentage": 86,
+          "productionUnknown": 0,
+          "productionUnknownPercentage": 0,
+          "productionToBattery": 29103.635,
+          "productionToBatteryPercentage": 13,
+          "productionToGrid": 1892.7749,
+          "productionToGridPercentage": 1
+        },
+        "consumption": 1466397,
+        "consumptionSummary": {
+          "consumptionFromBattery": 30808.633,
+          "consumptionFromBatteryPercentage": 2,
+          "consumptionFromSolar": 189328.58,
+          "consumptionFromSolarPercentage": 13,
+          "selfConsumption": null,
+          "selfConsumptionPercentage": null,
+          "consumptionUnknown": 0,
+          "consumptionUnknownPercentage": 0,
+          "consumptionFromGrid": 1246259.6,
+          "consumptionFromGridPercentage": 85
+        },
+        "batteryLevel": null,
+        "chargingPower": null,
+        "hasNegativeRate": null,
+        "import": 1248280,
+        "export": 2208
+      },
+      {
+        "measurementTime": "2024-07-01T00:00:00",
+        "production": 240575,
+        "productionSummary": {
+          "productionToHome": 199642.5,
+          "productionToHomePercentage": 83,
+          "productionUnknown": 0,
+          "productionUnknownPercentage": 0,
+          "productionToBattery": 31102.268,
+          "productionToBatteryPercentage": 13,
+          "productionToGrid": 9830.23,
+          "productionToGridPercentage": 4
+        },
+        "consumption": 1490371,
+        "consumptionSummary": {
+          "consumptionFromBattery": 103663.08,
+          "consumptionFromBatteryPercentage": 7,
+          "consumptionFromSolar": 199642.5,
+          "consumptionFromSolarPercentage": 13,
+          "selfConsumption": null,
+          "selfConsumptionPercentage": null,
+          "consumptionUnknown": 0,
+          "consumptionUnknownPercentage": 0,
+          "consumptionFromGrid": 1187065.5,
+          "consumptionFromGridPercentage": 80
+        },
+        "batteryLevel": null,
+        "chargingPower": null,
+        "hasNegativeRate": null,
+        "import": 1261060,
+        "export": 11264
+      },
+      {
+        "measurementTime": "2024-08-01T00:00:00",
+        "production": 416085,
+        "productionSummary": {
+          "productionToHome": 295089.38,
+          "productionToHomePercentage": 71,
+          "productionUnknown": 0,
+          "productionUnknownPercentage": 0,
+          "productionToBattery": 78607.445,
+          "productionToBatteryPercentage": 19,
+          "productionToGrid": 42388.19,
+          "productionToGridPercentage": 10
+        },
+        "consumption": 1498131,
+        "consumptionSummary": {
+          "consumptionFromBattery": 261395.23,
+          "consumptionFromBatteryPercentage": 17,
+          "consumptionFromSolar": 295089.38,
+          "consumptionFromSolarPercentage": 20,
+          "selfConsumption": null,
+          "selfConsumptionPercentage": null,
+          "consumptionUnknown": 0,
+          "consumptionUnknownPercentage": 0,
+          "consumptionFromGrid": 941646.44,
+          "consumptionFromGridPercentage": 63
+        },
+        "batteryLevel": null,
+        "chargingPower": null,
+        "hasNegativeRate": null,
+        "import": 1129000,
+        "export": 46954
+      },
+      {
+        "measurementTime": "2024-09-01T00:00:00",
+        "production": 473278,
+        "productionSummary": {
+          "productionToHome": 334309.75,
+          "productionToHomePercentage": 71,
+          "productionUnknown": 0,
+          "productionUnknownPercentage": 0,
+          "productionToBattery": 43141.434,
+          "productionToBatteryPercentage": 9,
+          "productionToGrid": 95826.8,
+          "productionToGridPercentage": 20
+        },
+        "consumption": 1248156,
+        "consumptionSummary": {
+          "consumptionFromBattery": 212586.56,
+          "consumptionFromBatteryPercentage": 17,
+          "consumptionFromSolar": 334309.75,
+          "consumptionFromSolarPercentage": 27,
+          "selfConsumption": null,
+          "selfConsumptionPercentage": null,
+          "consumptionUnknown": 0,
+          "consumptionUnknownPercentage": 0,
+          "consumptionFromGrid": 701259.7,
+          "consumptionFromGridPercentage": 56
+        },
+        "batteryLevel": null,
+        "chargingPower": null,
+        "hasNegativeRate": null,
+        "import": 875787,
+        "export": 100909
+      },
+      {
+        "measurementTime": "2024-10-01T00:00:00",
+        "production": 743188,
+        "productionSummary": {
+          "productionToHome": 545713.75,
+          "productionToHomePercentage": 74,
+          "productionUnknown": -0.0625,
+          "productionUnknownPercentage": 0,
+          "productionToBattery": 60587.473,
+          "productionToBatteryPercentage": 8,
+          "productionToGrid": 136886.8,
+          "productionToGridPercentage": 18
+        },
+        "consumption": 1650626,
+        "consumptionSummary": {
+          "consumptionFromBattery": 221777.92,
+          "consumptionFromBatteryPercentage": 13,
+          "consumptionFromSolar": 545713.75,
+          "consumptionFromSolarPercentage": 33,
+          "selfConsumption": null,
+          "selfConsumptionPercentage": null,
+          "consumptionUnknown": 0,
+          "consumptionUnknownPercentage": 0,
+          "consumptionFromGrid": 883134.25,
+          "consumptionFromGridPercentage": 54
+        },
+        "batteryLevel": null,
+        "chargingPower": null,
+        "hasNegativeRate": null,
+        "import": 1050020,
+        "export": 142582
+      },
+      {
+        "measurementTime": "2024-11-01T00:00:00",
+        "production": 731482,
+        "productionSummary": {
+          "productionToHome": 553881.4,
+          "productionToHomePercentage": 76,
+          "productionUnknown": 0.0625,
+          "productionUnknownPercentage": 0,
+          "productionToBattery": 56466.383,
+          "productionToBatteryPercentage": 8,
+          "productionToGrid": 121134.18,
+          "productionToGridPercentage": 16
+        },
+        "consumption": 1854228,
+        "consumptionSummary": {
+          "consumptionFromBattery": 219926.52,
+          "consumptionFromBatteryPercentage": 12,
+          "consumptionFromSolar": 553881.4,
+          "consumptionFromSolarPercentage": 30,
+          "selfConsumption": null,
+          "selfConsumptionPercentage": null,
+          "consumptionUnknown": 0,
+          "consumptionUnknownPercentage": 0,
+          "consumptionFromGrid": 1080420.1,
+          "consumptionFromGridPercentage": 58
+        },
+        "batteryLevel": null,
+        "chargingPower": null,
+        "hasNegativeRate": null,
+        "import": 1248560,
+        "export": 125814
+      },
+      {
+        "measurementTime": "2024-12-01T00:00:00",
+        "production": 884475,
+        "productionSummary": {
+          "productionToHome": 683167.56,
+          "productionToHomePercentage": 77,
+          "productionUnknown": 0.0625,
+          "productionUnknownPercentage": 0,
+          "productionToBattery": 74447.086,
+          "productionToBatteryPercentage": 9,
+          "productionToGrid": 126860.29,
+          "productionToGridPercentage": 14
+        },
+        "consumption": 2203537,
+        "consumptionSummary": {
+          "consumptionFromBattery": 234003.12,
+          "consumptionFromBatteryPercentage": 11,
+          "consumptionFromSolar": 683167.56,
+          "consumptionFromSolarPercentage": 31,
+          "selfConsumption": null,
+          "selfConsumptionPercentage": null,
+          "consumptionUnknown": 0,
+          "consumptionUnknownPercentage": 0,
+          "consumptionFromGrid": 1286366.4,
+          "consumptionFromGridPercentage": 58
+        },
+        "batteryLevel": null,
+        "chargingPower": null,
+        "hasNegativeRate": null,
+        "import": 1451040,
+        "export": 131978
+      },
+      {
+        "measurementTime": "2025-01-01T00:00:00",
+        "production": 841960,
+        "productionSummary": {
+          "productionToHome": 693098.2,
+          "productionToHomePercentage": 82,
+          "productionUnknown": 0,
+          "productionUnknownPercentage": 0,
+          "productionToBattery": 84043.57,
+          "productionToBatteryPercentage": 10,
+          "productionToGrid": 64818.26,
+          "productionToGridPercentage": 8
+        },
+        "consumption": 2140799,
+        "consumptionSummary": {
+          "consumptionFromBattery": 251792.97,
+          "consumptionFromBatteryPercentage": 12,
+          "consumptionFromSolar": 693098.2,
+          "consumptionFromSolarPercentage": 32,
+          "selfConsumption": null,
+          "selfConsumptionPercentage": null,
+          "consumptionUnknown": 0,
+          "consumptionUnknownPercentage": 0,
+          "consumptionFromGrid": 1195907.8,
+          "consumptionFromGridPercentage": 56
+        },
+        "batteryLevel": null,
+        "chargingPower": null,
+        "hasNegativeRate": null,
+        "import": 1367420,
+        "export": 68581
+      },
+      {
+        "measurementTime": "2025-02-01T00:00:00",
+        "production": 691773,
+        "productionSummary": {
+          "productionToHome": 512580.66,
+          "productionToHomePercentage": 74,
+          "productionUnknown": -0.0625,
+          "productionUnknownPercentage": 0,
+          "productionToBattery": 90037.09,
+          "productionToBatteryPercentage": 13,
+          "productionToGrid": 89155.3,
+          "productionToGridPercentage": 13
+        },
+        "consumption": 1771166,
+        "consumptionSummary": {
+          "consumptionFromBattery": 247004.83,
+          "consumptionFromBatteryPercentage": 14,
+          "consumptionFromSolar": 512580.66,
+          "consumptionFromSolarPercentage": 29,
+          "selfConsumption": null,
+          "selfConsumptionPercentage": null,
+          "consumptionUnknown": 0,
+          "consumptionUnknownPercentage": 0,
+          "consumptionFromGrid": 1011580.56,
+          "consumptionFromGridPercentage": 57
+        },
+        "batteryLevel": null,
+        "chargingPower": null,
+        "hasNegativeRate": null,
+        "import": 1173200,
+        "export": 93807
+      },
+      {
+        "measurementTime": "2025-03-01T00:00:00",
+        "production": 653296,
+        "productionSummary": {
+          "productionToHome": 508202.53,
+          "productionToHomePercentage": 78,
+          "productionUnknown": 0,
+          "productionUnknownPercentage": 0,
+          "productionToBattery": 83650.32,
+          "productionToBatteryPercentage": 13,
+          "productionToGrid": 61443.125,
+          "productionToGridPercentage": 9
+        },
+        "consumption": 1896415,
+        "consumptionSummary": {
+          "consumptionFromBattery": 266706,
+          "consumptionFromBatteryPercentage": 14,
+          "consumptionFromSolar": 508202.53,
+          "consumptionFromSolarPercentage": 27,
+          "selfConsumption": null,
+          "selfConsumptionPercentage": null,
+          "consumptionUnknown": 0,
+          "consumptionUnknownPercentage": 0,
+          "consumptionFromGrid": 1121506.5,
+          "consumptionFromGridPercentage": 59
+        },
+        "batteryLevel": null,
+        "chargingPower": null,
+        "hasNegativeRate": null,
+        "import": 1309300,
+        "export": 66181
+      },
+      {
+        "measurementTime": "2025-04-01T00:00:00",
+        "production": 470059,
+        "productionSummary": {
+          "productionToHome": 366514.56,
+          "productionToHomePercentage": 78,
+          "productionUnknown": 0,
+          "productionUnknownPercentage": 0,
+          "productionToBattery": 79071.984,
+          "productionToBatteryPercentage": 17,
+          "productionToGrid": 24472.451,
+          "productionToGridPercentage": 5
+        },
+        "consumption": 1799548,
+        "consumptionSummary": {
+          "consumptionFromBattery": 247173.83,
+          "consumptionFromBatteryPercentage": 14,
+          "consumptionFromSolar": 366514.56,
+          "consumptionFromSolarPercentage": 20,
+          "selfConsumption": null,
+          "selfConsumptionPercentage": null,
+          "consumptionUnknown": 0,
+          "consumptionUnknownPercentage": 0,
+          "consumptionFromGrid": 1185859.8,
+          "consumptionFromGridPercentage": 66
+        },
+        "batteryLevel": null,
+        "chargingPower": null,
+        "hasNegativeRate": null,
+        "import": 1357770,
+        "export": 28281
+      },
+      {
+        "measurementTime": "2025-05-01T00:00:00",
+        "production": 37706,
+        "productionSummary": {
+          "productionToHome": 23900.01,
+          "productionToHomePercentage": 64,
+          "productionUnknown": 0.00390625,
+          "productionUnknownPercentage": 0,
+          "productionToBattery": 10686.304,
+          "productionToBatteryPercentage": 28,
+          "productionToGrid": 3119.6848,
+          "productionToGridPercentage": 8
+        },
+        "consumption": 145471,
+        "consumptionSummary": {
+          "consumptionFromBattery": 22248.191,
+          "consumptionFromBatteryPercentage": 15,
+          "consumptionFromSolar": 23900.01,
+          "consumptionFromSolarPercentage": 17,
+          "selfConsumption": null,
+          "selfConsumptionPercentage": null,
+          "consumptionUnknown": 0,
+          "consumptionUnknownPercentage": 0,
+          "consumptionFromGrid": 99322.805,
+          "consumptionFromGridPercentage": 68
+        },
+        "batteryLevel": null,
+        "chargingPower": null,
+        "hasNegativeRate": null,
+        "import": 111726,
+        "export": 3961
+      }
+    ]
+  }
+}
+
+
+
+  */

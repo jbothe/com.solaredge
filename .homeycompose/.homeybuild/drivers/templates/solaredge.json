@@ -51,8 +51,7 @@
       "type": "password",
       "label": {
         "en": "API Key"
-      },
-      "hint": { "en": "Your SolarEdge (read-only) API key." }
+      }
     }
   ]
 }

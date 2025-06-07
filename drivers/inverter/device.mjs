@@ -10,6 +10,9 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
       siteId: this.getData().siteId,
     });
 
+    console.log(sitePowerflow)
+
+    // Solar
     if (typeof sitePowerflow.solarProduction?.currentPower === 'number') {
       await this.setCapabilityValue('measure_power', Math.round(sitePowerflow.solarProduction.currentPower * 1000)).catch(this.error);
     }
@@ -18,6 +21,8 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
     const { energyProducedOverviewList } = await this.api.getSiteEnergyOverview({
       siteId: this.getData().siteId,
     });
+
+    console.log(energyProducedOverviewList)
 
     for (const energyProducedOverviewListItem of Object.values(energyProducedOverviewList)) {
       switch (energyProducedOverviewListItem.timePeriod) {

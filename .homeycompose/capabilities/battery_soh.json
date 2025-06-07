@@ -1,0 +1,22 @@
+{
+  "type": "number",
+  "title": {
+    "en": "State of Health (SoH)"
+  },
+  "icon": "/assets/capabilities/battery-soc.svg",
+  "units": {
+    "en": "%"
+  },
+  "insights": true,
+  "desc": {
+    "en": "Battery SoH Percentage"
+  },
+  "chartType": "stepLine",
+  "min": 0,
+  "max": 100,
+  "step": 1,
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor"
+}
