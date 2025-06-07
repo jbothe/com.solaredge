@@ -7,12 +7,65 @@
   "capabilities": [
     "measure_battery",
     "measure_power",
-    "battery_charging_state"
+    "battery_charging_state",
+    "meter_power.charged_today",
+    "meter_power.discharged_today",
+    "meter_power.lifetime_charged",
+    "meter_power.lifetime_discharged",
+    "measure_temperature",
+    "battery_soh"
   ],
+  "capabilitiesOptions": {
+    "battery_charging_state": {
+      "title": {
+        "en": "Battery State"
+      }
+    },
+    "meter_power.charged_today": {
+      "title": {
+        "en": "Charged (today)"
+      },
+      "preventInsights": true
+    },
+    "meter_power.discharged_today": {
+      "title": {
+        "en": "Discharged (today)"
+      },
+      "preventInsights": true
+    },
+    "meter_power.lifetime_charged": {
+      "title": {
+        "en": "Charged (total)"
+      },
+      "preventInsights": true
+    },
+    "meter_power.lifetime_discharged": {
+      "title": {
+        "en": "Discharged (total)"
+      },
+      "preventInsights": true
+    },
+    "measure_temperature": {
+      "title": {
+        "en": "Internal Temperature"
+      }
+    },
+    "battery_soh": {
+      "title": {
+        "en": "State of Health (SoH)"
+      },
+      "preventInsights": true
+    }
+  },
   "energy": {
     "homeBattery": true,
     "batteries": [
       "INTERNAL"
-    ]
+    ],
+    "approximation": {
+      "usageConstant": 60
+    },
+    "meterPowerImportedCapability": "meter_power.lifetime_charged",
+    "meterPowerExportedCapability": "meter_power.lifetime_discharged"
   }
 }

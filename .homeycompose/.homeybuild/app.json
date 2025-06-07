@@ -1,0 +1,31 @@
+{
+  "id": "bothe.family.solaredge",
+  "version": "1.0.0",
+  "compatibility": ">=12.4.5",
+  "brandColor": "#D82F37",
+  "sdk": 3,
+  "platforms": [
+    "local",
+    "cloud"
+  ],
+  "name": {
+    "en": "SolarEdge"
+  },
+  "description": {
+    "en": "Powering People’s Lives Around the World"
+  },
+  "category": [
+    "energy"
+  ],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "John Bothe",
+    "email": "jbothe@gmail.com"
+  },
+  "source": "https://github.com/jbothe/com.solaredge"
+}

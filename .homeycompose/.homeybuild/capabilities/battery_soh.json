@@ -1,0 +1,19 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Battery SoH"
+  },
+  "icon": "/assets/capabilities/battery-soc.svg",
+  "units": {
+    "en": "%"
+  },
+  "insights": true,
+  "desc": {
+    "en": "Battery SoH Percentage"
+  },
+  "chartType": "stepLine",
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor"
+}

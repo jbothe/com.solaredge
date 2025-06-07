@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
-  "id": "com.solaredge",
-  "version": "1.6.0",
+  "id": "bothe.family.solaredge",
+  "version": "1.0.0",
   "compatibility": ">=12.4.5",
   "brandColor": "#D82F37",
   "sdk": 3,
@@ -13,7 +13,7 @@
     "en": "SolarEdge"
   },
   "description": {
-    "en": "Powering  People’s Lives Around the World"
+    "en": "Powering People’s Lives Around the World"
   },
   "category": [
     "energy"
@@ -25,11 +25,10 @@
     "xlarge": "/assets/images/xlarge.png"
   },
   "author": {
-    "name": "Emile Nijssen",
-    "email": "emile@athom.nl"
+    "name": "John Bothe",
+    "email": "jbothe@gmail.com"
   },
-  "support": "mailto:emile@athom.nl",
-  "source": "https://github.com/WeeJeWel/com.solaredge",
+  "source": "https://github.com/jbothe/com.solaredge",
   "drivers": [
     {
       "platforms": [
@@ -78,6 +77,16 @@
           "label": {
             "en": "Password"
           }
+        },
+        {
+          "id": "apikey",
+          "type": "password",
+          "label": {
+            "en": "API Key"
+          },
+          "hint": {
+            "en": "Your SolarEdge (read-only) API key."
+          }
         }
       ],
       "name": {
@@ -86,14 +95,50 @@
       "class": "battery",
       "capabilities": [
         "measure_battery",
+        "battery_soh",
         "measure_power",
+        "meter_power.lifetime_charged",
+        "meter_power.lifetime_discharged",
+        "measure_temperature",
         "battery_charging_state"
       ],
+      "capabilitiesOptions": {
+        "battery_soh": {
+          "title": {
+            "en": "State of Health (SoH)"
+          }
+        },
+        "meter_power.lifetime_charged": {
+          "title": {
+            "en": "Lifetime Charged"
+          }
+        },
+        "meter_power.lifetime_discharged": {
+          "title": {
+            "en": "Lifetime Discharged"
+          }
+        },
+        "measure_temperature": {
+          "title": {
+            "en": "Internal Temperature"
+          }
+        },
+        "battery_charging_state": {
+          "title": {
+            "en": "Battery State"
+          }
+        }
+      },
       "energy": {
         "homeBattery": true,
         "batteries": [
           "INTERNAL"
-        ]
+        ],
+        "approximation": {
+          "usageConstant": 60
+        },
+        "meterPowerImportedCapability": "meter_power.lifetime_charged",
+        "meterPowerExportedCapability": "meter_power.lifetime_discharged"
       },
       "id": "battery"
     },
@@ -143,6 +188,16 @@
           "type": "password",
           "label": {
             "en": "Password"
+          }
+        },
+        {
+          "id": "apikey",
+          "type": "password",
+          "label": {
+            "en": "API Key"
+          },
+          "hint": {
+            "en": "Your SolarEdge (read-only) API key."
           }
         }
       ],
@@ -222,6 +277,16 @@
           "type": "password",
           "label": {
             "en": "Password"
+          }
+        },
+        {
+          "id": "apikey",
+          "type": "password",
+          "label": {
+            "en": "API Key"
+          },
+          "hint": {
+            "en": "Your SolarEdge (read-only) API key."
           }
         }
       ],
@@ -312,6 +377,16 @@
           "label": {
             "en": "Password"
           }
+        },
+        {
+          "id": "apikey",
+          "type": "password",
+          "label": {
+            "en": "API Key"
+          },
+          "hint": {
+            "en": "Your SolarEdge (read-only) API key."
+          }
         }
       ],
       "name": {
@@ -321,7 +396,8 @@
       "capabilities": [
         "measure_power",
         "meter_power.imported",
-        "meter_power.exported"
+        "meter_power.exported",
+        "alarm_generic"
       ],
       "capabilitiesOptions": {
         "meter_power.imported": {
@@ -333,6 +409,11 @@
           "title": {
             "en": "Exported Energy"
           }
+        },
+        "alarm_generic": {
+          "title": {
+            "en": "Power Outage"
+          }
         }
       },
       "energy": {
@@ -342,5 +423,48 @@
       },
       "id": "meter"
     }
-  ]
+  ],
+  "capabilities": {
+    "battery_soc": {
+      "type": "number",
+      "title": {
+        "en": "Battery SoC"
+      },
+      "icon": "/assets/capabilities/battery-soc.svg",
+      "units": {
+        "en": "%"
+      },
+      "insights": true,
+      "desc": {
+        "en": "Battery SoC Percentage"
+      },
+      "chartType": "stepLine",
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "battery_soh": {
+      "type": "number",
+      "title": {
+        "en": "State of Health (SoH)"
+      },
+      "icon": "/assets/capabilities/battery-soc.svg",
+      "units": {
+        "en": "%"
+      },
+      "insights": true,
+      "desc": {
+        "en": "Battery SoH Percentage"
+      },
+      "chartType": "stepLine",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    }
+  }
 }
