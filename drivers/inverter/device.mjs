@@ -10,39 +10,11 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
       siteId: this.getData().siteId,
     });
 
-    console.log(sitePowerflow)
+    //console.log(sitePowerflow)
 
     // Solar
     if (typeof sitePowerflow.solarProduction?.currentPower === 'number') {
       await this.setCapabilityValue('measure_power', Math.round(sitePowerflow.solarProduction.currentPower * 1000)).catch(this.error);
-    }
-
-    // Get Energy Overview
-    const { energyProducedOverviewList } = await this.api.getSiteEnergyOverview({
-      siteId: this.getData().siteId,
-    });
-
-    console.log(energyProducedOverviewList)
-
-    for (const energyProducedOverviewListItem of Object.values(energyProducedOverviewList)) {
-      switch (energyProducedOverviewListItem.timePeriod) {
-        case 'LIFE_TIME': {
-          await this.setCapabilityValue('meter_power', energyProducedOverviewListItem.energy / 1000).catch(this.error);
-          break;
-        }
-        case 'LAST_YEAR': {
-          await this.setCapabilityValue('meter_power.year', energyProducedOverviewListItem.energy / 1000).catch(this.error);
-          break;
-        }
-        case 'LAST_MONTH': {
-          await this.setCapabilityValue('meter_power.month', energyProducedOverviewListItem.energy / 1000).catch(this.error);
-          break;
-        }
-        case 'LAST_DAY': {
-          await this.setCapabilityValue('meter_power.day', energyProducedOverviewListItem.energy / 1000).catch(this.error);
-          break;
-        }
-      }
     }
 
     if (sitePowerflow.solarProduction?.isActive) {
@@ -52,4 +24,38 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
     }
   }
 
+
+  async onLongPoll() {
+    await super.onPoll();
+
+    // Get Energy Overview
+        const { energyProducedOverviewList } = await this.api.getSiteEnergyOverview({
+          siteId: this.getData().siteId,
+        });
+    
+        console.log(energyProducedOverviewList)
+    
+        for (const energyProducedOverviewListItem of Object.values(energyProducedOverviewList)) {
+          switch (energyProducedOverviewListItem.timePeriod) {
+            case 'LIFE_TIME': {
+              await this.setCapabilityValue('meter_power', energyProducedOverviewListItem.energy / 1000).catch(this.error);
+              break;
+            }
+            case 'LAST_YEAR': {
+              await this.setCapabilityValue('meter_power.year', energyProducedOverviewListItem.energy / 1000).catch(this.error);
+              break;
+            }
+            case 'LAST_MONTH': {
+              await this.setCapabilityValue('meter_power.month', energyProducedOverviewListItem.energy / 1000).catch(this.error);
+              break;
+            }
+            case 'LAST_DAY': {
+              await this.setCapabilityValue('meter_power.day', energyProducedOverviewListItem.energy / 1000).catch(this.error);
+              break;
+            }
+          }
+        }
+
+    // TODO Get inverter serial, store in device data, then call inverter API to get voltage, temp, etc
+  }
 };

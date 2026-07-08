@@ -13,7 +13,7 @@
     "en": "SolarEdge"
   },
   "description": {
-    "en": "Powering People’s Lives Around the World"
+    "en": "Support for SolarEdge Inverters, Meters, EV Chargers and Batteries."
   },
   "category": [
     "energy"
@@ -95,38 +95,55 @@
       "class": "battery",
       "capabilities": [
         "measure_battery",
-        "battery_soh",
         "measure_power",
-        "meter_power.lifetime_charged",
-        "meter_power.lifetime_discharged",
+        "battery_charging_state",
+        "meter_power.charged_today",
+        "meter_power.discharged_today",
+        "meter_power.charged_total",
+        "meter_power.discharged_total",
         "measure_temperature",
-        "battery_charging_state"
+        "battery_soh"
       ],
       "capabilitiesOptions": {
-        "battery_soh": {
+        "battery_charging_state": {
           "title": {
-            "en": "State of Health (SoH)"
+            "en": "Battery State"
           }
         },
-        "meter_power.lifetime_charged": {
+        "meter_power.charged_today": {
           "title": {
-            "en": "Lifetime Charged"
-          }
+            "en": "Charged (today)"
+          },
+          "preventInsights": true
         },
-        "meter_power.lifetime_discharged": {
+        "meter_power.discharged_today": {
           "title": {
-            "en": "Lifetime Discharged"
-          }
+            "en": "Discharged (today)"
+          },
+          "preventInsights": true
+        },
+        "meter_power.charged_total": {
+          "title": {
+            "en": "Charged (total)"
+          },
+          "preventInsights": true
+        },
+        "meter_power.discharged_total": {
+          "title": {
+            "en": "Discharged (total)"
+          },
+          "preventInsights": true
         },
         "measure_temperature": {
           "title": {
             "en": "Internal Temperature"
           }
         },
-        "battery_charging_state": {
+        "battery_soh": {
           "title": {
-            "en": "Battery State"
-          }
+            "en": "State of Health (SoH)"
+          },
+          "preventInsights": true
         }
       },
       "energy": {
@@ -309,22 +326,22 @@
         },
         "meter_power": {
           "title": {
-            "en": "Generated Total"
+            "en": "Generated (total)"
           }
         },
         "meter_power.day": {
           "title": {
-            "en": "Generated Today"
+            "en": "Generated (today)"
           }
         },
         "meter_power.month": {
           "title": {
-            "en": "Generated This Month"
+            "en": "Generated (this month)"
           }
         },
         "meter_power.year": {
           "title": {
-            "en": "Generated This Year"
+            "en": "Generated (this year)"
           }
         }
       },
@@ -395,31 +412,47 @@
       "class": "sensor",
       "capabilities": [
         "measure_power",
-        "meter_power.imported",
-        "meter_power.exported",
-        "alarm_generic"
+        "alarm_generic",
+        "meter_power.imported_today",
+        "meter_power.exported_today",
+        "meter_power.imported_total",
+        "meter_power.exported_total"
       ],
       "capabilitiesOptions": {
-        "meter_power.imported": {
-          "title": {
-            "en": "Imported Energy"
-          }
-        },
-        "meter_power.exported": {
-          "title": {
-            "en": "Exported Energy"
-          }
-        },
         "alarm_generic": {
           "title": {
             "en": "Power Outage"
           }
+        },
+        "meter_power.imported_today": {
+          "title": {
+            "en": "Imported (today)"
+          },
+          "preventInsights": true
+        },
+        "meter_power.exported_today": {
+          "title": {
+            "en": "Exported (today)"
+          },
+          "preventInsights": true
+        },
+        "meter_power.imported_total": {
+          "title": {
+            "en": "Imported (total)"
+          },
+          "preventInsights": true
+        },
+        "meter_power.exported_total": {
+          "title": {
+            "en": "Exported (total)"
+          },
+          "preventInsights": true
         }
       },
       "energy": {
         "cumulative": true,
-        "cumulativeImportedCapability": "meter_power.imported",
-        "cumulativeExportedCapability": "meter_power.exported"
+        "cumulativeImportedCapability": "meter_power.imported_total",
+        "cumulativeExportedCapability": "meter_power.exported_total"
       },
       "id": "meter"
     }

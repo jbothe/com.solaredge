@@ -79,14 +79,14 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
         if (typeof lifetimeCharged === 'number') {
           lifetimeCharged = Math.round(lifetimeCharged / 1000)
           console.log('Setting lifetimeCharged', lifetimeCharged)
-          await this.setCapabilityValue('meter_power.lifetime_charged', lifetimeCharged).catch(this.error);
+          await this.setCapabilityValue('meter_power.charged_total', lifetimeCharged).catch(this.error);
         }
 
         let lifetimeDischarged = latestTelemetry.lifeTimeEnergyDischarged
         if (typeof lifetimeDischarged === 'number') {
           lifetimeDischarged = Math.round(lifetimeDischarged / 1000)
           console.log('Setting lifetimeDischarged', lifetimeDischarged)
-          await this.setCapabilityValue('meter_power.lifetime_discharged', lifetimeDischarged).catch(this.error);
+          await this.setCapabilityValue('meter_power.discharged_total', lifetimeDischarged).catch(this.error);
         }
       }
     }

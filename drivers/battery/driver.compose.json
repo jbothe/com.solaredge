@@ -10,8 +10,8 @@
     "battery_charging_state",
     "meter_power.charged_today",
     "meter_power.discharged_today",
-    "meter_power.lifetime_charged",
-    "meter_power.lifetime_discharged",
+    "meter_power.charged_total",
+    "meter_power.discharged_total",
     "measure_temperature",
     "battery_soh"
   ],
@@ -33,13 +33,13 @@
       },
       "preventInsights": true
     },
-    "meter_power.lifetime_charged": {
+    "meter_power.charged_total": {
       "title": {
         "en": "Charged (total)"
       },
       "preventInsights": true
     },
-    "meter_power.lifetime_discharged": {
+    "meter_power.discharged_total": {
       "title": {
         "en": "Discharged (total)"
       },

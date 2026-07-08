@@ -43,19 +43,35 @@ export default class SolarEdgeDeviceMeter extends SolarEdgeDevice {
     await super.onPoll();
 
     const { siteId } = this.getData();
-    const summary = await this.api.getSiteEnergySummary({ siteId });
+    const summary = await this.api.getSiteEnergySummary(siteId, 'LIFETIME');
 
     if (summary.import && summary.export) {
       let imported = summary.import;
       if (typeof imported === 'number') {
         imported = Math.round(summary.import / 1000)
-        await this.setCapabilityValue('meter_power.imported', imported).catch(this.error);
+        await this.setCapabilityValue('meter_power.imported_total', imported).catch(this.error);
       }
 
       let exported = summary.export;
       if (typeof exported === 'number') {
         exported = Math.round(summary.export / 1000)
-        await this.setCapabilityValue('meter_power.exported', exported).catch(this.error);
+        await this.setCapabilityValue('meter_power.exported_total', exported).catch(this.error);
+      }
+    }
+
+    const summaryToday = await this.api.getSiteEnergySummary(siteId, 'TODAY');
+
+    if (summaryToday.import && summaryToday.export) {
+      let importedToday = summaryToday.import;
+      if (typeof importedToday === 'number') {
+        importedToday = Math.round(summaryToday.import / 1000)
+        await this.setCapabilityValue('meter_power.imported_today', importedToday).catch(this.error);
+      }
+
+      let exportedToday = summaryToday.export;
+      if (typeof exportedToday === 'number') {
+        exportedToday = Math.round(summaryToday.export / 1000)
+        await this.setCapabilityValue('meter_power.exported_today', exportedToday).catch(this.error);
       }
     }
   }

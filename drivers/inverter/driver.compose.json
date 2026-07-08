@@ -19,22 +19,22 @@
     },
     "meter_power": {
       "title": {
-        "en": "Generated Total"
+        "en": "Generated (total)"
       }
     },
     "meter_power.day": {
       "title": {
-        "en": "Generated Today"
+        "en": "Generated (today)"
       }
     },
     "meter_power.month": {
       "title": {
-        "en": "Generated This Month"
+        "en": "Generated (this month)"
       }
     },
     "meter_power.year": {
       "title": {
-        "en": "Generated This Year"
+        "en": "Generated (this year)"
       }
     }
   }
