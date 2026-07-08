@@ -416,17 +416,41 @@
       "class": "solarpanel",
       "capabilities": [
         "measure_power",
-        "meter_power",
+        "measure_temperature",
         "meter_power.day",
         "meter_power.month",
-        "meter_power.year"
+        "meter_power.year",
+        "meter_power",
+        "measure_voltage",
+        "measure_voltage.dc"
       ],
       "capabilitiesOptions": {
         "measure_power": {
           "title": {
-            "de": "Erzeugte Leistung",
-            "en": "Generated Power",
-            "nl": "Opgewekt vermogen"
+            "de": "Leistung",
+            "en": "Power",
+            "nl": "Vermogen"
+          }
+        },
+        "measure_voltage": {
+          "title": {
+            "de": "Netzspannung",
+            "en": "AC Voltage",
+            "nl": "Netspanning"
+          }
+        },
+        "measure_voltage.dc": {
+          "title": {
+            "de": "Gleichspannung",
+            "en": "DC Voltage",
+            "nl": "Gelijkspanning"
+          }
+        },
+        "measure_temperature": {
+          "title": {
+            "de": "Innentemperatur",
+            "en": "Internal Temperature",
+            "nl": "Interne temperatuur"
           }
         },
         "meter_power": {
@@ -532,6 +556,8 @@
       "capabilities": [
         "measure_power",
         "alarm_generic",
+        "measure_power.grid",
+        "measure_power.solar",
         "meter_power.imported_today",
         "meter_power.exported_today",
         "meter_power.imported_total",

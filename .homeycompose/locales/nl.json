@@ -69,7 +69,16 @@
       },
       "capabilitiesOptions": {
         "measure_power": {
-          "title": "Opgewekt vermogen"
+          "title": "Vermogen"
+        },
+        "measure_voltage": {
+          "title": "Netspanning"
+        },
+        "measure_voltage.dc": {
+          "title": "Gelijkspanning"
+        },
+        "measure_temperature": {
+          "title": "Interne temperatuur"
         },
         "meter_power": {
           "title": "Opgewekt (totaal)"

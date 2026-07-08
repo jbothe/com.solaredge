@@ -87,7 +87,16 @@
       },
       "capabilitiesOptions": {
         "measure_power": {
-          "title": "Generated Power"
+          "title": "Power"
+        },
+        "measure_voltage": {
+          "title": "AC Voltage"
+        },
+        "measure_voltage.dc": {
+          "title": "DC Voltage"
+        },
+        "measure_temperature": {
+          "title": "Internal Temperature"
         },
         "meter_power": {
           "title": "Generated (total)"

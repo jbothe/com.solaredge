@@ -2,11 +2,34 @@ import SolarEdgeDevice from '../../lib/SolarEdgeDevice.mjs';
 
 export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
 
+  static POLL_INTERVAL = 1000 * 10; // 10 seconds
+
   async onInit() {
+    // This driver doesn't consume site powerflow data (it polls
+    // getSiteDevices instead), so it runs its own interval alongside the
+    // base class's long-poll rather than registering with the site poller.
     await super.onInit();
 
     this.registerCapabilityListener('solaredge-home-load-controller-state', async (value) => {
       await this.onCapabilityState(value);
+    });
+
+    this.pollInterval = setInterval(() => this.poll(), this.constructor.POLL_INTERVAL);
+    this.poll();
+  }
+
+  async onUninit() {
+    await super.onUninit();
+
+    if (this.pollInterval) {
+      clearInterval(this.pollInterval);
+    }
+  }
+
+  poll() {
+    this.onPoll().catch(err => {
+      this.error(`Error Polling: ${err.message}`);
+      this.setUnavailable(err).catch(this.error);
     });
   }
 
@@ -47,7 +70,7 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
   }
 
   async onPoll() {
-    await super.onPoll();
+    await this.ensureSignedIn();
 
     const {
       siteId,

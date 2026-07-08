@@ -4,6 +4,8 @@
   "capabilities": [
     "measure_power",
     "alarm_generic",
+    "measure_power.grid",
+    "measure_power.solar",
     "meter_power.imported_today",
     "meter_power.exported_today",
     "meter_power.imported_total",

@@ -2,14 +2,7 @@ import SolarEdgeDevice from '../../lib/SolarEdgeDevice.mjs';
 
 export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
 
-  async onPoll() {
-    await super.onPoll();
-
-    // Get Powerflow
-    const sitePowerflow = await this.api.getSitePowerflow({
-      siteId: this.getData().siteId,
-    });
-
+  async onSitePowerflow(sitePowerflow) {
     if (typeof sitePowerflow.storage?.currentPower === 'number') {
       let power = Math.round(sitePowerflow.storage.currentPower * 1000);
 
@@ -61,31 +54,32 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
 
       if (battery.telemetries.length > 0) {
         const latestTelemetry = battery.telemetries[battery.telemetries.length - 1];
-        // console.log(latestTelemetry)
 
         const temp = latestTelemetry.internalTemp
         if (typeof temp === 'number') {
-          console.log('Setting temp', temp)
           await this.setCapabilityValue('measure_temperature', temp).catch(this.error);
         }
 
         if (typeof latestTelemetry.fullPackEnergyAvailable ==='number' && typeof totalStorage === 'number') {
           const soh = Math.round(100 * latestTelemetry.fullPackEnergyAvailable / totalStorage)
-          console.log('Setting soh', soh)
           await this.setCapabilityValue('battery_soh', soh).catch(this.error);
         }
-        
+
         let lifetimeCharged = latestTelemetry.lifeTimeEnergyCharged
         if (typeof lifetimeCharged === 'number') {
           lifetimeCharged = Math.round(lifetimeCharged / 1000)
-          console.log('Setting lifetimeCharged', lifetimeCharged)
+          if (!this.hasCapability('meter_power.charged_total')) {
+            await this.addCapability('meter_power.charged_total');
+          }
           await this.setCapabilityValue('meter_power.charged_total', lifetimeCharged).catch(this.error);
         }
 
         let lifetimeDischarged = latestTelemetry.lifeTimeEnergyDischarged
         if (typeof lifetimeDischarged === 'number') {
           lifetimeDischarged = Math.round(lifetimeDischarged / 1000)
-          console.log('Setting lifetimeDischarged', lifetimeDischarged)
+          if (!this.hasCapability('meter_power.discharged_total')) {
+            await this.addCapability('meter_power.discharged_total');
+          }
           await this.setCapabilityValue('meter_power.discharged_total', lifetimeDischarged).catch(this.error);
         }
       }

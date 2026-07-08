@@ -27,16 +27,13 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
     });
   }
 
-  async onPoll() {
-    await super.onPoll();
+  async onSitePowerflow(sitePowerflow) {
+    await this.ensureSignedIn();
 
     const {
       siteId,
       reporterId,
     } = this.getData();
-
-    // Get Powerflow
-    const sitePowerflow = await this.api.getSitePowerflow({ siteId });
 
     // Set measure_power
     if (sitePowerflow.evCharger?.currentPower === null) {

@@ -2,14 +2,7 @@ import SolarEdgeDevice from '../../lib/SolarEdgeDevice.mjs';
 
 export default class SolarEdgeDeviceMeter extends SolarEdgeDevice {
 
-  async onPoll() {
-    await super.onPoll();
-
-    const { siteId } = this.getData();
-
-    // Get Powerflow
-    const sitePowerflow = await this.api.getSitePowerflow({ siteId });
-
+  async onSitePowerflow(sitePowerflow) {
     if (typeof sitePowerflow.grid?.currentPower === 'number') {
       let power = Math.round(sitePowerflow.grid.currentPower * 1000);
 
@@ -68,7 +61,7 @@ export default class SolarEdgeDeviceMeter extends SolarEdgeDevice {
   }
 
   async onLongPoll() {
-    await super.onPoll();
+    await super.onLongPoll();
 
     const { siteId } = this.getData();
     const summary = await this.api.getSiteEnergySummary(siteId, 'LIFETIME');

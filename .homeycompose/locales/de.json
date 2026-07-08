@@ -69,7 +69,16 @@
       },
       "capabilitiesOptions": {
         "measure_power": {
-          "title": "Erzeugte Leistung"
+          "title": "Leistung"
+        },
+        "measure_voltage": {
+          "title": "Netzspannung"
+        },
+        "measure_voltage.dc": {
+          "title": "Gleichspannung"
+        },
+        "measure_temperature": {
+          "title": "Innentemperatur"
         },
         "meter_power": {
           "title": "Erzeugung (gesamt)"

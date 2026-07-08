@@ -3,9 +3,12 @@
   "class": "solarpanel",
   "capabilities": [
     "measure_power",
-    "meter_power",
+    "measure_temperature",
     "meter_power.day",
     "meter_power.month",
-    "meter_power.year"
+    "meter_power.year",
+    "meter_power",
+    "measure_voltage",
+    "measure_voltage.dc"
   ]
 }
