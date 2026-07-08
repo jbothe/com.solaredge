@@ -1,0 +1,152 @@
+{
+  "$app": {
+    "name": "SolarEdge",
+    "description": "Support for SolarEdge Inverters, Meters, EV Chargers and Batteries."
+  },
+  "$capabilities": {
+    "solaredge-home-load-controller-state": {
+      "title": "State"
+    }
+  },
+  "$flow": {
+    "actions": {
+      "home-load-controller-set-state": {
+        "title": "Set the state",
+        "titleFormatted": "Set the state to [[state]]",
+        "args": {
+          "state": {
+            "title": "State"
+          }
+        }
+      }
+    }
+  },
+  "$drivers": {
+    "battery": {
+      "name": "Battery",
+      "settings": {
+        "username": {
+          "label": "Username"
+        },
+        "password": {
+          "label": "Password"
+        }
+      },
+      "capabilitiesOptions": {
+        "battery_charging_state": {
+          "title": "Battery State"
+        },
+        "meter_power.charged_today": {
+          "title": "Charged (today)"
+        },
+        "meter_power.discharged_today": {
+          "title": "Discharged (today)"
+        },
+        "meter_power.charged_total": {
+          "title": "Charged (total)"
+        },
+        "meter_power.discharged_total": {
+          "title": "Discharged (total)"
+        },
+        "measure_temperature": {
+          "title": "Internal Temperature"
+        },
+        "battery_soh": {
+          "title": "State of Health (SoH)"
+        }
+      }
+    },
+    "evcharger": {
+      "name": "EV Charger",
+      "settings": {
+        "username": {
+          "label": "Username"
+        },
+        "password": {
+          "label": "Password"
+        }
+      },
+      "capabilitiesOptions": {
+        "meter_power.charged": {
+          "title": "Total Charged Energy"
+        },
+        "meter_power.discharged": {
+          "title": "Total Discharged Energy"
+        }
+      }
+    },
+    "inverter": {
+      "name": "Inverter",
+      "settings": {
+        "username": {
+          "label": "Username"
+        },
+        "password": {
+          "label": "Password"
+        }
+      },
+      "capabilitiesOptions": {
+        "measure_power": {
+          "title": "Generated Power"
+        },
+        "meter_power": {
+          "title": "Generated (total)"
+        },
+        "meter_power.day": {
+          "title": "Generated (today)"
+        },
+        "meter_power.month": {
+          "title": "Generated (this month)"
+        },
+        "meter_power.year": {
+          "title": "Generated (this year)"
+        }
+      }
+    },
+    "meter": {
+      "name": "Meter",
+      "settings": {
+        "username": {
+          "label": "Username"
+        },
+        "password": {
+          "label": "Password"
+        }
+      },
+      "capabilitiesOptions": {
+        "alarm_generic": {
+          "title": "Power Outage"
+        },
+        "meter_power.imported_today": {
+          "title": "Imported (today)"
+        },
+        "meter_power.exported_today": {
+          "title": "Exported (today)"
+        },
+        "meter_power.imported_total": {
+          "title": "Imported (total)"
+        },
+        "meter_power.exported_total": {
+          "title": "Exported (total)"
+        },
+        "measure_power.grid": {
+          "title": "Grid Power"
+        },
+        "measure_power.solar": {
+          "title": "Solar Power"
+        }
+      }
+    },
+    "home-load-controller": {
+      "name": "Home Load Controller",
+      "settings": {
+        "username": {
+          "label": "Username"
+        },
+        "password": {
+          "label": "Password"
+        }
+      }
+    }
+  }
+}

@@ -10,10 +10,14 @@
     "cloud"
   ],
   "name": {
-    "en": "SolarEdge"
+    "en": "SolarEdge",
+    "de": "SolarEdge",
+    "nl": "SolarEdge"
   },
   "description": {
-    "en": "Support for SolarEdge Inverters, Meters, EV Chargers and Batteries."
+    "en": "Support for SolarEdge Inverters, Meters, EV Chargers and Batteries.",
+    "de": "Unterstützung für SolarEdge Wechselrichter, Zähler, Ladegeräte und Batterien.",
+    "nl": "Ondersteuning voor SolarEdge omvormers, meters, laders en batterijen."
   },
   "category": [
     "energy"
@@ -68,14 +72,18 @@
           "id": "username",
           "type": "text",
           "label": {
-            "en": "Username"
+            "de": "Benutzername",
+            "en": "Username",
+            "nl": "Gebruikersnaam"
           }
         },
         {
           "id": "password",
           "type": "password",
           "label": {
-            "en": "Password"
+            "en": "Password",
+            "de": "Passwort",
+            "nl": "Wachtwoord"
           }
         },
         {
@@ -89,9 +97,6 @@
           }
         }
       ],
-      "name": {
-        "en": "Battery"
-      },
       "class": "battery",
       "capabilities": [
         "measure_battery",
@@ -105,45 +110,59 @@
         "battery_soh"
       ],
       "capabilitiesOptions": {
-        "battery_charging_state": {
+        "meter_power.charged_today": {
+          "preventInsights": true,
           "title": {
-            "en": "Battery State"
+            "de": "Geladen (heute)",
+            "en": "Charged (today)",
+            "nl": "Opgeladen (vandaag)"
           }
         },
-        "meter_power.charged_today": {
-          "title": {
-            "en": "Charged (today)"
-          },
-          "preventInsights": true
-        },
         "meter_power.discharged_today": {
+          "preventInsights": true,
           "title": {
-            "en": "Discharged (today)"
-          },
-          "preventInsights": true
+            "de": "Entladen (heute)",
+            "en": "Discharged (today)",
+            "nl": "Ontladen (vandaag)"
+          }
         },
         "meter_power.charged_total": {
+          "preventInsights": true,
           "title": {
-            "en": "Charged (total)"
-          },
-          "preventInsights": true
+            "de": "Geladen (gesamt)",
+            "en": "Charged (total)",
+            "nl": "Opgeladen (totaal)"
+          }
         },
         "meter_power.discharged_total": {
+          "preventInsights": true,
           "title": {
-            "en": "Discharged (total)"
-          },
-          "preventInsights": true
-        },
-        "measure_temperature": {
-          "title": {
-            "en": "Internal Temperature"
+            "de": "Entladen (gesamt)",
+            "en": "Discharged (total)",
+            "nl": "Ontladen (totaal)"
           }
         },
         "battery_soh": {
+          "preventInsights": true,
           "title": {
-            "en": "State of Health (SoH)"
-          },
-          "preventInsights": true
+            "de": "Gesundheitszustand (SoH)",
+            "en": "State of Health (SoH)",
+            "nl": "Gezondheidsstatus (SoH)"
+          }
+        },
+        "battery_charging_state": {
+          "title": {
+            "de": "Batteriestatus",
+            "en": "Battery State",
+            "nl": "Batterijstatus"
+          }
+        },
+        "measure_temperature": {
+          "title": {
+            "de": "Innentemperatur",
+            "en": "Internal Temperature",
+            "nl": "Interne temperatuur"
+          }
         }
       },
       "energy": {
@@ -154,10 +173,15 @@
         "approximation": {
           "usageConstant": 60
         },
-        "meterPowerImportedCapability": "meter_power.lifetime_charged",
-        "meterPowerExportedCapability": "meter_power.lifetime_discharged"
+        "meterPowerImportedCapability": "meter_power.charged_total",
+        "meterPowerExportedCapability": "meter_power.discharged_total"
       },
-      "id": "battery"
+      "id": "battery",
+      "name": {
+        "de": "Batterie",
+        "en": "Battery",
+        "nl": "Batterij"
+      }
     },
     {
       "platforms": [
@@ -197,6 +221,105 @@
           "id": "username",
           "type": "text",
           "label": {
+            "de": "Benutzername",
+            "en": "Username",
+            "nl": "Gebruikersnaam"
+          }
+        },
+        {
+          "id": "password",
+          "type": "password",
+          "label": {
+            "en": "Password",
+            "de": "Passwort",
+            "nl": "Wachtwoord"
+          }
+        },
+        {
+          "id": "apikey",
+          "type": "password",
+          "label": {
+            "en": "API Key"
+          },
+          "hint": {
+            "en": "Your SolarEdge (read-only) API key."
+          }
+        }
+      ],
+      "class": "evcharger",
+      "capabilities": [
+        "measure_power",
+        "meter_power.charged",
+        "meter_power.discharged",
+        "evcharger_charging",
+        "evcharger_charging_state"
+      ],
+      "energy": {
+        "evCharger": true,
+        "meterPowerImportedCapability": "meter_power.charged",
+        "meterPowerExportedCapability": "meter_power.discharged"
+      },
+      "capabilitiesOptions": {
+        "meter_power.charged": {
+          "title": {
+            "de": "Geladene Gesamtenergie",
+            "en": "Total Charged Energy",
+            "nl": "Totaal opgeladen energie"
+          }
+        },
+        "meter_power.discharged": {
+          "title": {
+            "de": "Entladene Gesamtenergie",
+            "en": "Total Discharged Energy",
+            "nl": "Totaal ontladen energie"
+          }
+        }
+      },
+      "id": "evcharger",
+      "name": {
+        "de": "EV-Ladegerät",
+        "en": "EV Charger",
+        "nl": "EV Lader"
+      }
+    },
+    {
+      "platforms": [
+        "local",
+        "cloud"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/home-load-controller/assets/images/small.png",
+        "large": "/drivers/home-load-controller/assets/images/large.png",
+        "xlarge": "/drivers/home-load-controller/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "login_credentials",
+          "template": "login_credentials",
+          "options": {
+            "logo": "logo.svg"
+          }
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "id": "username",
+          "type": "text",
+          "label": {
             "en": "Username"
           }
         },
@@ -218,35 +341,14 @@
           }
         }
       ],
-      "name": {
-        "en": "EV Charger"
-      },
-      "class": "evcharger",
+      "class": "other",
       "capabilities": [
-        "measure_power",
-        "meter_power.charged",
-        "meter_power.discharged",
-        "evcharger_charging",
-        "evcharger_charging_state"
+        "solaredge-home-load-controller-state"
       ],
-      "capabilitiesOptions": {
-        "meter_power.charged": {
-          "title": {
-            "en": "Total Charged Energy"
-          }
-        },
-        "meter_power.discharged": {
-          "title": {
-            "en": "Total Discharged Energy"
-          }
-        }
-      },
-      "energy": {
-        "evCharger": true,
-        "meterPowerImportedCapability": "meter_power.charged",
-        "meterPowerExportedCapability": "meter_power.discharged"
-      },
-      "id": "evcharger"
+      "id": "home-load-controller",
+      "name": {
+        "en": "Home Load Controller"
+      }
     },
     {
       "platforms": [
@@ -286,14 +388,18 @@
           "id": "username",
           "type": "text",
           "label": {
-            "en": "Username"
+            "de": "Benutzername",
+            "en": "Username",
+            "nl": "Gebruikersnaam"
           }
         },
         {
           "id": "password",
           "type": "password",
           "label": {
-            "en": "Password"
+            "en": "Password",
+            "de": "Passwort",
+            "nl": "Wachtwoord"
           }
         },
         {
@@ -307,9 +413,6 @@
           }
         }
       ],
-      "name": {
-        "en": "Inverter"
-      },
       "class": "solarpanel",
       "capabilities": [
         "measure_power",
@@ -320,32 +423,47 @@
       ],
       "capabilitiesOptions": {
         "measure_power": {
-          "en": "Generated Power",
-          "nl": "Opgewekte energie",
-          "de": "Energieproduktion"
+          "title": {
+            "de": "Erzeugte Leistung",
+            "en": "Generated Power",
+            "nl": "Opgewekt vermogen"
+          }
         },
         "meter_power": {
           "title": {
-            "en": "Generated (total)"
+            "de": "Erzeugung (gesamt)",
+            "en": "Generated (total)",
+            "nl": "Opgewekt (totaal)"
           }
         },
         "meter_power.day": {
           "title": {
-            "en": "Generated (today)"
+            "de": "Erzeugung (heute)",
+            "en": "Generated (today)",
+            "nl": "Opgewekt (vandaag)"
           }
         },
         "meter_power.month": {
           "title": {
-            "en": "Generated (this month)"
+            "de": "Erzeugung (diesen Monat)",
+            "en": "Generated (this month)",
+            "nl": "Opgewekt (deze maand)"
           }
         },
         "meter_power.year": {
           "title": {
-            "en": "Generated (this year)"
+            "de": "Erzeugung (dieses Jahr)",
+            "en": "Generated (this year)",
+            "nl": "Opgewekt (dit jaar)"
           }
         }
       },
-      "id": "inverter"
+      "id": "inverter",
+      "name": {
+        "de": "Wechselrichter",
+        "en": "Inverter",
+        "nl": "Omvormer"
+      }
     },
     {
       "platforms": [
@@ -385,14 +503,18 @@
           "id": "username",
           "type": "text",
           "label": {
-            "en": "Username"
+            "de": "Benutzername",
+            "en": "Username",
+            "nl": "Gebruikersnaam"
           }
         },
         {
           "id": "password",
           "type": "password",
           "label": {
-            "en": "Password"
+            "en": "Password",
+            "de": "Passwort",
+            "nl": "Wachtwoord"
           }
         },
         {
@@ -406,9 +528,6 @@
           }
         }
       ],
-      "name": {
-        "en": "Meter"
-      },
       "class": "sensor",
       "capabilities": [
         "measure_power",
@@ -419,34 +538,58 @@
         "meter_power.exported_total"
       ],
       "capabilitiesOptions": {
-        "alarm_generic": {
+        "meter_power.imported_today": {
+          "preventInsights": true,
           "title": {
-            "en": "Power Outage"
+            "de": "Importiert (heute)",
+            "en": "Imported (today)",
+            "nl": "Geïmporteerd (vandaag)"
           }
         },
-        "meter_power.imported_today": {
-          "title": {
-            "en": "Imported (today)"
-          },
-          "preventInsights": true
-        },
         "meter_power.exported_today": {
+          "preventInsights": true,
           "title": {
-            "en": "Exported (today)"
-          },
-          "preventInsights": true
+            "de": "Exportiert (heute)",
+            "en": "Exported (today)",
+            "nl": "Geëxporteerd (vandaag)"
+          }
         },
         "meter_power.imported_total": {
+          "preventInsights": true,
           "title": {
-            "en": "Imported (total)"
-          },
-          "preventInsights": true
+            "de": "Importiert (gesamt)",
+            "en": "Imported (total)",
+            "nl": "Geïmporteerd (totaal)"
+          }
         },
         "meter_power.exported_total": {
+          "preventInsights": true,
           "title": {
-            "en": "Exported (total)"
-          },
-          "preventInsights": true
+            "de": "Exportiert (gesamt)",
+            "en": "Exported (total)",
+            "nl": "Geëxporteerd (totaal)"
+          }
+        },
+        "alarm_generic": {
+          "title": {
+            "de": "Stromausfall",
+            "en": "Power Outage",
+            "nl": "Stroomstoring"
+          }
+        },
+        "measure_power.grid": {
+          "title": {
+            "de": "Netzleistung",
+            "en": "Grid Power",
+            "nl": "Netvermogen"
+          }
+        },
+        "measure_power.solar": {
+          "title": {
+            "de": "Solar Leistung",
+            "en": "Solar Power",
+            "nl": "Zonne Energie"
+          }
         }
       },
       "energy": {
@@ -454,9 +597,94 @@
         "cumulativeImportedCapability": "meter_power.imported_total",
         "cumulativeExportedCapability": "meter_power.exported_total"
       },
-      "id": "meter"
+      "id": "meter",
+      "name": {
+        "de": "Zähler",
+        "en": "Meter",
+        "nl": "Meter"
+      }
     }
   ],
+  "flow": {
+    "actions": [
+      {
+        "id": "home-load-controller-set-state",
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=home-load-controller"
+          },
+          {
+            "name": "state",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "on",
+                "title": {
+                  "en": "On",
+                  "nl": "Aan",
+                  "de": "Ein",
+                  "fr": "Activé",
+                  "it": "Acceso",
+                  "es": "Encendido",
+                  "sv": "På",
+                  "da": "Til",
+                  "fi": "Päällä",
+                  "no": "På",
+                  "ru": "Включено",
+                  "ko": "켜기"
+                }
+              },
+              {
+                "id": "off",
+                "title": {
+                  "en": "Off",
+                  "nl": "Uit",
+                  "de": "Aus",
+                  "fr": "Désactivé",
+                  "it": "Spento",
+                  "es": "Apagado",
+                  "sv": "Av",
+                  "da": "Fra",
+                  "fi": "Pois päältä",
+                  "no": "Av",
+                  "ru": "Выключено",
+                  "ko": "끄기"
+                }
+              },
+              {
+                "id": "auto",
+                "title": {
+                  "en": "Auto",
+                  "nl": "Auto",
+                  "de": "Auto",
+                  "fr": "Auto",
+                  "it": "Auto",
+                  "es": "Auto",
+                  "sv": "Auto",
+                  "da": "Auto",
+                  "fi": "Auto",
+                  "no": "Auto",
+                  "ru": "Авто",
+                  "ko": "자동"
+                }
+              }
+            ],
+            "title": {
+              "en": "State"
+            }
+          }
+        ],
+        "title": {
+          "en": "Set the state"
+        },
+        "titleFormatted": {
+          "en": "Set the state to [[state]]"
+        }
+      }
+    ]
+  },
   "capabilities": {
     "battery_soc": {
       "type": "number",
@@ -498,6 +726,67 @@
       "getable": true,
       "setable": false,
       "uiComponent": "sensor"
+    },
+    "solaredge-home-load-controller-state": {
+      "type": "enum",
+      "getable": true,
+      "setable": true,
+      "values": [
+        {
+          "id": "on",
+          "title": {
+            "en": "On",
+            "nl": "Aan",
+            "de": "Ein",
+            "fr": "Activé",
+            "it": "Acceso",
+            "es": "Encendido",
+            "sv": "På",
+            "da": "Til",
+            "fi": "Päällä",
+            "no": "På",
+            "ru": "Включено",
+            "ko": "켜기"
+          }
+        },
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "nl": "Uit",
+            "de": "Aus",
+            "fr": "Désactivé",
+            "it": "Spento",
+            "es": "Apagado",
+            "sv": "Av",
+            "da": "Fra",
+            "fi": "Pois päältä",
+            "no": "Av",
+            "ru": "Выключено",
+            "ko": "끄기"
+          }
+        },
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto",
+            "nl": "Auto",
+            "de": "Auto",
+            "fr": "Auto",
+            "it": "Auto",
+            "es": "Auto",
+            "sv": "Auto",
+            "da": "Auto",
+            "fi": "Auto",
+            "no": "Auto",
+            "ru": "Авто",
+            "ko": "자동"
+          }
+        }
+      ],
+      "title": {
+        "en": "State"
+      }
     }
   }
 }

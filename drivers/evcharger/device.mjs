@@ -94,26 +94,28 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
         reporterId: this.getData().reporterId,
       });
 
-      let totalCharged = 0;
-      let totalDischarged = 0;
-      applianceSessionsHistory.applianceDetails.forEach(applianceDetails => {
-        const statisticsConsumedEnergy = applianceDetails.statistics.find(statistic => statistic.subjectEnum === 'CONSUMED_ENERGY');
-        if (typeof statisticsConsumedEnergy?.totalValue === 'number') {
-          totalCharged += statisticsConsumedEnergy.totalValue;
+      if (Array.isArray(applianceSessionsHistory?.applianceDetails)) {
+        let totalCharged = 0;
+        let totalDischarged = 0;
+        applianceSessionsHistory.applianceDetails.forEach(applianceDetails => {
+          const statisticsConsumedEnergy = applianceDetails.statistics.find(statistic => statistic.subjectEnum === 'CONSUMED_ENERGY');
+          if (typeof statisticsConsumedEnergy?.totalValue === 'number') {
+            totalCharged += statisticsConsumedEnergy.totalValue;
+          }
+        });
+
+        // Set Total Charged
+        if (!this.hasCapability('meter_power.charged')) {
+          await this.addCapability('meter_power.charged');
         }
-      });
+        await this.setCapabilityValue('meter_power.charged', totalCharged / 1000).catch(this.error);
 
-      // Set Total Charged
-      if (!this.hasCapability('meter_power.charged')) {
-        await this.addCapability('meter_power.charged');
+        // Set Total Discharged
+        if (!this.hasCapability('meter_power.discharged')) {
+          await this.addCapability('meter_power.discharged');
+        }
+        await this.setCapabilityValue('meter_power.discharged', totalDischarged / 1000).catch(this.error);
       }
-      await this.setCapabilityValue('meter_power.charged', totalCharged / 1000).catch(this.error);
-
-      // Set Total Discharged
-      if (!this.hasCapability('meter_power.discharged')) {
-        await this.addCapability('meter_power.discharged');
-      }
-      await this.setCapabilityValue('meter_power.discharged', totalDischarged / 1000).catch(this.error);
     } else {
       await this.setWarning('Please remove & re-add this device to get kWh values.');
     }

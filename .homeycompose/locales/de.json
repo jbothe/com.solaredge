@@ -1,0 +1,123 @@
+{
+  "$app": {
+    "name": "SolarEdge",
+    "description": "Unterstützung für SolarEdge Wechselrichter, Zähler, Ladegeräte und Batterien."
+  },
+  "$drivers": {
+    "battery": {
+      "name": "Batterie",
+      "settings": {
+        "username": {
+          "label": "Benutzername"
+        },
+        "password": {
+          "label": "Passwort"
+        }
+      },
+      "capabilitiesOptions": {
+        "battery_charging_state": {
+          "title": "Batteriestatus"
+        },
+        "meter_power.charged_today": {
+          "title": "Geladen (heute)"
+        },
+        "meter_power.discharged_today": {
+          "title": "Entladen (heute)"
+        },
+        "meter_power.charged_total": {
+          "title": "Geladen (gesamt)"
+        },
+        "meter_power.discharged_total": {
+          "title": "Entladen (gesamt)"
+        },
+        "measure_temperature": {
+          "title": "Innentemperatur"
+        },
+        "battery_soh": {
+          "title": "Gesundheitszustand (SoH)"
+        }
+      }
+    },
+    "evcharger": {
+      "name": "EV-Ladegerät",
+      "settings": {
+        "username": {
+          "label": "Benutzername"
+        },
+        "password": {
+          "label": "Passwort"
+        }
+      },
+      "capabilitiesOptions": {
+        "meter_power.charged": {
+          "title": "Geladene Gesamtenergie"
+        },
+        "meter_power.discharged": {
+          "title": "Entladene Gesamtenergie"
+        }
+      }
+    },
+    "inverter": {
+      "name": "Wechselrichter",
+      "settings": {
+        "username": {
+          "label": "Benutzername"
+        },
+        "password": {
+          "label": "Passwort"
+        }
+      },
+      "capabilitiesOptions": {
+        "measure_power": {
+          "title": "Erzeugte Leistung"
+        },
+        "meter_power": {
+          "title": "Erzeugung (gesamt)"
+        },
+        "meter_power.day": {
+          "title": "Erzeugung (heute)"
+        },
+        "meter_power.month": {
+          "title": "Erzeugung (diesen Monat)"
+        },
+        "meter_power.year": {
+          "title": "Erzeugung (dieses Jahr)"
+        }
+      }
+    },
+    "meter": {
+      "name": "Zähler",
+      "settings": {
+        "username": {
+          "label": "Benutzername"
+        },
+        "password": {
+          "label": "Passwort"
+        }
+      },
+      "capabilitiesOptions": {
+        "alarm_generic": {
+          "title": "Stromausfall"
+        },
+        "meter_power.imported_today": {
+          "title": "Importiert (heute)"
+        },
+        "meter_power.exported_today": {
+          "title": "Exportiert (heute)"
+        },
+        "meter_power.imported_total": {
+          "title": "Importiert (gesamt)"
+        },
+        "meter_power.exported_total": {
+          "title": "Exportiert (gesamt)"
+        },
+        "measure_power.grid": {
+          "title": "Netzleistung"
+        },
+        "measure_power.solar": {
+          "title": "Solar Leistung"
+        }
+      }
+    }
+  }
+}

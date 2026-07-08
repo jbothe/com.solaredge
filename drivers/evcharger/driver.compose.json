@@ -1,8 +1,5 @@
 {
   "$extends": "solaredge",
-  "name": {
-    "en": "EV Charger"
-  },
   "class": "evcharger",
   "capabilities": [
     "measure_power",
@@ -11,18 +8,6 @@
     "evcharger_charging",
     "evcharger_charging_state"
   ],
-  "capabilitiesOptions": {
-    "meter_power.charged": {
-      "title": {
-        "en": "Total Charged Energy"
-      }
-    },
-    "meter_power.discharged": {
-      "title": {
-        "en": "Total Discharged Energy"
-      }
-    }
-  },
   "energy": {
     "evCharger": true,
     "meterPowerImportedCapability": "meter_power.charged",

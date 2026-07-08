@@ -1,0 +1,123 @@
+{
+  "$app": {
+    "name": "SolarEdge",
+    "description": "Ondersteuning voor SolarEdge omvormers, meters, laders en batterijen."
+  },
+  "$drivers": {
+    "battery": {
+      "name": "Batterij",
+      "settings": {
+        "username": {
+          "label": "Gebruikersnaam"
+        },
+        "password": {
+          "label": "Wachtwoord"
+        }
+      },
+      "capabilitiesOptions": {
+        "battery_charging_state": {
+          "title": "Batterijstatus"
+        },
+        "meter_power.charged_today": {
+          "title": "Opgeladen (vandaag)"
+        },
+        "meter_power.discharged_today": {
+          "title": "Ontladen (vandaag)"
+        },
+        "meter_power.charged_total": {
+          "title": "Opgeladen (totaal)"
+        },
+        "meter_power.discharged_total": {
+          "title": "Ontladen (totaal)"
+        },
+        "measure_temperature": {
+          "title": "Interne temperatuur"
+        },
+        "battery_soh": {
+          "title": "Gezondheidsstatus (SoH)"
+        }
+      }
+    },
+    "evcharger": {
+      "name": "EV Lader",
+      "settings": {
+        "username": {
+          "label": "Gebruikersnaam"
+        },
+        "password": {
+          "label": "Wachtwoord"
+        }
+      },
+      "capabilitiesOptions": {
+        "meter_power.charged": {
+          "title": "Totaal opgeladen energie"
+        },
+        "meter_power.discharged": {
+          "title": "Totaal ontladen energie"
+        }
+      }
+    },
+    "inverter": {
+      "name": "Omvormer",
+      "settings": {
+        "username": {
+          "label": "Gebruikersnaam"
+        },
+        "password": {
+          "label": "Wachtwoord"
+        }
+      },
+      "capabilitiesOptions": {
+        "measure_power": {
+          "title": "Opgewekt vermogen"
+        },
+        "meter_power": {
+          "title": "Opgewekt (totaal)"
+        },
+        "meter_power.day": {
+          "title": "Opgewekt (vandaag)"
+        },
+        "meter_power.month": {
+          "title": "Opgewekt (deze maand)"
+        },
+        "meter_power.year": {
+          "title": "Opgewekt (dit jaar)"
+        }
+      }
+    },
+    "meter": {
+      "name": "Meter",
+      "settings": {
+        "username": {
+          "label": "Gebruikersnaam"
+        },
+        "password": {
+          "label": "Wachtwoord"
+        }
+      },
+      "capabilitiesOptions": {
+        "alarm_generic": {
+          "title": "Stroomstoring"
+        },
+        "meter_power.imported_today": {
+          "title": "Geïmporteerd (vandaag)"
+        },
+        "meter_power.exported_today": {
+          "title": "Geëxporteerd (vandaag)"
+        },
+        "meter_power.imported_total": {
+          "title": "Geïmporteerd (totaal)"
+        },
+        "meter_power.exported_total": {
+          "title": "Geëxporteerd (totaal)"
+        },
+        "measure_power.grid": {
+          "title": "Netvermogen"
+        },
+        "measure_power.solar": {
+          "title": "Zonne Energie"
+        }
+      }
+    }
+  }
+}

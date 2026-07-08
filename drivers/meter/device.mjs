@@ -31,6 +31,34 @@ export default class SolarEdgeDeviceMeter extends SolarEdgeDevice {
       }
     }
 
+    // Grid
+    if (typeof sitePowerflow.grid?.currentPower === 'number') {
+      if (!this.hasCapability('measure_power.grid')) {
+        await this.addCapability('measure_power.grid');
+      }
+
+      let power = Math.round(sitePowerflow.grid.currentPower * 1000);
+      if (sitePowerflow.grid?.status === 'export') {
+        power *= -1;
+      }
+
+      await this.setCapabilityValue('measure_power.grid', power).catch(this.error);
+    }
+
+    // Solar
+    if (typeof sitePowerflow.solarProduction?.currentPower === 'number') {
+      if (!this.hasCapability('measure_power.solar')) {
+        await this.addCapability('measure_power.solar');
+      }
+
+      let power = Math.round(sitePowerflow.solarProduction.currentPower * 1000);
+      if (sitePowerflow.solarProduction?.isProducing === false) {
+        power *= -1;
+      }
+
+      await this.setCapabilityValue('measure_power.solar', power).catch(this.error);
+    }
+
     // Set Device Availability
     if (sitePowerflow.grid?.isActive) {
       await this.setAvailable();

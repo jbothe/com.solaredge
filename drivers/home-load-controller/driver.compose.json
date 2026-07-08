@@ -1,0 +1,7 @@
+{
+  "$extends": "solaredge",
+  "class": "other",
+  "capabilities": [
+    "solaredge-home-load-controller-state"
+  ]
+}

@@ -1,8 +1,5 @@
 {
   "$extends": "solaredge",
-  "name": {
-    "en": "Inverter"
-  },
   "class": "solarpanel",
   "capabilities": [
     "measure_power",
@@ -10,32 +7,5 @@
     "meter_power.day",
     "meter_power.month",
     "meter_power.year"
-  ],
-  "capabilitiesOptions": {
-    "measure_power": {
-      "en": "Generated Power",
-      "nl": "Opgewekte energie",
-      "de": "Energieproduktion"
-    },
-    "meter_power": {
-      "title": {
-        "en": "Generated (total)"
-      }
-    },
-    "meter_power.day": {
-      "title": {
-        "en": "Generated (today)"
-      }
-    },
-    "meter_power.month": {
-      "title": {
-        "en": "Generated (this month)"
-      }
-    },
-    "meter_power.year": {
-      "title": {
-        "en": "Generated (this year)"
-      }
-    }
-  }
+  ]
 }

@@ -40,5 +40,26 @@
   },
   "1.6.0": {
     "en": "Added support to control EV charging."
+  },
+  "1.6.1": {
+    "en": "Fixed a crash in EV chargers."
+  },
+  "1.6.2": {
+    "en": "Fixed an issue where fetching the total energy usage for a meter."
+  },
+  "1.7.0": {
+    "en": "Added Grid & Solar power measurements to the Meter."
+  },
+  "1.7.1": {
+    "en": "Fixed an issue with translations."
+  },
+  "1.7.2": {
+    "en": "Fixed an issue where an infinite loop for Meter devices could happen."
+  },
+  "1.8.0": {
+    "en": "Added Home Load Controller."
+  },
+  "1.8.1": {
+    "en": "Added icon for Home Load Controller."
   }
 }

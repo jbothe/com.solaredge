@@ -1,8 +1,5 @@
 {
   "$extends": "solaredge",
-  "name": {
-    "en": "Meter"
-  },
   "class": "sensor",
   "capabilities": [
     "measure_power",
@@ -13,33 +10,16 @@
     "meter_power.exported_total"
   ],
   "capabilitiesOptions": {
-    "alarm_generic": {
-      "title": {
-        "en": "Power Outage"
-      }
-    },
     "meter_power.imported_today": {
-      "title": {
-        "en": "Imported (today)"
-      },
       "preventInsights": true
     },
     "meter_power.exported_today": {
-      "title": {
-        "en": "Exported (today)"
-      },
       "preventInsights": true
     },
     "meter_power.imported_total": {
-      "title": {
-        "en": "Imported (total)"
-      },
       "preventInsights": true
     },
     "meter_power.exported_total": {
-      "title": {
-        "en": "Exported (total)"
-      },
       "preventInsights": true
     }
   },

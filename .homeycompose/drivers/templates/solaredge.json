@@ -34,10 +34,7 @@
   "settings": [
     {
       "id": "username",
-      "type": "text",
-      "label": {
-        "en": "Username"
-      }
+      "type": "text"
     },
     {
       "id": "password",
