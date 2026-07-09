@@ -8,7 +8,7 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
 
       // Invert the value when discharging
       if (sitePowerflow.storage?.status === 'discharging') {
-        power = power * -1;
+        power *= -1;
       }
 
       await this.setCapabilityValue('measure_power', power).catch(this.error);
@@ -32,6 +32,9 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
         await this.setCapabilityValue('battery_charging_state', 'idle').catch(this.error);
         break;
       }
+      default: {
+        break;
+      }
     }
 
     if (sitePowerflow.storage?.isActive) {
@@ -49,34 +52,34 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
     });
 
     if (siteStorage.batteries && siteStorage.batteries.length > 0) {
-      const battery = siteStorage.batteries[0]
-      const totalStorage = battery.nameplate
+      const battery = siteStorage.batteries[0];
+      const totalStorage = battery.nameplate;
 
       if (battery.telemetries.length > 0) {
         const latestTelemetry = battery.telemetries[battery.telemetries.length - 1];
 
-        const temp = latestTelemetry.internalTemp
+        const temp = latestTelemetry.internalTemp;
         if (typeof temp === 'number') {
           await this.setCapabilityValue('measure_temperature', temp).catch(this.error);
         }
 
-        if (typeof latestTelemetry.fullPackEnergyAvailable ==='number' && typeof totalStorage === 'number') {
-          const soh = Math.round(100 * latestTelemetry.fullPackEnergyAvailable / totalStorage)
+        if (typeof latestTelemetry.fullPackEnergyAvailable === 'number' && typeof totalStorage === 'number') {
+          const soh = Math.round((100 * latestTelemetry.fullPackEnergyAvailable) / totalStorage);
           await this.setCapabilityValue('battery_soh', soh).catch(this.error);
         }
 
-        let lifetimeCharged = latestTelemetry.lifeTimeEnergyCharged
+        let lifetimeCharged = latestTelemetry.lifeTimeEnergyCharged;
         if (typeof lifetimeCharged === 'number') {
-          lifetimeCharged = Math.round(lifetimeCharged / 1000)
+          lifetimeCharged = Math.round(lifetimeCharged / 1000);
           if (!this.hasCapability('meter_power.charged_total')) {
             await this.addCapability('meter_power.charged_total');
           }
           await this.setCapabilityValue('meter_power.charged_total', lifetimeCharged).catch(this.error);
         }
 
-        let lifetimeDischarged = latestTelemetry.lifeTimeEnergyDischarged
+        let lifetimeDischarged = latestTelemetry.lifeTimeEnergyDischarged;
         if (typeof lifetimeDischarged === 'number') {
-          lifetimeDischarged = Math.round(lifetimeDischarged / 1000)
+          lifetimeDischarged = Math.round(lifetimeDischarged / 1000);
           if (!this.hasCapability('meter_power.discharged_total')) {
             await this.addCapability('meter_power.discharged_total');
           }
@@ -86,4 +89,4 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
     }
   }
 
-};
+}

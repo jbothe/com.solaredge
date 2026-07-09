@@ -15,35 +15,37 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
     }
   }
 
-
   async onLongPoll() {
     await super.onLongPoll();
 
     // Get Energy Overview
-        const { energyProducedOverviewList } = await this.api.getSiteEnergyOverview({
-          siteId: this.getData().siteId,
-        });
+    const { energyProducedOverviewList } = await this.api.getSiteEnergyOverview({
+      siteId: this.getData().siteId,
+    });
 
-        for (const energyProducedOverviewListItem of Object.values(energyProducedOverviewList)) {
-          switch (energyProducedOverviewListItem.timePeriod) {
-            case 'LIFE_TIME': {
-              await this.setCapabilityValue('meter_power', energyProducedOverviewListItem.energy / 1000).catch(this.error);
-              break;
-            }
-            case 'LAST_YEAR': {
-              await this.setCapabilityValue('meter_power.year', energyProducedOverviewListItem.energy / 1000).catch(this.error);
-              break;
-            }
-            case 'LAST_MONTH': {
-              await this.setCapabilityValue('meter_power.month', energyProducedOverviewListItem.energy / 1000).catch(this.error);
-              break;
-            }
-            case 'LAST_DAY': {
-              await this.setCapabilityValue('meter_power.day', energyProducedOverviewListItem.energy / 1000).catch(this.error);
-              break;
-            }
-          }
+    for (const energyProducedOverviewListItem of Object.values(energyProducedOverviewList)) {
+      switch (energyProducedOverviewListItem.timePeriod) {
+        case 'LIFE_TIME': {
+          await this.setCapabilityValue('meter_power', energyProducedOverviewListItem.energy / 1000).catch(this.error);
+          break;
         }
+        case 'LAST_YEAR': {
+          await this.setCapabilityValue('meter_power.year', energyProducedOverviewListItem.energy / 1000).catch(this.error);
+          break;
+        }
+        case 'LAST_MONTH': {
+          await this.setCapabilityValue('meter_power.month', energyProducedOverviewListItem.energy / 1000).catch(this.error);
+          break;
+        }
+        case 'LAST_DAY': {
+          await this.setCapabilityValue('meter_power.day', energyProducedOverviewListItem.energy / 1000).catch(this.error);
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+    }
 
     // Get Inverter Serial
     let inverterSerial = await this.getStoreValue('inverterSerial');
@@ -86,7 +88,7 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
           await this.setCapabilityValue('measure_temperature', temp).catch(this.error);
         }
 
-        const dcVoltage = latestTelemetry.dcVoltage;
+        const { dcVoltage } = latestTelemetry;
         if (typeof dcVoltage === 'number') {
           if (!this.hasCapability('measure_voltage.dc')) {
             await this.addCapability('measure_voltage.dc');
@@ -96,4 +98,5 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
       }
     }
   }
-};
+
+}

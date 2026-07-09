@@ -7,4 +7,4 @@ export default class SolarEdgeDriverBattery extends SolarEdgeDriver {
     return capabilities?.hasStorage === true;
   }
 
-};
+}

@@ -18,8 +18,8 @@ export default class SolarEdgeDriverEVCharger extends SolarEdgeDriver {
     });
 
     return devices
-      .filter(device => device.type === 'ON_OFF')
-      .map(device => ({
+      .filter((device) => device.type === 'ON_OFF')
+      .map((device) => ({
         name: device.name,
         data: {
           reporterId: device.reporterId,
@@ -28,4 +28,4 @@ export default class SolarEdgeDriverEVCharger extends SolarEdgeDriver {
       }));
   }
 
-};
+}

@@ -8,7 +8,7 @@ export default class SolarEdgeDeviceMeter extends SolarEdgeDevice {
 
       // Invert the value when exporting
       if (sitePowerflow.grid?.status === 'export') {
-        power = power * -1;
+        power *= -1;
       }
 
       await this.setCapabilityValue('measure_power', power).catch(this.error);
@@ -18,8 +18,7 @@ export default class SolarEdgeDeviceMeter extends SolarEdgeDevice {
     if (sitePowerflow.grid?.hasPowerOutage !== undefined) {
       if (sitePowerflow.grid?.hasPowerOutage) {
         await this.setCapabilityValue('alarm_generic', true).catch(this.error);
-      }
-      else {
+      } else {
         await this.setCapabilityValue('alarm_generic', false).catch(this.error);
       }
     }
@@ -69,13 +68,13 @@ export default class SolarEdgeDeviceMeter extends SolarEdgeDevice {
     if (summary.import && summary.export) {
       let imported = summary.import;
       if (typeof imported === 'number') {
-        imported = Math.round(summary.import / 1000)
+        imported = Math.round(summary.import / 1000);
         await this.setCapabilityValue('meter_power.imported_total', imported).catch(this.error);
       }
 
       let exported = summary.export;
       if (typeof exported === 'number') {
-        exported = Math.round(summary.export / 1000)
+        exported = Math.round(summary.export / 1000);
         await this.setCapabilityValue('meter_power.exported_total', exported).catch(this.error);
       }
     }
@@ -85,15 +84,16 @@ export default class SolarEdgeDeviceMeter extends SolarEdgeDevice {
     if (summaryToday.import && summaryToday.export) {
       let importedToday = summaryToday.import;
       if (typeof importedToday === 'number') {
-        importedToday = Math.round(summaryToday.import / 1000)
+        importedToday = Math.round(summaryToday.import / 1000);
         await this.setCapabilityValue('meter_power.imported_today', importedToday).catch(this.error);
       }
 
       let exportedToday = summaryToday.export;
       if (typeof exportedToday === 'number') {
-        exportedToday = Math.round(summaryToday.export / 1000)
+        exportedToday = Math.round(summaryToday.export / 1000);
         await this.setCapabilityValue('meter_power.exported_today', exportedToday).catch(this.error);
       }
     }
   }
-};
+
+}

@@ -2,8 +2,11 @@
   "name": "bothe.family.solaredge",
   "version": "1.0.0",
   "main": "app.mjs",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
-    "lint": "eslint --ext .js,.ts --ignore-path .gitignore ."
+    "lint": "eslint --ext .js,.mjs,.ts --ignore-path .gitignore ."
   },
   "devDependencies": {
     "@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.10",

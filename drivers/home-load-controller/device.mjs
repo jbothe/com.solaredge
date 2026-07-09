@@ -27,7 +27,7 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
   }
 
   poll() {
-    this.onPoll().catch(err => {
+    this.onPoll().catch((err) => {
       this.error(`Error Polling: ${err.message}`);
       this.setUnavailable(err).catch(this.error);
     });
@@ -59,6 +59,9 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
         state.duration = null;
         break;
       }
+      default: {
+        break;
+      }
     }
 
     // Set State
@@ -81,9 +84,9 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
       siteId,
     });
 
-    const device = devices.find(device => device.reporterId === reporterId);
+    const device = devices.find((device) => device.reporterId === reporterId);
     if (!device) {
-      throw new Error(`Device Not Found`);
+      throw new Error('Device Not Found');
     }
 
     switch (device.activationMode) {
@@ -97,11 +100,17 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
             await this.setCapabilityValue('solaredge-home-load-controller-state', 'on');
             break;
           }
+          default: {
+            break;
+          }
         }
         break;
       }
       case 'AUTO': {
         await this.setCapabilityValue('solaredge-home-load-controller-state', 'auto');
+        break;
+      }
+      default: {
         break;
       }
     }
@@ -114,4 +123,4 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
     }
   }
 
-};
+}

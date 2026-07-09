@@ -22,7 +22,7 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
       state: {
         mode: 'MANUAL',
         level: value ? 100 : 0,
-        duration: null
+        duration: null,
       },
     });
   }
@@ -30,10 +30,7 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
   async onSitePowerflow(sitePowerflow) {
     await this.ensureSignedIn();
 
-    const {
-      siteId,
-      reporterId,
-    } = this.getData();
+    const { reporterId } = this.getData();
 
     // Set measure_power
     if (sitePowerflow.evCharger?.currentPower === null) {
@@ -93,9 +90,9 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
 
       if (Array.isArray(applianceSessionsHistory?.applianceDetails)) {
         let totalCharged = 0;
-        let totalDischarged = 0;
-        applianceSessionsHistory.applianceDetails.forEach(applianceDetails => {
-          const statisticsConsumedEnergy = applianceDetails.statistics.find(statistic => statistic.subjectEnum === 'CONSUMED_ENERGY');
+        const totalDischarged = 0;
+        applianceSessionsHistory.applianceDetails.forEach((applianceDetails) => {
+          const statisticsConsumedEnergy = applianceDetails.statistics.find((statistic) => statistic.subjectEnum === 'CONSUMED_ENERGY');
           if (typeof statisticsConsumedEnergy?.totalValue === 'number') {
             totalCharged += statisticsConsumedEnergy.totalValue;
           }
@@ -116,7 +113,6 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
     } else {
       await this.setWarning('Please remove & re-add this device to get kWh values.');
     }
-
   }
 
-};
+}

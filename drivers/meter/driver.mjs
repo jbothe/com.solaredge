@@ -7,4 +7,4 @@ export default class SolarEdgeDriverMeter extends SolarEdgeDriver {
     return capabilities?.hasConsumptionAndGrid === true;
   }
 
-};
+}

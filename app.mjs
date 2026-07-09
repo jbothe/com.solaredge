@@ -14,4 +14,4 @@ export default class SolarEdgeApp extends Homey.App {
     return this.sitePollers.get(siteId);
   }
 
-};
+}
