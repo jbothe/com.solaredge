@@ -26,11 +26,22 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
     }
   }
 
+  // This driver ignores site powerflow, so a successful site poll says nothing
+  // about whether its own data is current. Skip the base class's freshness
+  // marking and record it in onPoll instead.
+  async handleSitePowerflow(sitePowerflow) {
+    // Intentionally empty
+  }
+
   poll() {
-    this.onPoll().catch((err) => {
-      this.error(`Error Polling: ${err.message}`);
-      this.setUnavailable(err).catch(this.error);
-    });
+    this.onPoll()
+      .then(() => {
+        this.markLiveUpdate();
+      })
+      .catch((err) => {
+        this.error(`Error Polling: ${err.message}`);
+        this.setUnavailable(err).catch(this.error);
+      });
   }
 
   async onCapabilityState(value) {
