@@ -1,1 +1,5 @@
-{}
+{
+  "forecast": {
+    "notReady": "De zonneprognose is nog niet beschikbaar."
+  }
+}

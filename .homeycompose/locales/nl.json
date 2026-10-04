@@ -65,6 +65,43 @@
         },
         "password": {
           "label": "Wachtwoord"
+        },
+        "forecast_tilt": {
+          "label": "Hellingshoek panelen",
+          "hint": "Hoek van de panelen ten opzichte van horizontaal. Plat is 0°, een gemiddeld dak is 15–35°."
+        },
+        "forecast_orientation": {
+          "label": "Richting panelen",
+          "hint": "De richting waarin de panelen liggen. De prognose leert van je opbrengst, dus een benadering is prima.",
+          "values": {
+            "0": {
+              "label": "Noord"
+            },
+            "45": {
+              "label": "Noordoost"
+            },
+            "90": {
+              "label": "Oost"
+            },
+            "135": {
+              "label": "Zuidoost"
+            },
+            "180": {
+              "label": "Zuid"
+            },
+            "225": {
+              "label": "Zuidwest"
+            },
+            "270": {
+              "label": "West"
+            },
+            "315": {
+              "label": "Noordwest"
+            },
+            "auto": {
+              "label": "Automatisch (naar de evenaar)"
+            }
+          }
         }
       },
       "capabilitiesOptions": {
@@ -125,6 +162,69 @@
         },
         "measure_power.solar": {
           "title": "Zonne Energie"
+        }
+      }
+    }
+  },
+  "$capabilities": {
+    "solar_forecast_today": {
+      "title": "Prognose (vandaag)"
+    },
+    "solar_forecast_tomorrow": {
+      "title": "Prognose (morgen)"
+    },
+    "solar_forecast_power": {
+      "title": "Prognose vermogen"
+    }
+  },
+  "$flow": {
+    "triggers": {
+      "solar_forecast_tomorrow_changed": {
+        "title": "De zonneprognose voor morgen is gewijzigd",
+        "tokens": {
+          "forecast": {
+            "title": "Prognose"
+          },
+          "forecast_low": {
+            "title": "Prognose (laag, P10)"
+          },
+          "forecast_high": {
+            "title": "Prognose (hoog, P90)"
+          }
+        }
+      }
+    },
+    "conditions": {
+      "solar_forecast_tomorrow_above": {
+        "title": "De zonneprognose voor morgen is hoger dan…",
+        "titleFormatted": "De [[estimate]] zonneprognose voor morgen !{{is|is niet}} hoger dan [[kwh]] kWh",
+        "args": {
+          "estimate": {
+            "values": {
+              "p50": {
+                "title": "meest waarschijnlijke"
+              },
+              "p10": {
+                "title": "lage (9 op 10 dagen hoger)"
+              },
+              "p90": {
+                "title": "hoge (1 op 10 dagen hoger)"
+              }
+            }
+          },
+          "kwh": {
+            "placeholder": "kWh"
+          }
+        }
+      },
+      "solar_forecast_power_at_above": {
+        "title": "Verwacht zonnevermogen op een tijdstip is hoger dan…",
+        "titleFormatted": "Verwacht zonnevermogen om [[time]] !{{is|is niet}} hoger dan [[watts]] W",
+        "hint": "Het eerstvolgende moment met deze tijd: vandaag, of morgen als het al voorbij is.",
+        "args": {
+          "watts": {
+            "placeholder": "W"
+          }
         }
       }
     }

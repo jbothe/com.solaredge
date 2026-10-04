@@ -1,0 +1,61 @@
+{
+  "triggers": [
+    {
+      "id": "solar_forecast_tomorrow_changed",
+      "tokens": [
+        {
+          "name": "forecast",
+          "type": "number",
+          "example": 18.5
+        },
+        {
+          "name": "forecast_low",
+          "type": "number",
+          "example": 12.1
+        },
+        {
+          "name": "forecast_high",
+          "type": "number",
+          "example": 22.4
+        }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "id": "solar_forecast_tomorrow_above",
+      "args": [
+        {
+          "name": "estimate",
+          "type": "dropdown",
+          "values": [
+            { "id": "p50" },
+            { "id": "p10" },
+            { "id": "p90" }
+          ]
+        },
+        {
+          "name": "kwh",
+          "type": "number",
+          "min": 0,
+          "step": 0.1
+        }
+      ]
+    },
+    {
+      "id": "solar_forecast_power_at_above",
+      "args": [
+        {
+          "name": "time",
+          "type": "time"
+        },
+        {
+          "name": "watts",
+          "type": "number",
+          "min": 0,
+          "step": 100
+        }
+      ]
+    }
+  ]
+}

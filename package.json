@@ -8,6 +8,7 @@
   "scripts": {
     "lint": "eslint --ext .js,.mjs,.ts --ignore-path .gitignore .",
     "test": "node --test \"test/**/*.test.mjs\"",
+    "forecast": "node --env-file-if-exists=.env scripts/forecast-poc.mjs",
     "v2": "node --env-file-if-exists=.env scripts/v2-oauth-poc.mjs",
     "internal": "node --env-file-if-exists=.env scripts/internal-probe.mjs"
   },

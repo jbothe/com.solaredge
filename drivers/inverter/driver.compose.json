@@ -3,6 +3,9 @@
   "class": "solarpanel",
   "capabilities": [
     "measure_power",
+    "solar_forecast_power",
+    "solar_forecast_today",
+    "solar_forecast_tomorrow",
     "meter_power.day",
     "meter_power.month",
     "meter_power.year",

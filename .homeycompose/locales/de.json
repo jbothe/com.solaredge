@@ -65,6 +65,43 @@
         },
         "password": {
           "label": "Passwort"
+        },
+        "forecast_tilt": {
+          "label": "Neigung der Module",
+          "hint": "Winkel der Module zur Horizontalen. Flach ist 0°, ein typisches Dach 15–35°."
+        },
+        "forecast_orientation": {
+          "label": "Ausrichtung der Module",
+          "hint": "Die Richtung, in die die Module zeigen. Die Prognose lernt aus Ihrem Ertrag, ein ungefährer Wert genügt.",
+          "values": {
+            "0": {
+              "label": "Nord"
+            },
+            "45": {
+              "label": "Nordost"
+            },
+            "90": {
+              "label": "Ost"
+            },
+            "135": {
+              "label": "Südost"
+            },
+            "180": {
+              "label": "Süd"
+            },
+            "225": {
+              "label": "Südwest"
+            },
+            "270": {
+              "label": "West"
+            },
+            "315": {
+              "label": "Nordwest"
+            },
+            "auto": {
+              "label": "Automatisch (zum Äquator)"
+            }
+          }
         }
       },
       "capabilitiesOptions": {
@@ -125,6 +162,69 @@
         },
         "measure_power.solar": {
           "title": "Solar Leistung"
+        }
+      }
+    }
+  },
+  "$capabilities": {
+    "solar_forecast_today": {
+      "title": "Prognose (heute)"
+    },
+    "solar_forecast_tomorrow": {
+      "title": "Prognose (morgen)"
+    },
+    "solar_forecast_power": {
+      "title": "Prognose Leistung"
+    }
+  },
+  "$flow": {
+    "triggers": {
+      "solar_forecast_tomorrow_changed": {
+        "title": "Die Solarprognose für morgen hat sich geändert",
+        "tokens": {
+          "forecast": {
+            "title": "Prognose"
+          },
+          "forecast_low": {
+            "title": "Prognose (niedrig, P10)"
+          },
+          "forecast_high": {
+            "title": "Prognose (hoch, P90)"
+          }
+        }
+      }
+    },
+    "conditions": {
+      "solar_forecast_tomorrow_above": {
+        "title": "Die Solarprognose für morgen liegt über…",
+        "titleFormatted": "Die [[estimate]] Solarprognose für morgen !{{liegt|liegt nicht}} über [[kwh]] kWh",
+        "args": {
+          "estimate": {
+            "values": {
+              "p50": {
+                "title": "wahrscheinlichste"
+              },
+              "p10": {
+                "title": "niedrige (an 9 von 10 Tagen übertroffen)"
+              },
+              "p90": {
+                "title": "hohe (an 1 von 10 Tagen übertroffen)"
+              }
+            }
+          },
+          "kwh": {
+            "placeholder": "kWh"
+          }
+        }
+      },
+      "solar_forecast_power_at_above": {
+        "title": "Erwartete Solarleistung zu einer Uhrzeit liegt über…",
+        "titleFormatted": "Erwartete Solarleistung um [[time]] !{{liegt|liegt nicht}} über [[watts]] W",
+        "hint": "Der nächste Zeitpunkt mit dieser Uhrzeit: heute, oder morgen, wenn er schon vorbei ist.",
+        "args": {
+          "watts": {
+            "placeholder": "W"
+          }
         }
       }
     }

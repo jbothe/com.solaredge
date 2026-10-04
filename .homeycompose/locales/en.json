@@ -6,6 +6,15 @@
   "$capabilities": {
     "solaredge-home-load-controller-state": {
       "title": "State"
+    },
+    "solar_forecast_today": {
+      "title": "Forecast (today)"
+    },
+    "solar_forecast_tomorrow": {
+      "title": "Forecast (tomorrow)"
+    },
+    "solar_forecast_power": {
+      "title": "Forecast power"
     }
   },
   "$flow": {
@@ -16,6 +25,56 @@
         "args": {
           "state": {
             "title": "State"
+          }
+        }
+      }
+    },
+    "triggers": {
+      "solar_forecast_tomorrow_changed": {
+        "title": "Tomorrow's solar forecast changed",
+        "tokens": {
+          "forecast": {
+            "title": "Forecast"
+          },
+          "forecast_low": {
+            "title": "Forecast (low, P10)"
+          },
+          "forecast_high": {
+            "title": "Forecast (high, P90)"
+          }
+        }
+      }
+    },
+    "conditions": {
+      "solar_forecast_tomorrow_above": {
+        "title": "Tomorrow's solar forecast is above…",
+        "titleFormatted": "Tomorrow's [[estimate]] solar forecast !{{is|is not}} above [[kwh]] kWh",
+        "args": {
+          "estimate": {
+            "values": {
+              "p50": {
+                "title": "most likely"
+              },
+              "p10": {
+                "title": "low (9 in 10 days beat it)"
+              },
+              "p90": {
+                "title": "high (1 in 10 days beat it)"
+              }
+            }
+          },
+          "kwh": {
+            "placeholder": "kWh"
+          }
+        }
+      },
+      "solar_forecast_power_at_above": {
+        "title": "Expected solar power at a time is above…",
+        "titleFormatted": "Expected solar power at [[time]] !{{is|is not}} above [[watts]] W",
+        "hint": "The next time the clock reads this: today, or tomorrow if it has passed.",
+        "args": {
+          "watts": {
+            "placeholder": "W"
           }
         }
       }
@@ -83,6 +142,43 @@
         },
         "password": {
           "label": "Password"
+        },
+        "forecast_tilt": {
+          "label": "Panel tilt",
+          "hint": "Angle of the panels from horizontal. Flat is 0°, a typical roof is 15–35°."
+        },
+        "forecast_orientation": {
+          "label": "Panel direction",
+          "hint": "The way the panels face. The forecast learns from your production, so an approximate value is fine.",
+          "values": {
+            "0": {
+              "label": "North"
+            },
+            "45": {
+              "label": "North-east"
+            },
+            "90": {
+              "label": "East"
+            },
+            "135": {
+              "label": "South-east"
+            },
+            "180": {
+              "label": "South"
+            },
+            "225": {
+              "label": "South-west"
+            },
+            "270": {
+              "label": "West"
+            },
+            "315": {
+              "label": "North-west"
+            },
+            "auto": {
+              "label": "Automatic (facing the equator)"
+            }
+          }
         }
       },
       "capabilitiesOptions": {

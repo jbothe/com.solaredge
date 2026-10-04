@@ -1,1 +1,5 @@
-{}
+{
+  "forecast": {
+    "notReady": "Die Solarprognose ist noch nicht verfügbar."
+  }
+}

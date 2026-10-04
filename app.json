@@ -370,11 +370,133 @@
             "de": "Passwort",
             "nl": "Wachtwoord"
           }
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Solar forecast",
+            "nl": "Zonneprognose",
+            "de": "Solarprognose"
+          },
+          "children": [
+            {
+              "id": "forecast_tilt",
+              "type": "number",
+              "value": 20,
+              "min": 0,
+              "max": 90,
+              "units": {
+                "en": "°"
+              },
+              "label": {
+                "de": "Neigung der Module",
+                "en": "Panel tilt",
+                "nl": "Hellingshoek panelen"
+              },
+              "hint": {
+                "de": "Winkel der Module zur Horizontalen. Flach ist 0°, ein typisches Dach 15–35°.",
+                "en": "Angle of the panels from horizontal. Flat is 0°, a typical roof is 15–35°.",
+                "nl": "Hoek van de panelen ten opzichte van horizontaal. Plat is 0°, een gemiddeld dak is 15–35°."
+              }
+            },
+            {
+              "id": "forecast_orientation",
+              "type": "dropdown",
+              "value": "auto",
+              "values": [
+                {
+                  "id": "auto",
+                  "label": {
+                    "de": "Automatisch (zum Äquator)",
+                    "en": "Automatic (facing the equator)",
+                    "nl": "Automatisch (naar de evenaar)"
+                  }
+                },
+                {
+                  "id": "0",
+                  "label": {
+                    "de": "Nord",
+                    "en": "North",
+                    "nl": "Noord"
+                  }
+                },
+                {
+                  "id": "45",
+                  "label": {
+                    "de": "Nordost",
+                    "en": "North-east",
+                    "nl": "Noordoost"
+                  }
+                },
+                {
+                  "id": "90",
+                  "label": {
+                    "de": "Ost",
+                    "en": "East",
+                    "nl": "Oost"
+                  }
+                },
+                {
+                  "id": "135",
+                  "label": {
+                    "de": "Südost",
+                    "en": "South-east",
+                    "nl": "Zuidoost"
+                  }
+                },
+                {
+                  "id": "180",
+                  "label": {
+                    "de": "Süd",
+                    "en": "South",
+                    "nl": "Zuid"
+                  }
+                },
+                {
+                  "id": "225",
+                  "label": {
+                    "de": "Südwest",
+                    "en": "South-west",
+                    "nl": "Zuidwest"
+                  }
+                },
+                {
+                  "id": "270",
+                  "label": {
+                    "de": "West",
+                    "en": "West",
+                    "nl": "West"
+                  }
+                },
+                {
+                  "id": "315",
+                  "label": {
+                    "de": "Nordwest",
+                    "en": "North-west",
+                    "nl": "Noordwest"
+                  }
+                }
+              ],
+              "label": {
+                "de": "Ausrichtung der Module",
+                "en": "Panel direction",
+                "nl": "Richting panelen"
+              },
+              "hint": {
+                "de": "Die Richtung, in die die Module zeigen. Die Prognose lernt aus Ihrem Ertrag, ein ungefährer Wert genügt.",
+                "en": "The way the panels face. The forecast learns from your production, so an approximate value is fine.",
+                "nl": "De richting waarin de panelen liggen. De prognose leert van je opbrengst, dus een benadering is prima."
+              }
+            }
+          ]
         }
       ],
       "class": "solarpanel",
       "capabilities": [
         "measure_power",
+        "solar_forecast_power",
+        "solar_forecast_today",
+        "solar_forecast_tomorrow",
         "meter_power.day",
         "meter_power.month",
         "meter_power.year",
@@ -655,6 +777,158 @@
           "en": "Set the state to [[state]]"
         }
       }
+    ],
+    "triggers": [
+      {
+        "id": "solar_forecast_tomorrow_changed",
+        "tokens": [
+          {
+            "name": "forecast",
+            "type": "number",
+            "example": 18.5,
+            "title": {
+              "de": "Prognose",
+              "en": "Forecast",
+              "nl": "Prognose"
+            }
+          },
+          {
+            "name": "forecast_low",
+            "type": "number",
+            "example": 12.1,
+            "title": {
+              "de": "Prognose (niedrig, P10)",
+              "en": "Forecast (low, P10)",
+              "nl": "Prognose (laag, P10)"
+            }
+          },
+          {
+            "name": "forecast_high",
+            "type": "number",
+            "example": 22.4,
+            "title": {
+              "de": "Prognose (hoch, P90)",
+              "en": "Forecast (high, P90)",
+              "nl": "Prognose (hoog, P90)"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=inverter"
+          }
+        ],
+        "title": {
+          "de": "Die Solarprognose für morgen hat sich geändert",
+          "en": "Tomorrow's solar forecast changed",
+          "nl": "De zonneprognose voor morgen is gewijzigd"
+        }
+      }
+    ],
+    "conditions": [
+      {
+        "id": "solar_forecast_tomorrow_above",
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=inverter"
+          },
+          {
+            "name": "estimate",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "p50",
+                "title": {
+                  "de": "wahrscheinlichste",
+                  "en": "most likely",
+                  "nl": "meest waarschijnlijke"
+                }
+              },
+              {
+                "id": "p10",
+                "title": {
+                  "de": "niedrige (an 9 von 10 Tagen übertroffen)",
+                  "en": "low (9 in 10 days beat it)",
+                  "nl": "lage (9 op 10 dagen hoger)"
+                }
+              },
+              {
+                "id": "p90",
+                "title": {
+                  "de": "hohe (an 1 von 10 Tagen übertroffen)",
+                  "en": "high (1 in 10 days beat it)",
+                  "nl": "hoge (1 op 10 dagen hoger)"
+                }
+              }
+            ]
+          },
+          {
+            "name": "kwh",
+            "type": "number",
+            "min": 0,
+            "step": 0.1,
+            "placeholder": {
+              "de": "kWh",
+              "en": "kWh",
+              "nl": "kWh"
+            }
+          }
+        ],
+        "title": {
+          "de": "Die Solarprognose für morgen liegt über…",
+          "en": "Tomorrow's solar forecast is above…",
+          "nl": "De zonneprognose voor morgen is hoger dan…"
+        },
+        "titleFormatted": {
+          "de": "Die [[estimate]] Solarprognose für morgen !{{liegt|liegt nicht}} über [[kwh]] kWh",
+          "en": "Tomorrow's [[estimate]] solar forecast !{{is|is not}} above [[kwh]] kWh",
+          "nl": "De [[estimate]] zonneprognose voor morgen !{{is|is niet}} hoger dan [[kwh]] kWh"
+        }
+      },
+      {
+        "id": "solar_forecast_power_at_above",
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=inverter"
+          },
+          {
+            "name": "time",
+            "type": "time"
+          },
+          {
+            "name": "watts",
+            "type": "number",
+            "min": 0,
+            "step": 100,
+            "placeholder": {
+              "de": "W",
+              "en": "W",
+              "nl": "W"
+            }
+          }
+        ],
+        "title": {
+          "de": "Erwartete Solarleistung zu einer Uhrzeit liegt über…",
+          "en": "Expected solar power at a time is above…",
+          "nl": "Verwacht zonnevermogen op een tijdstip is hoger dan…"
+        },
+        "titleFormatted": {
+          "de": "Erwartete Solarleistung um [[time]] !{{liegt|liegt nicht}} über [[watts]] W",
+          "en": "Expected solar power at [[time]] !{{is|is not}} above [[watts]] W",
+          "nl": "Verwacht zonnevermogen om [[time]] !{{is|is niet}} hoger dan [[watts]] W"
+        },
+        "hint": {
+          "de": "Der nächste Zeitpunkt mit dieser Uhrzeit: heute, oder morgen, wenn er schon vorbei ist.",
+          "en": "The next time the clock reads this: today, or tomorrow if it has passed.",
+          "nl": "Het eerstvolgende moment met deze tijd: vandaag, of morgen als het al voorbij is."
+        }
+      }
     ]
   },
   "capabilities": {
@@ -695,6 +969,60 @@
       "max": 100,
       "step": 1,
       "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "solar_forecast_power": {
+      "type": "number",
+      "title": {
+        "en": "Forecast power",
+        "de": "Prognose Leistung",
+        "nl": "Prognose vermogen"
+      },
+      "icon": "/assets/capabilities/solar-forecast.svg",
+      "units": {
+        "en": "W"
+      },
+      "insights": true,
+      "chartType": "spline",
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "solar_forecast_today": {
+      "type": "number",
+      "title": {
+        "en": "Forecast (today)",
+        "de": "Prognose (heute)",
+        "nl": "Prognose (vandaag)"
+      },
+      "icon": "/assets/capabilities/solar-forecast.svg",
+      "units": {
+        "en": "kWh"
+      },
+      "insights": true,
+      "chartType": "stepLine",
+      "decimals": 1,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "solar_forecast_tomorrow": {
+      "type": "number",
+      "title": {
+        "en": "Forecast (tomorrow)",
+        "de": "Prognose (morgen)",
+        "nl": "Prognose (morgen)"
+      },
+      "icon": "/assets/capabilities/solar-forecast.svg",
+      "units": {
+        "en": "kWh"
+      },
+      "insights": true,
+      "chartType": "stepLine",
+      "decimals": 1,
       "getable": true,
       "setable": false,
       "uiComponent": "sensor"
