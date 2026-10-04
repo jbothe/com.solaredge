@@ -71,32 +71,125 @@ function fakeSolarEdge() {
   };
 }
 
-test('forecaster fetches history in blocks and reuses complete ones the next day', async () => {
+// Noon in Melbourne on the given date, as the forecaster's clock.
+const at = (date) => () => new Date(`${date}T02:00:00Z`);
+
+// An in-memory stand-in for the device store.
+function memoryStore() {
+  const store = { saved: null, saves: 0 };
+  store.load = async () => (store.saved ? JSON.parse(JSON.stringify(store.saved)) : null);
+  store.save = async (history) => {
+    store.saved = JSON.parse(JSON.stringify(history));
+    store.saves += 1;
+  };
+  return store;
+}
+
+function forecasterFor(api, options = {}) {
+  return new SolarForecaster({
+    solarEdgeApi: api, siteId: 1, timeZone: 'Australia/Melbourne', now: at('2026-10-04'), ...options,
+  });
+}
+
+test('forecaster fetches history in blocks and only new days the next day', async () => {
   const api = fakeSolarEdge();
-  const forecaster = new SolarForecaster({ solarEdgeApi: api, siteId: 1, timeZone: 'Australia/Melbourne' });
-  await forecaster.init();
+  const historyStore = memoryStore();
+  const forecaster = forecasterFor(api, { historyStore });
 
   const energy = await forecaster.getEnergy({ startDate: '2025-10-04', endDate: '2026-10-03' });
   assert.equal(energy.length, 365);
   assert.equal(energy[0].date, '2025-10-04');
   assert.equal(energy[364].date, '2026-10-03');
+  assert.ok(energy.every((e) => e.value === 10000));
   assert.equal(api.calls.filter((c) => c.startsWith('energy')).length, 13);
 
   const capW = await forecaster.getCapW({ endDate: '2026-10-03' });
   assert.equal(capW, 4000 * SolarForecaster.CAP_HEADROOM);
-  const powerCalls = api.calls.filter((c) => c.startsWith('power')).length;
-  assert.ok(powerCalls <= 5);
+  assert.ok(api.calls.filter((c) => c.startsWith('power')).length <= 5);
 
-  // The next day only the current month and week are fetched again.
+  // The next day only the block holding the new day is fetched again.
   api.calls.length = 0;
+  forecaster.now = at('2026-10-05');
   await forecaster.getEnergy({ startDate: '2025-10-05', endDate: '2026-10-04' });
   await forecaster.getCapW({ endDate: '2026-10-04' });
   assert.deepEqual(api.calls, ['energy 2026-10-01..2026-10-04', 'power 2026-10-01..2026-10-04']);
 });
 
+test('history survives a restart through the store', async () => {
+  const historyStore = memoryStore();
+  await forecasterFor(fakeSolarEdge(), { historyStore }).getEnergy({ startDate: '2026-08-01', endDate: '2026-10-03' });
+  assert.ok(historyStore.saves > 0);
+
+  // A new instance, as after a Homey restart, needs nothing from SolarEdge.
+  const api = fakeSolarEdge();
+  const energy = await forecasterFor(api, { historyStore }).getEnergy({ startDate: '2026-08-01', endDate: '2026-10-03' });
+  assert.equal(energy.length, 64);
+  assert.deepEqual(api.calls, []);
+});
+
+test('history for another site is ignored', async () => {
+  const historyStore = memoryStore();
+  await forecasterFor(fakeSolarEdge(), { historyStore }).getEnergy({ startDate: '2026-09-01', endDate: '2026-09-30' });
+
+  const api = fakeSolarEdge();
+  await forecasterFor(api, { historyStore, siteId: 2 }).getEnergy({ startDate: '2026-09-01', endDate: '2026-09-30' });
+  assert.deepEqual(api.calls, ['energy 2026-09-01..2026-09-30']);
+});
+
+test('today is never stored, and missing days are asked for again only while recent', async () => {
+  const api = fakeSolarEdge();
+  const { getSiteEnergy } = api;
+  // SolarEdge has nothing for 2026-08-10 or 2026-10-02.
+  api.getSiteEnergy = async (args) => {
+    const result = await getSiteEnergy(args);
+    result.chart.measurements = result.chart.measurements
+      .filter((m) => !['2026-08-10', '2026-10-02'].includes(m.measurementTime.slice(0, 10)));
+    return result;
+  };
+
+  const forecaster = forecasterFor(api);
+  const energy = await forecaster.getEnergy({ startDate: '2026-08-01', endDate: '2026-10-04' });
+  assert.equal(energy.find((e) => e.date === '2026-08-10').value, null);
+  assert.equal(energy.find((e) => e.date === '2026-10-04').value, null);
+  assert.ok(!('2026-10-04' in forecaster.history.energy));
+
+  // 2026-10-02 is recent enough to be checked again; 2026-08-10 isn't.
+  api.calls.length = 0;
+  await forecaster.getEnergy({ startDate: '2026-08-01', endDate: '2026-10-03' });
+  assert.deepEqual(api.calls, ['energy 2026-10-01..2026-10-03']);
+});
+
+test('dates past the retention window are dropped when the history is saved', async () => {
+  const historyStore = memoryStore();
+  const forecaster = forecasterFor(fakeSolarEdge(), { historyStore, retainDays: 40 });
+  await forecaster.getEnergy({ startDate: '2026-08-01', endDate: '2026-10-03' });
+
+  const dates = Object.keys(historyStore.saved.energy).sort();
+  assert.equal(dates[0], '2026-08-25');
+});
+
+test('15-minute power rolls up into energy per hour ending, plus the peak', () => {
+  const days = SolarForecaster.rollUpPower([
+    { measurementTime: '2026-10-03T10:00:00+10:00', production: 1000 },
+    { measurementTime: '2026-10-03T10:15:00+10:00', production: 2000 },
+    { measurementTime: '2026-10-03T10:30:00+10:00', production: 3000 },
+    { measurementTime: '2026-10-03T10:45:00+10:00', production: 4000 },
+    { measurementTime: '2026-10-03T11:00:00+10:00', production: 400 },
+    { measurementTime: '2026-10-03T23:45:00+10:00', production: 5 },
+    { measurementTime: '2026-10-03T12:00:00+10:00', production: null },
+  ]);
+
+  // 10:00–11:00 is Open-Meteo's 11:00 hour.
+  assert.equal(days['2026-10-03'].hours[11], 2500);
+  assert.equal(days['2026-10-03'].hours[12], 100);
+  assert.equal(days['2026-10-03'].hours[10], 0);
+  assert.equal(days['2026-10-03'].hours.length, 24);
+  assert.equal(days['2026-10-03'].maxW, 4000);
+});
+
 test('concurrent requests for the same history share in-flight blocks', async () => {
   const api = fakeSolarEdge();
-  const forecaster = new SolarForecaster({ solarEdgeApi: api, siteId: 1, timeZone: 'Australia/Melbourne' });
+  const forecaster = forecasterFor(api);
 
   // What happens when Open-Meteo fails: loadDays() rejects while its
   // getEnergy() keeps running, and the next step asks for the same year.
@@ -117,7 +210,7 @@ test('a block that fails is fetched again next time', async () => {
     return getSiteEnergy(args);
   };
 
-  const forecaster = new SolarForecaster({ solarEdgeApi: api, siteId: 1, timeZone: 'Australia/Melbourne' });
+  const forecaster = forecasterFor(api);
   const range = { startDate: '2026-08-01', endDate: '2026-10-03' };
 
   await assert.rejects(forecaster.getEnergy(range), /boom/);
@@ -130,4 +223,38 @@ test('a block that fails is fetched again next time', async () => {
     'energy 2026-09-01..2026-09-30',
     'energy 2026-10-01..2026-10-03',
   ]);
+});
+
+test('forecast hours follow the shading shape and add up to the seasonal P50', async () => {
+  // Two days of a flat 600 W/m² from 07:00 to 17:00.
+  const hours = [];
+  for (const date of ['2026-06-15', '2026-06-16']) {
+    for (let hour = 0; hour < 24; hour++) {
+      hours.push({
+        time: `${date}T${String(hour).padStart(2, '0')}:00`, gti: hour >= 7 && hour <= 17 ? 600 : 0, temperature: 10, cloudCover: 20,
+      });
+    }
+  }
+  const openMeteoApi = { getForecast: async () => hours };
+  const forecaster = forecasterFor(fakeSolarEdge(), { openMeteoApi });
+  const calibration = {
+    factor: 0.8, capW: Infinity, peakPowerW: 5720, bands: null, ceilingWh: null,
+  };
+
+  const plain = await forecaster.forecast({ calibration, profile: null });
+  // Half the 09:00 hour shaded in June.
+  const cells = Array.from({ length: 12 }, () => new Array(24).fill(1));
+  cells[5][9] = 0.5;
+  const shaded = await forecaster.forecast({ calibration, profile: { multipliers: null, shading: { cells } } });
+
+  const sumFor = (forecast, date) => forecast.hours.filter((h) => h.time.startsWith(date)).reduce((sum, h) => sum + h.wh, 0);
+  const at = (forecast, time) => forecast.hours.find((h) => h.time === time).wh;
+
+  // The daily total is the seasonal model's, untouched by the shading profile.
+  assert.equal(shaded.days['2026-06-15'].p50, plain.days['2026-06-15'].p50);
+  assert.ok(Math.abs(sumFor(shaded, '2026-06-15') - shaded.days['2026-06-15'].p50) < 1e-6);
+  // The shaded hour gives up energy to the others.
+  assert.ok(at(shaded, '2026-06-15T09:00') < at(plain, '2026-06-15T09:00') * 0.6);
+  assert.ok(at(shaded, '2026-06-15T12:00') > at(plain, '2026-06-15T12:00'));
+  assert.equal(at(shaded, '2026-06-15T03:00'), 0);
 });

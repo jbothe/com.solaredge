@@ -36,7 +36,9 @@ import {
   fitFactor,
   localDate,
   predictDay,
+  predictHourWh,
   seasonalMultiplier,
+  shadingMultipliers,
 } from '../lib/SolarForecastModel.mjs';
 
 const CACHE_DIR = path.resolve(import.meta.dirname, '../.cache/forecast-poc');
@@ -49,7 +51,12 @@ const { values: opts, positionals } = parseArgs({
     tilt: { type: 'string' },
     azimuth: { type: 'string' },
     verbose: { type: 'boolean', default: false },
+    brief: { type: 'boolean', default: false },
     'no-cache': { type: 'boolean', default: false },
+    // Shading profile tuning, see buildShadingProfile.
+    'shading-cloud': { type: 'string' },
+    'shading-evidence': { type: 'string' },
+    'shading-spread': { type: 'string' },
   },
 });
 
@@ -90,6 +97,25 @@ function cached(target, prefix) {
       };
     },
   });
+}
+
+// Keeps the forecaster's history in .cache, as the device store does on a
+// Homey, so a rerun only fetches days it hasn't seen.
+function fileHistoryStore(siteId) {
+  const file = path.join(CACHE_DIR, `history-${siteId}.json`);
+  return {
+    async load() {
+      try {
+        return JSON.parse(await fs.readFile(file, 'utf8'));
+      } catch {
+        return null;
+      }
+    },
+    async save(history) {
+      await fs.mkdir(CACHE_DIR, { recursive: true });
+      await fs.writeFile(file, JSON.stringify(history));
+    },
+  };
 }
 
 class UsageError extends Error {}
@@ -145,6 +171,9 @@ async function setup() {
     longitude,
     tilt,
     azimuth,
+    historyStore: opts['no-cache'] ? null : fileHistoryStore(siteId),
+    // The backtest learns its profile from the year before the test period.
+    retainDays: 2 * 365,
   });
 
   await forecaster.init();
@@ -172,9 +201,23 @@ function printProfile(profile) {
     return `${month} ${seasonalMultiplier(profile, date).toFixed(2)}`;
   });
 
-  console.log(`\nSeasonal profile  from ${profile.days} days`);
+  console.log(`\nSeasonal profile  from ${profile.days} days${profile.shading ? ' (stand-in only: the shading profile is used)' : ''}`);
   console.log(`  ${line.slice(0, 6).join('  ')}`);
   console.log(`  ${line.slice(6).join('  ')}`);
+
+  if (!profile.shading) {
+    console.log('\nShading profile   none (not enough hourly history)');
+    return;
+  }
+
+  // Multipliers as percentages, for the daylight hours. The hour is the one
+  // ending then: 09 is 08:00–09:00.
+  const hours = Array.from({ length: 15 }, (_, i) => i + 6);
+  console.log(`\nShading profile   from ${profile.shading.days} days, ${profile.shading.hours} clear hours (% of a typical clear hour)`);
+  console.log(`  hour ${hours.map((h) => String(h).padStart(4)).join('')}`);
+  profile.shading.cells.forEach((row, month) => {
+    console.log(`  ${MONTHS[month]}  ${hours.map((h) => String(Math.round(row[h] * 100)).padStart(4)).join('')}`);
+  });
 }
 
 function printBands(bands) {
@@ -236,6 +279,14 @@ function summariseErrors(rows, key) {
   };
 }
 
+function shadingOptions() {
+  const options = {};
+  if (opts['shading-cloud'] !== undefined) options.maxCloud = Number(opts['shading-cloud']);
+  if (opts['shading-evidence'] !== undefined) options.fullEvidence = Number(opts['shading-evidence']);
+  if (opts['shading-spread'] !== undefined) options.hourSpread = Number(opts['shading-spread']);
+  return options;
+}
+
 async function runBacktest({ forecaster }) {
   const days = Number(opts.days);
   const window = SolarForecaster.CALIBRATION_DAYS;
@@ -249,17 +300,29 @@ async function runBacktest({ forecaster }) {
 
   // The profile is learned only from the year before the test period, so the
   // test never scores the model on days it learned from.
-  const profile = await forecaster.buildProfile({ endDate: addDays(testStart, -2) });
+  const profile = await forecaster.buildProfile({ endDate: addDays(testStart, -2), shadingOptions: shadingOptions() });
   const capW = (await forecaster.getCapW({ endDate: testEnd })) ?? Infinity;
 
   const history = await forecaster.loadDays({
     startDate: addDays(testEnd, -(historyDays - 1)),
     endDate: testEnd,
     weather: 'dayAhead',
-    profile,
+    withHours: true,
   });
   const byDate = Object.fromEntries(history.map((day) => [day.date, day]));
-  const withoutProfile = (day) => ({ ...day, multiplier: 1 });
+
+  // The same day under each way of applying the profile.
+  const plain = (day) => ({ ...day, hourMultipliers: undefined, multiplier: 1 });
+  const variants = {
+    seasonal: (day) => ({ ...day, hourMultipliers: undefined, multiplier: seasonalMultiplier(profile, day.date) }),
+  };
+  // Shading as the whole model, totals included: what the app doesn't do,
+  // kept to show why.
+  if (profile.shading) {
+    variants.shading = (day) => ({ ...day, multiplier: undefined, hourMultipliers: shadingMultipliers(profile.shading, day) });
+  }
+  const hourly = Object.fromEntries([...Object.keys(variants), ...(profile.shading ? ['hybrid'] : [])]
+    .map((key) => [key, { shapeError: 0, p50Error: 0, actual: 0 }]));
 
   // Replays the app's schedule: the forecast for day D is made on D-1, with a
   // factor and range calibrated early on D-1 from days up to D-2.
@@ -271,56 +334,95 @@ async function runBacktest({ forecaster }) {
     const trainEnd = addDays(date, -2);
     const trainStart = addDays(trainEnd, -(window - 1));
     const train = history.filter((d) => d.date >= trainStart && d.date <= trainEnd);
-
-    const phase1 = fitFactor(train.map(withoutProfile), { capW, asOfDate: trainEnd });
-    const seasonal = fitFactor(train, { capW, asOfDate: trainEnd });
-    const bands = fitBands(history.filter((d) => d.date <= trainEnd), { factor: seasonal.factor, capW });
-
+    const upToTrainEnd = history.filter((d) => d.date <= trainEnd);
     const ceilingWh = fitCeiling(history.filter((d) => d.date > addDays(trainEnd, -CEILING_DAYS) && d.date <= trainEnd));
 
-    const seasonalWh = predictDay(day, seasonal.factor, capW);
-    const { p10, p50, p90 } = applyBands(seasonalWh, day.cloudCover, bands, { ceilingWh });
-    const uncorrected = applyBands(seasonalWh, day.cloudCover, bands, { ceilingWh, correctCloud: false }).p50;
+    const phase1 = fitFactor(train.map(plain), { capW, asOfDate: trainEnd });
+    const row = {
+      date,
+      actualWh: day.actualWh,
+      cloudCover: day.cloudCover,
+      phase1: predictDay(plain(day), phase1.factor, capW),
+      uncalibrated: predictDay(plain(day), DEFAULT_FACTOR, Infinity),
+    };
+
+    for (const [key, applyProfile] of Object.entries(variants)) {
+      const { factor } = fitFactor(train.map(applyProfile), { capW, asOfDate: trainEnd });
+      const bands = fitBands(upToTrainEnd.map(applyProfile), { factor, capW });
+      const shaped = applyProfile(day);
+      const modelWh = predictDay(shaped, factor, capW);
+      const { p10, p50, p90 } = applyBands(modelWh, day.cloudCover, bands, { ceilingWh });
+
+      row[key] = modelWh;
+      row[`${key}P50`] = p50;
+      row[`${key}P10`] = p10;
+      row[`${key}P90`] = p90;
+      row[`${key}Factor`] = factor;
+      if (key === 'seasonal') {
+        row.uncorrected = applyBands(modelWh, day.cloudCover, bands, { ceilingWh, correctCloud: false }).p50;
+      }
+
+      // Hour by hour, against what was produced: once scaled to the day's
+      // actual total (the shape alone), once scaled to P50 (as the app shows).
+      if (day.actualHours && modelWh > 0) {
+        const predicted = shaped.idealHours.map((idealWh, i) => predictHourWh(idealWh, factor * (shaped.hourMultipliers?.[i] ?? shaped.multiplier ?? 1), capW));
+        const total = predicted.reduce((sum, wh) => sum + wh, 0);
+        predicted.forEach((wh, i) => {
+          const actual = day.actualHours[shaped.hourOfDay[i]] ?? 0;
+          hourly[key].shapeError += Math.abs((wh * day.actualWh) / total - actual);
+          hourly[key].p50Error += Math.abs((wh * p50) / total - actual);
+          hourly[key].actual += actual;
+        });
+      }
+    }
+
+    // What the app does: the seasonal model's P50 for the day, spread over
+    // its hours by the shading profile's shape.
+    if (profile.shading && day.actualHours && row.seasonalP50 > 0) {
+      const shaped = variants.shading(day);
+      const predicted = shaped.idealHours.map((idealWh, i) => predictHourWh(idealWh, row.shadingFactor * shaped.hourMultipliers[i], capW));
+      const total = predicted.reduce((sum, wh) => sum + wh, 0);
+      predicted.forEach((wh, i) => {
+        const actual = day.actualHours[shaped.hourOfDay[i]] ?? 0;
+        hourly.hybrid.shapeError += Math.abs((wh * day.actualWh) / total - actual);
+        hourly.hybrid.p50Error += Math.abs((wh * row.seasonalP50) / total - actual);
+        hourly.hybrid.actual += actual;
+      });
+    }
 
     const previous = [1, 2, 3, 4, 5, 6, 7]
       .map((n) => byDate[addDays(date, -n)]?.actualWh)
       .filter((wh) => wh > 0);
+    row.yesterday = byDate[addDays(date, -1)]?.actualWh > 0 ? byDate[addDays(date, -1)].actualWh : undefined;
+    row.week = previous.length ? previous.reduce((a, b) => a + b, 0) / previous.length : undefined;
 
-    rows.push({
-      date,
-      actualWh: day.actualWh,
-      cloudCover: day.cloudCover,
-      factor: seasonal.factor,
-      phase1: predictDay(withoutProfile(day), phase1.factor, capW),
-      seasonal: seasonalWh,
-      uncorrected,
-      p10,
-      p50,
-      p90,
-      uncalibrated: predictDay(withoutProfile(day), DEFAULT_FACTOR, Infinity),
-      yesterday: byDate[addDays(date, -1)]?.actualWh > 0 ? byDate[addDays(date, -1)].actualWh : undefined,
-      week: previous.length ? previous.reduce((a, b) => a + b, 0) / previous.length : undefined,
-    });
+    rows.push(row);
   }
 
   if (!rows.length) fail('No days with production in the backtest range.');
 
   printProfile(profile);
 
+  const best = 'seasonal';
   if (opts.verbose) {
-    console.log('\ndate         actual  phase1      P50   P10–P90         cloud  factor');
+    console.log(`\ndate         actual  phase1      P50   P10–P90         cloud  factor   (${best})`);
     for (const row of rows) {
-      const inRange = row.actualWh >= row.p10 && row.actualWh <= row.p90 ? ' ' : '!';
-      console.log(`${row.date}  ${kwh(row.actualWh).padStart(6)}  ${kwh(row.phase1).padStart(6)}  ${kwh(row.p50).padStart(6)}   ${`${kwh(row.p10)}–${kwh(row.p90)}`.padEnd(12)}${inRange}  ${String(Math.round(row.cloudCover ?? 0)).padStart(4)}%  ${row.factor}`);
+      const [p10, p50, p90] = [row[`${best}P10`], row[`${best}P50`], row[`${best}P90`]];
+      const inRange = row.actualWh >= p10 && row.actualWh <= p90 ? ' ' : '!';
+      console.log(`${row.date}  ${kwh(row.actualWh).padStart(6)}  ${kwh(row.phase1).padStart(6)}  ${kwh(p50).padStart(6)}   ${`${kwh(p10)}–${kwh(p90)}`.padEnd(12)}${inRange}  ${String(Math.round(row.cloudCover ?? 0)).padStart(4)}%  ${row[`${best}Factor`]}`);
     }
     console.log('(! = actual outside P10–P90)');
   }
 
   console.log(`\nBacktest: ${rows.length} days (${rows[0].date} to ${rows[rows.length - 1].date}), day-ahead forecasts, clip at ${Number.isFinite(capW) ? `${Math.round(capW)} W` : 'none'}\n`);
-  console.log('method                         MAE kWh   error %   bias     within ±10%   within ±20%');
+  console.log('Daily totals                   MAE kWh   error %   bias     within ±10%   within ±20%');
 
   const methods = [
-    ['p50', 'Phase 2 (seasonal + cloud)'],
+    ['seasonalP50', 'Seasonal + cloud (the app)'],
+    ...(profile.shading ? [
+      ['shadingP50', 'Shading as the model + cloud'],
+      ['shading', 'Shading as the model only'],
+    ] : []),
     ['uncorrected', 'Seasonal + ceiling'],
     ['seasonal', 'Seasonal only'],
     ['phase1', 'Phase 1'],
@@ -330,13 +432,26 @@ async function runBacktest({ forecaster }) {
   ];
 
   for (const [key, label] of methods) {
-    const s = summariseErrors(rows, key);
-    console.log(`${label.padEnd(30)} ${kwh(s.mae).padStart(7)}   ${(s.wmape * 100).toFixed(1).padStart(6)}%  ${pct(s.bias).padStart(7)}   ${(s.within10 * 100).toFixed(0).padStart(9)}%   ${(s.within20 * 100).toFixed(0).padStart(9)}%`);
+    const sum = summariseErrors(rows, key);
+    console.log(`${label.padEnd(30)} ${kwh(sum.mae).padStart(7)}   ${(sum.wmape * 100).toFixed(1).padStart(6)}%  ${pct(sum.bias).padStart(7)}   ${(sum.within10 * 100).toFixed(0).padStart(9)}%   ${(sum.within20 * 100).toFixed(0).padStart(9)}%`);
+  }
+
+  const labels = {
+    seasonal: 'Seasonal shape', shading: 'Shading as the model', hybrid: 'Seasonal total, shading shape (the app)',
+  };
+  console.log(`\n${'Hourly'.padEnd(40)} shape error   error vs P50`);
+  for (const [key, h] of Object.entries(hourly)) {
+    if (!h.actual) continue;
+    console.log(`${labels[key].padEnd(40)} ${(100 * (h.shapeError / h.actual)).toFixed(1).padStart(10)}%   ${(100 * (h.p50Error / h.actual)).toFixed(1).padStart(11)}%`);
   }
 
   const share = (test) => `${Math.round((rows.filter(test).length / rows.length) * 100)}%`;
-  console.log(`\nRange: actual below P10 on ${share((r) => r.actualWh < r.p10)} of days, above P90 on ${share((r) => r.actualWh > r.p90)} (10% each is ideal).`);
+  for (const key of Object.keys(variants)) {
+    if (opts.brief) continue;
+    console.log(`\nRange (${key === 'seasonal' ? 'the app' : labels[key]}): actual below P10 on ${share((r) => r.actualWh < r[`${key}P10`])} of days, above P90 on ${share((r) => r.actualWh > r[`${key}P90`])} (10% each is ideal).`);
+  }
   console.log('error % = total absolute error / total production. bias > 0 means over-forecasting.');
+  console.log('Hourly shape error: each day\'s hours scaled to its actual total, so only how the day is spread counts.');
 }
 
 try {

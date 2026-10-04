@@ -8,6 +8,7 @@ import {
   addDays,
   applyBands,
   buildSeasonalProfile,
+  buildShadingProfile,
   cloudBin,
   dayOfYear,
   daysBetween,
@@ -19,6 +20,7 @@ import {
   localDateTime,
   predictDayWh,
   seasonalMultiplier,
+  shadingMultipliers,
   summariseDays,
 } from '../lib/SolarForecastModel.mjs';
 
@@ -226,4 +228,70 @@ test('nextOccurrence picks today if still ahead, else tomorrow', () => {
 
   assert.equal(localDateTime(SolarForecaster.nextOccurrence('13:30', { now, timeZone }), timeZone), '2026-10-04T13:30');
   assert.equal(localDateTime(SolarForecaster.nextOccurrence('09:00', { now, timeZone }), timeZone), '2026-10-05T09:00');
+});
+
+// A year of clear days on a 5 kW array, ideal output a bell from 06:00 to
+// 18:00, delivering 80% of ideal except where shade(date, hour) says less.
+function shadedYear(shade) {
+  const days = [];
+  for (let date = '2025-10-01'; date <= '2026-09-30'; date = addDays(date, 1)) {
+    const hourOfDay = [];
+    const idealHours = [];
+    for (let hour = 6; hour <= 18; hour++) {
+      hourOfDay.push(hour);
+      idealHours.push(4000 * Math.sin((Math.PI * (hour - 5)) / 14));
+    }
+    const actualHours = new Array(24).fill(0);
+    hourOfDay.forEach((hour, i) => {
+      actualHours[hour] = idealHours[i] * 0.8 * shade(date, hour);
+    });
+    days.push({
+      date,
+      idealHours,
+      hourOfDay,
+      cloudHours: hourOfDay.map(() => 10),
+      cloudCover: 10,
+      actualHours,
+      actualWh: actualHours.reduce((a, b) => a + b, 0),
+    });
+  }
+  return days;
+}
+
+test('the shading profile finds shade at the hours and months it happens', () => {
+  // A tree takes half the 08:00 and 09:00 hours in June and July.
+  const winterMorning = (date, hour) => (['06', '07'].includes(date.slice(5, 7)) && [8, 9].includes(hour) ? 0.5 : 1);
+  const profile = buildShadingProfile(shadedYear(winterMorning), { peakPowerW: 5000 });
+
+  assert.ok(profile);
+  const june = profile.cells[5];
+  const december = profile.cells[11];
+  assert.ok(Math.abs(june[9] - 0.5) < 0.05, `June 09:00 was ${june[9]}`);
+  assert.ok(Math.abs(june[13] - 1) < 0.05, `June 13:00 was ${june[13]}`);
+  assert.ok(Math.abs(december[9] - 1) < 0.05, `December 09:00 was ${december[9]}`);
+  // Night hours have no evidence and stay neutral.
+  assert.equal(june[2], 1);
+});
+
+test('the shading profile needs enough days of hourly history', () => {
+  const days = shadedYear(() => 1).slice(0, 30);
+  assert.equal(buildShadingProfile(days, { peakPowerW: 5000 }), null);
+});
+
+test('shading multipliers interpolate between months, whatever the cloud', () => {
+  const cells = Array.from({ length: 12 }, (_, month) => new Array(24).fill(month === 5 ? 0.5 : 1));
+  const profile = { cells };
+  const day = (date, cloud) => ({ date, hourOfDay: [9], cloudHours: [cloud] });
+
+  // On 15 June the June cell applies in full; on 30 June about halfway to July.
+  assert.equal(shadingMultipliers(profile, day('2026-06-15', 0))[0], 0.5);
+  assert.ok(Math.abs(shadingMultipliers(profile, day('2026-06-30', 0))[0] - 0.75) < 0.02);
+  // Wrapping round the year: 1 January sits between December and January.
+  assert.equal(shadingMultipliers(profile, day('2026-01-01', 0))[0], 1);
+  assert.equal(shadingMultipliers(profile, day('2026-06-15', 80))[0], 0.5);
+});
+
+test('a day with hour multipliers is predicted hour by hour', () => {
+  const day = { idealHours: [1000, 1000], hourMultipliers: [1, 0.5] };
+  assert.equal(predictDayWh(day.idealHours, 0.8, Infinity, day.hourMultipliers), 1200);
 });

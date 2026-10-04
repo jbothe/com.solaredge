@@ -88,6 +88,13 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
       tilt: tilt ?? 20,
       // Compass degrees; left out, the panels are taken to face the equator.
       azimuth: orientation && orientation !== 'auto' ? Number(orientation) : undefined,
+      // SolarEdge history the forecast learns from, kept across restarts so
+      // they don't refetch it (about 100 bytes a day, a year and a month of
+      // it).
+      historyStore: {
+        load: async () => this.getStoreValue('forecastHistory'),
+        save: async (history) => this.setStoreValue('forecastHistory', history),
+      },
     });
 
     await forecaster.init();
@@ -97,6 +104,7 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
 
   needsProfile(profile, forecaster, today) {
     return !profile
+      || profile.version !== SolarForecaster.PROFILE_VERSION
       || profile.configKey !== forecaster.configKey
       || daysBetween(profile.date, today) >= this.constructor.PROFILE_MAX_AGE_DAYS;
   }
@@ -136,7 +144,8 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
         try {
           profile = await forecaster.buildProfile({ now });
           await this.setStoreValue('forecastProfile', profile);
-          this.log(`Forecast seasonal profile built from ${profile.days} days${profile.multipliers ? '' : ' (too few, not used)'}`);
+          this.log(`Forecast profile built: seasonal from ${profile.days} days${profile.multipliers ? '' : ' (too few, not used)'}, `
+            + `shading ${profile.shading ? `from ${profile.shading.days} days` : 'not enough hourly history'}`);
         } catch (err) {
           this.error(`Error building forecast profile: ${err.message}`);
         }
