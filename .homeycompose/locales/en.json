@@ -143,13 +143,17 @@
         "password": {
           "label": "Password"
         },
+        "forecast_panels": {
+          "label": "Number of panels",
+          "hint": "How many panels face this way. Only needed when some face another way (see the next groups)."
+        },
         "forecast_tilt": {
           "label": "Panel tilt",
           "hint": "Angle of the panels from horizontal. Flat is 0°, a typical roof is 15–35°."
         },
         "forecast_orientation": {
           "label": "Panel direction",
-          "hint": "The way the panels face. The forecast learns from your production, so an approximate value is fine.",
+          "hint": "The way the panels face. The forecast learns from your production, so the nearest direction is fine.",
           "values": {
             "0": {
               "label": "North"
@@ -177,6 +181,160 @@
             },
             "auto": {
               "label": "Automatic (facing the equator)"
+            },
+            "22.5": {
+              "label": "North-north-east"
+            },
+            "67.5": {
+              "label": "East-north-east"
+            },
+            "112.5": {
+              "label": "East-south-east"
+            },
+            "157.5": {
+              "label": "South-south-east"
+            },
+            "202.5": {
+              "label": "South-south-west"
+            },
+            "247.5": {
+              "label": "West-south-west"
+            },
+            "292.5": {
+              "label": "West-north-west"
+            },
+            "337.5": {
+              "label": "North-north-west"
+            }
+          }
+        },
+        "forecast_panels_2": {
+          "label": "Number of panels",
+          "hint": "Panels facing a second (or third) way. 0 when all your panels face the same way."
+        },
+        "forecast_tilt_2": {
+          "label": "Panel tilt",
+          "hint": "Angle of the panels from horizontal. Flat is 0°, a typical roof is 15–35°."
+        },
+        "forecast_orientation_2": {
+          "label": "Panel direction",
+          "hint": "The way the panels face. The forecast learns from your production, so the nearest direction is fine.",
+          "values": {
+            "0": {
+              "label": "North"
+            },
+            "45": {
+              "label": "North-east"
+            },
+            "90": {
+              "label": "East"
+            },
+            "135": {
+              "label": "South-east"
+            },
+            "180": {
+              "label": "South"
+            },
+            "225": {
+              "label": "South-west"
+            },
+            "270": {
+              "label": "West"
+            },
+            "315": {
+              "label": "North-west"
+            },
+            "auto": {
+              "label": "Automatic (facing the equator)"
+            },
+            "22.5": {
+              "label": "North-north-east"
+            },
+            "67.5": {
+              "label": "East-north-east"
+            },
+            "112.5": {
+              "label": "East-south-east"
+            },
+            "157.5": {
+              "label": "South-south-east"
+            },
+            "202.5": {
+              "label": "South-south-west"
+            },
+            "247.5": {
+              "label": "West-south-west"
+            },
+            "292.5": {
+              "label": "West-north-west"
+            },
+            "337.5": {
+              "label": "North-north-west"
+            }
+          }
+        },
+        "forecast_panels_3": {
+          "label": "Number of panels",
+          "hint": "Panels facing a second (or third) way. 0 when all your panels face the same way."
+        },
+        "forecast_tilt_3": {
+          "label": "Panel tilt",
+          "hint": "Angle of the panels from horizontal. Flat is 0°, a typical roof is 15–35°."
+        },
+        "forecast_orientation_3": {
+          "label": "Panel direction",
+          "hint": "The way the panels face. The forecast learns from your production, so the nearest direction is fine.",
+          "values": {
+            "0": {
+              "label": "North"
+            },
+            "45": {
+              "label": "North-east"
+            },
+            "90": {
+              "label": "East"
+            },
+            "135": {
+              "label": "South-east"
+            },
+            "180": {
+              "label": "South"
+            },
+            "225": {
+              "label": "South-west"
+            },
+            "270": {
+              "label": "West"
+            },
+            "315": {
+              "label": "North-west"
+            },
+            "auto": {
+              "label": "Automatic (facing the equator)"
+            },
+            "22.5": {
+              "label": "North-north-east"
+            },
+            "67.5": {
+              "label": "East-north-east"
+            },
+            "112.5": {
+              "label": "East-south-east"
+            },
+            "157.5": {
+              "label": "South-south-east"
+            },
+            "202.5": {
+              "label": "South-south-west"
+            },
+            "247.5": {
+              "label": "West-south-west"
+            },
+            "292.5": {
+              "label": "West-north-west"
+            },
+            "337.5": {
+              "label": "North-north-west"
             }
           }
         }

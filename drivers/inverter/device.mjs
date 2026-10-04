@@ -1,4 +1,5 @@
 import SolarEdgeDevice from '../../lib/SolarEdgeDevice.mjs';
+import { describePlanes, planesFromGroups } from '../../lib/PanelLayout.mjs';
 import SolarForecaster from '../../lib/SolarForecaster.mjs';
 import { daysBetween, localDate, localDateTime } from '../../lib/SolarForecastModel.mjs';
 
@@ -56,9 +57,15 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
   }
 
   async onSettings({ newSettings, changedKeys }) {
+    const forecastChanged = changedKeys.some((key) => key.startsWith('forecast_'));
+
+    // Rejects panel groups that don't add up, with the reason, before
+    // anything is saved.
+    if (forecastChanged) this.constructor.panelPlanes(newSettings);
+
     await super.onSettings({ newSettings, changedKeys });
 
-    if (changedKeys.some((key) => ['forecast_tilt', 'forecast_orientation'].includes(key))) {
+    if (forecastChanged) {
       // The stored profile and calibration are keyed on their config, so
       // they are rebuilt on the next tick rather than discarded here.
       this.forecaster = null;
@@ -78,16 +85,12 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
   async getForecaster() {
     if (this.forecaster) return this.forecaster;
 
-    const { forecast_tilt: tilt, forecast_orientation: orientation } = this.getSettings();
-
     // Location comes from the site's coordinates in SolarEdge.
     const forecaster = new SolarForecaster({
       solarEdgeApi: this.api,
       siteId: this.getData().siteId,
       timeZone: this.homey.clock.getTimezone(),
-      tilt: tilt ?? 20,
-      // Compass degrees; left out, the panels are taken to face the equator.
-      azimuth: orientation && orientation !== 'auto' ? Number(orientation) : undefined,
+      planes: this.constructor.panelPlanes(this.getSettings()),
       // SolarEdge history the forecast learns from, kept across restarts so
       // they don't refetch it (about 100 bytes a day, a year and a month of
       // it).
@@ -98,8 +101,25 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
     });
 
     await forecaster.init();
+    this.log(`Forecast panels: ${describePlanes(forecaster.location.planes)} (tilt/facing)`);
     this.forecaster = forecaster;
     return forecaster;
+  }
+
+  // Planes from the up to three panel groups in the settings. SolarEdge's
+  // site layout isn't used: it's the installer's drawing, and on the author's site
+  // it didn't match the roof (see lib/PanelLayout.mjs).
+  static panelPlanes(settings) {
+    const group = (suffix) => {
+      const orientation = settings[`forecast_orientation${suffix}`];
+      return {
+        panels: settings[`forecast_panels${suffix}`] ?? 0,
+        tilt: settings[`forecast_tilt${suffix}`] ?? 20,
+        // Compass degrees; "auto" faces the equator.
+        azimuth: orientation && orientation !== 'auto' ? Number(orientation) : null,
+      };
+    };
+    return planesFromGroups([group(''), group('_2'), group('_3')]);
   }
 
   needsProfile(profile, forecaster, today) {

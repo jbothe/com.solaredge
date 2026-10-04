@@ -66,13 +66,17 @@
         "password": {
           "label": "Wachtwoord"
         },
+        "forecast_panels": {
+          "label": "Aantal panelen",
+          "hint": "Hoeveel panelen deze kant op liggen. Alleen nodig als een deel een andere kant op ligt (zie de volgende groepen)."
+        },
         "forecast_tilt": {
           "label": "Hellingshoek panelen",
           "hint": "Hoek van de panelen ten opzichte van horizontaal. Plat is 0°, een gemiddeld dak is 15–35°."
         },
         "forecast_orientation": {
           "label": "Richting panelen",
-          "hint": "De richting waarin de panelen liggen. De prognose leert van je opbrengst, dus een benadering is prima.",
+          "hint": "De richting waarin de panelen liggen. De prognose leert van je opbrengst, dus de dichtstbijzijnde richting is prima.",
           "values": {
             "0": {
               "label": "Noord"
@@ -99,7 +103,161 @@
               "label": "Noordwest"
             },
             "auto": {
-              "label": "Automatisch (naar de evenaar)"
+              "label": "Automatisch (richting de evenaar)"
+            },
+            "22.5": {
+              "label": "Noord-noordoost"
+            },
+            "67.5": {
+              "label": "Oost-noordoost"
+            },
+            "112.5": {
+              "label": "Oost-zuidoost"
+            },
+            "157.5": {
+              "label": "Zuid-zuidoost"
+            },
+            "202.5": {
+              "label": "Zuid-zuidwest"
+            },
+            "247.5": {
+              "label": "West-zuidwest"
+            },
+            "292.5": {
+              "label": "West-noordwest"
+            },
+            "337.5": {
+              "label": "Noord-noordwest"
+            }
+          }
+        },
+        "forecast_panels_2": {
+          "label": "Aantal panelen",
+          "hint": "Panelen die een tweede (of derde) kant op liggen. 0 als al je panelen dezelfde kant op liggen."
+        },
+        "forecast_tilt_2": {
+          "label": "Hellingshoek panelen",
+          "hint": "Hoek van de panelen ten opzichte van horizontaal. Plat is 0°, een gemiddeld dak is 15–35°."
+        },
+        "forecast_orientation_2": {
+          "label": "Richting panelen",
+          "hint": "De richting waarin de panelen liggen. De prognose leert van je opbrengst, dus de dichtstbijzijnde richting is prima.",
+          "values": {
+            "0": {
+              "label": "Noord"
+            },
+            "45": {
+              "label": "Noordoost"
+            },
+            "90": {
+              "label": "Oost"
+            },
+            "135": {
+              "label": "Zuidoost"
+            },
+            "180": {
+              "label": "Zuid"
+            },
+            "225": {
+              "label": "Zuidwest"
+            },
+            "270": {
+              "label": "West"
+            },
+            "315": {
+              "label": "Noordwest"
+            },
+            "auto": {
+              "label": "Automatisch (richting de evenaar)"
+            },
+            "22.5": {
+              "label": "Noord-noordoost"
+            },
+            "67.5": {
+              "label": "Oost-noordoost"
+            },
+            "112.5": {
+              "label": "Oost-zuidoost"
+            },
+            "157.5": {
+              "label": "Zuid-zuidoost"
+            },
+            "202.5": {
+              "label": "Zuid-zuidwest"
+            },
+            "247.5": {
+              "label": "West-zuidwest"
+            },
+            "292.5": {
+              "label": "West-noordwest"
+            },
+            "337.5": {
+              "label": "Noord-noordwest"
+            }
+          }
+        },
+        "forecast_panels_3": {
+          "label": "Aantal panelen",
+          "hint": "Panelen die een tweede (of derde) kant op liggen. 0 als al je panelen dezelfde kant op liggen."
+        },
+        "forecast_tilt_3": {
+          "label": "Hellingshoek panelen",
+          "hint": "Hoek van de panelen ten opzichte van horizontaal. Plat is 0°, een gemiddeld dak is 15–35°."
+        },
+        "forecast_orientation_3": {
+          "label": "Richting panelen",
+          "hint": "De richting waarin de panelen liggen. De prognose leert van je opbrengst, dus de dichtstbijzijnde richting is prima.",
+          "values": {
+            "0": {
+              "label": "Noord"
+            },
+            "45": {
+              "label": "Noordoost"
+            },
+            "90": {
+              "label": "Oost"
+            },
+            "135": {
+              "label": "Zuidoost"
+            },
+            "180": {
+              "label": "Zuid"
+            },
+            "225": {
+              "label": "Zuidwest"
+            },
+            "270": {
+              "label": "West"
+            },
+            "315": {
+              "label": "Noordwest"
+            },
+            "auto": {
+              "label": "Automatisch (richting de evenaar)"
+            },
+            "22.5": {
+              "label": "Noord-noordoost"
+            },
+            "67.5": {
+              "label": "Oost-noordoost"
+            },
+            "112.5": {
+              "label": "Oost-zuidoost"
+            },
+            "157.5": {
+              "label": "Zuid-zuidoost"
+            },
+            "202.5": {
+              "label": "Zuid-zuidwest"
+            },
+            "247.5": {
+              "label": "West-zuidwest"
+            },
+            "292.5": {
+              "label": "West-noordwest"
+            },
+            "337.5": {
+              "label": "Noord-noordwest"
             }
           }
         }

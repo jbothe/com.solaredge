@@ -66,13 +66,17 @@
         "password": {
           "label": "Passwort"
         },
+        "forecast_panels": {
+          "label": "Anzahl der Module",
+          "hint": "Wie viele Module in diese Richtung zeigen. Nur nötig, wenn ein Teil in eine andere Richtung zeigt (siehe die nächsten Gruppen)."
+        },
         "forecast_tilt": {
           "label": "Neigung der Module",
           "hint": "Winkel der Module zur Horizontalen. Flach ist 0°, ein typisches Dach 15–35°."
         },
         "forecast_orientation": {
           "label": "Ausrichtung der Module",
-          "hint": "Die Richtung, in die die Module zeigen. Die Prognose lernt aus Ihrem Ertrag, ein ungefährer Wert genügt.",
+          "hint": "Die Richtung, in die die Module zeigen. Die Prognose lernt aus Ihrem Ertrag, die nächstliegende Richtung genügt.",
           "values": {
             "0": {
               "label": "Nord"
@@ -100,6 +104,160 @@
             },
             "auto": {
               "label": "Automatisch (zum Äquator)"
+            },
+            "22.5": {
+              "label": "Nordnordost"
+            },
+            "67.5": {
+              "label": "Ostnordost"
+            },
+            "112.5": {
+              "label": "Ostsüdost"
+            },
+            "157.5": {
+              "label": "Südsüdost"
+            },
+            "202.5": {
+              "label": "Südsüdwest"
+            },
+            "247.5": {
+              "label": "Westsüdwest"
+            },
+            "292.5": {
+              "label": "Westnordwest"
+            },
+            "337.5": {
+              "label": "Nordnordwest"
+            }
+          }
+        },
+        "forecast_panels_2": {
+          "label": "Anzahl der Module",
+          "hint": "Module, die in eine zweite (oder dritte) Richtung zeigen. 0, wenn alle Module in dieselbe Richtung zeigen."
+        },
+        "forecast_tilt_2": {
+          "label": "Neigung der Module",
+          "hint": "Winkel der Module zur Horizontalen. Flach ist 0°, ein typisches Dach 15–35°."
+        },
+        "forecast_orientation_2": {
+          "label": "Ausrichtung der Module",
+          "hint": "Die Richtung, in die die Module zeigen. Die Prognose lernt aus Ihrem Ertrag, die nächstliegende Richtung genügt.",
+          "values": {
+            "0": {
+              "label": "Nord"
+            },
+            "45": {
+              "label": "Nordost"
+            },
+            "90": {
+              "label": "Ost"
+            },
+            "135": {
+              "label": "Südost"
+            },
+            "180": {
+              "label": "Süd"
+            },
+            "225": {
+              "label": "Südwest"
+            },
+            "270": {
+              "label": "West"
+            },
+            "315": {
+              "label": "Nordwest"
+            },
+            "auto": {
+              "label": "Automatisch (zum Äquator)"
+            },
+            "22.5": {
+              "label": "Nordnordost"
+            },
+            "67.5": {
+              "label": "Ostnordost"
+            },
+            "112.5": {
+              "label": "Ostsüdost"
+            },
+            "157.5": {
+              "label": "Südsüdost"
+            },
+            "202.5": {
+              "label": "Südsüdwest"
+            },
+            "247.5": {
+              "label": "Westsüdwest"
+            },
+            "292.5": {
+              "label": "Westnordwest"
+            },
+            "337.5": {
+              "label": "Nordnordwest"
+            }
+          }
+        },
+        "forecast_panels_3": {
+          "label": "Anzahl der Module",
+          "hint": "Module, die in eine zweite (oder dritte) Richtung zeigen. 0, wenn alle Module in dieselbe Richtung zeigen."
+        },
+        "forecast_tilt_3": {
+          "label": "Neigung der Module",
+          "hint": "Winkel der Module zur Horizontalen. Flach ist 0°, ein typisches Dach 15–35°."
+        },
+        "forecast_orientation_3": {
+          "label": "Ausrichtung der Module",
+          "hint": "Die Richtung, in die die Module zeigen. Die Prognose lernt aus Ihrem Ertrag, die nächstliegende Richtung genügt.",
+          "values": {
+            "0": {
+              "label": "Nord"
+            },
+            "45": {
+              "label": "Nordost"
+            },
+            "90": {
+              "label": "Ost"
+            },
+            "135": {
+              "label": "Südost"
+            },
+            "180": {
+              "label": "Süd"
+            },
+            "225": {
+              "label": "Südwest"
+            },
+            "270": {
+              "label": "West"
+            },
+            "315": {
+              "label": "Nordwest"
+            },
+            "auto": {
+              "label": "Automatisch (zum Äquator)"
+            },
+            "22.5": {
+              "label": "Nordnordost"
+            },
+            "67.5": {
+              "label": "Ostnordost"
+            },
+            "112.5": {
+              "label": "Ostsüdost"
+            },
+            "157.5": {
+              "label": "Südsüdost"
+            },
+            "202.5": {
+              "label": "Südsüdwest"
+            },
+            "247.5": {
+              "label": "Westsüdwest"
+            },
+            "292.5": {
+              "label": "Westnordwest"
+            },
+            "337.5": {
+              "label": "Nordnordwest"
             }
           }
         }

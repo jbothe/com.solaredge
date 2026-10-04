@@ -13,11 +13,18 @@
   {
     "type": "group",
     "label": {
-      "en": "Solar forecast",
-      "nl": "Zonneprognose",
-      "de": "Solarprognose"
+      "en": "Solar forecast: panels",
+      "nl": "Zonneprognose: panelen",
+      "de": "Solarprognose: Module"
     },
     "children": [
+      {
+        "id": "forecast_panels",
+        "type": "number",
+        "value": 0,
+        "min": 0,
+        "max": 500
+      },
       {
         "id": "forecast_tilt",
         "type": "number",
@@ -40,25 +47,219 @@
             "id": "0"
           },
           {
+            "id": "22.5"
+          },
+          {
             "id": "45"
+          },
+          {
+            "id": "67.5"
           },
           {
             "id": "90"
           },
           {
+            "id": "112.5"
+          },
+          {
             "id": "135"
+          },
+          {
+            "id": "157.5"
           },
           {
             "id": "180"
           },
           {
+            "id": "202.5"
+          },
+          {
             "id": "225"
+          },
+          {
+            "id": "247.5"
           },
           {
             "id": "270"
           },
           {
+            "id": "292.5"
+          },
+          {
             "id": "315"
+          },
+          {
+            "id": "337.5"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Solar forecast: second group of panels",
+      "nl": "Zonneprognose: tweede groep panelen",
+      "de": "Solarprognose: zweite Modulgruppe"
+    },
+    "children": [
+      {
+        "id": "forecast_panels_2",
+        "type": "number",
+        "value": 0,
+        "min": 0,
+        "max": 500
+      },
+      {
+        "id": "forecast_tilt_2",
+        "type": "number",
+        "value": 20,
+        "min": 0,
+        "max": 90,
+        "units": {
+          "en": "°"
+        }
+      },
+      {
+        "id": "forecast_orientation_2",
+        "type": "dropdown",
+        "value": "auto",
+        "values": [
+          {
+            "id": "auto"
+          },
+          {
+            "id": "0"
+          },
+          {
+            "id": "22.5"
+          },
+          {
+            "id": "45"
+          },
+          {
+            "id": "67.5"
+          },
+          {
+            "id": "90"
+          },
+          {
+            "id": "112.5"
+          },
+          {
+            "id": "135"
+          },
+          {
+            "id": "157.5"
+          },
+          {
+            "id": "180"
+          },
+          {
+            "id": "202.5"
+          },
+          {
+            "id": "225"
+          },
+          {
+            "id": "247.5"
+          },
+          {
+            "id": "270"
+          },
+          {
+            "id": "292.5"
+          },
+          {
+            "id": "315"
+          },
+          {
+            "id": "337.5"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Solar forecast: third group of panels",
+      "nl": "Zonneprognose: derde groep panelen",
+      "de": "Solarprognose: dritte Modulgruppe"
+    },
+    "children": [
+      {
+        "id": "forecast_panels_3",
+        "type": "number",
+        "value": 0,
+        "min": 0,
+        "max": 500
+      },
+      {
+        "id": "forecast_tilt_3",
+        "type": "number",
+        "value": 20,
+        "min": 0,
+        "max": 90,
+        "units": {
+          "en": "°"
+        }
+      },
+      {
+        "id": "forecast_orientation_3",
+        "type": "dropdown",
+        "value": "auto",
+        "values": [
+          {
+            "id": "auto"
+          },
+          {
+            "id": "0"
+          },
+          {
+            "id": "22.5"
+          },
+          {
+            "id": "45"
+          },
+          {
+            "id": "67.5"
+          },
+          {
+            "id": "90"
+          },
+          {
+            "id": "112.5"
+          },
+          {
+            "id": "135"
+          },
+          {
+            "id": "157.5"
+          },
+          {
+            "id": "180"
+          },
+          {
+            "id": "202.5"
+          },
+          {
+            "id": "225"
+          },
+          {
+            "id": "247.5"
+          },
+          {
+            "id": "270"
+          },
+          {
+            "id": "292.5"
+          },
+          {
+            "id": "315"
+          },
+          {
+            "id": "337.5"
           }
         ]
       }

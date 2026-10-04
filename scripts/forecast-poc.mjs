@@ -5,15 +5,21 @@
 //   npm run forecast                 calibrate, then forecast today + tomorrow
 //   npm run forecast -- backtest     replay the last 90 days as day-ahead forecasts,
 //                                    phase 1 against phase 2
+//   npm run forecast -- detect       suggest the panel groups (--planes) from a year
+//                                    of hourly production on clear days
+//                                    (--tilts 15,20,30, --months 10,11,12,1,2,3)
 //
-// Options: --days N (backtest length), --tilt DEG, --azimuth DEG (compass,
-// 0 = N, 90 = E, 180 = S, 270 = W), --verbose, --no-cache.
+// Options: --days N (backtest length), --verbose, --no-cache, and for the
+// panels: --planes 13@20/339,9@20/251 (groups as panels@tilt/azimuth,
+// compass degrees: 0 = N, 90 = E, 180 = S, 270 = W), or --tilt DEG and
+// --azimuth DEG for a single plane (default 20° facing the equator).
 //
 // Configuration comes from .env (gitignored):
 //   SOLAREDGE_USERNAME / SOLAREDGE_PASSWORD   required, your monitoring.solaredge.com login
 //   SOLAREDGE_SITE_ID=...            optional, defaults to the account's first site
 //   SITE_LATITUDE / SITE_LONGITUDE   optional, else the site's coordinates in SolarEdge
-//   PANEL_TILT / PANEL_AZIMUTH       optional, default 20° facing the equator
+//   PANEL_PLANES=13@22/306,9@22/33   optional panel groups, as --planes
+//   PANEL_TILT / PANEL_AZIMUTH       optional single plane, default 20° facing the equator
 //
 // API responses are cached in .cache/forecast-poc for 6 hours, to go easy on
 // SolarEdge and Open-Meteo while iterating.
@@ -24,6 +30,7 @@ import path from 'node:path';
 import { parseArgs } from 'node:util';
 
 import OpenMeteoAPI from '../lib/OpenMeteoAPI.mjs';
+import { describePlanes, parsePlanes } from '../lib/PanelLayout.mjs';
 import SolarEdgeAPI from '../lib/SolarEdgeAPI.mjs';
 import SolarForecaster from '../lib/SolarForecaster.mjs';
 import {
@@ -34,6 +41,7 @@ import {
   fitBands,
   fitCeiling,
   fitFactor,
+  idealHourlyWh,
   localDate,
   predictDay,
   predictHourWh,
@@ -50,6 +58,7 @@ const { values: opts, positionals } = parseArgs({
     days: { type: 'string', default: '90' },
     tilt: { type: 'string' },
     azimuth: { type: 'string' },
+    planes: { type: 'string' },
     verbose: { type: 'boolean', default: false },
     brief: { type: 'boolean', default: false },
     'no-cache': { type: 'boolean', default: false },
@@ -57,6 +66,8 @@ const { values: opts, positionals } = parseArgs({
     'shading-cloud': { type: 'string' },
     'shading-evidence': { type: 'string' },
     'shading-spread': { type: 'string' },
+    tilts: { type: 'string', default: '20' },
+    months: { type: 'string', default: '10,11,12,1,2,3' },
   },
 });
 
@@ -171,6 +182,7 @@ async function setup() {
     longitude,
     tilt,
     azimuth,
+    planes: (opts.planes ?? process.env.PANEL_PLANES) ? parsePlanes(opts.planes ?? process.env.PANEL_PLANES) : undefined,
     historyStore: opts['no-cache'] ? null : fileHistoryStore(siteId),
     // The backtest learns its profile from the year before the test period.
     retainDays: 2 * 365,
@@ -181,7 +193,7 @@ async function setup() {
 
   console.log(`Site      ${siteId}, ${details.peakPower} kWp, ${timeZone}`);
   console.log(`Location  ${location.latitude.toFixed(3)}, ${location.longitude.toFixed(3)} (${latitude === undefined ? 'from SolarEdge' : 'from .env'})`);
-  console.log(`Panels    tilt ${location.tilt}°, facing ${location.azimuth}° (compass)`);
+  console.log(`Panels    ${describePlanes(location.planes)} (tilt/facing)`);
 
   return { forecaster, timeZone };
 }
@@ -454,13 +466,133 @@ async function runBacktest({ forecaster }) {
   console.log('Hourly shape error: each day\'s hours scaled to its actual total, so only how the day is spread counts.');
 }
 
+// Non-negative least squares by coordinate descent: w ≥ 0 minimising
+// Σ (y - Σ w_i x_i)². columns are arrays the length of y.
+function nnls(columns, y, { iterations = 2000 } = {}) {
+  const weights = columns.map(() => 0);
+  const residual = [...y];
+  const norms = columns.map((x) => x.reduce((sum, v) => sum + v * v, 0));
+
+  for (let it = 0; it < iterations; it++) {
+    let moved = 0;
+    columns.forEach((x, i) => {
+      if (!norms[i]) return;
+      let dot = 0;
+      for (let k = 0; k < y.length; k++) dot += x[k] * residual[k];
+      const next = Math.max(0, weights[i] + dot / norms[i]);
+      const delta = next - weights[i];
+      if (delta) {
+        for (let k = 0; k < y.length; k++) residual[k] -= delta * x[k];
+        weights[i] = next;
+        moved = Math.max(moved, Math.abs(delta));
+      }
+    });
+    if (moved < 1e-6) break;
+  }
+
+  const error = residual.reduce((sum, r) => sum + Math.abs(r), 0) / y.reduce((sum, v) => sum + v, 0);
+  return { weights, error };
+}
+
+// Suggests panel groups from production: on clear days in the given months
+// (high sun, least shading), finds the non-negative mix of candidate planes
+// (every 22.5° at each tilt) whose ideal hourly output best matches what was
+// produced, then merges neighbouring directions into groups.
+async function runDetect({ forecaster, timeZone }) {
+  const tilts = opts.tilts.split(',').map(Number);
+  const months = new Set(opts.months.split(',').map(Number));
+  const azimuths = Array.from({ length: 16 }, (_, i) => i * 22.5);
+
+  const endDate = addDays(localDate(new Date(), timeZone), -1);
+  const startDate = addDays(endDate, -364);
+  const { latitude, longitude } = forecaster.location;
+  const { peakPowerW } = forecaster;
+  const capW = (await forecaster.getCapW({ endDate })) ?? Infinity;
+  const power = await forecaster.getPowerDays({ startDate, endDate });
+
+  // Ideal output by time for each candidate plane.
+  const candidates = [];
+  for (const tilt of tilts) {
+    for (const azimuth of azimuths) {
+      const hours = await forecaster.openMeteoApi.getHistoricalForecast({
+        latitude, longitude, timeZone, tilt, azimuth, startDate, endDate,
+      });
+      candidates.push({ tilt, azimuth, hours });
+    }
+  }
+
+  // Clear days in the chosen months, from the first candidate's weather.
+  const cloudByDate = {};
+  for (const hour of candidates[0].hours) {
+    const date = hour.time.slice(0, 10);
+    const ideal = idealHourlyWh(hour, peakPowerW);
+    cloudByDate[date] ??= { weighted: 0, weight: 0 };
+    if (typeof hour.cloudCover === 'number') {
+      cloudByDate[date].weighted += hour.cloudCover * ideal;
+      cloudByDate[date].weight += ideal;
+    }
+  }
+  const clearDates = new Set(Object.entries(cloudByDate)
+    .filter(([date, c]) => c.weight > 0 && c.weighted / c.weight < 30 && months.has(Number(date.slice(5, 7))) && power[date])
+    .map(([date]) => date));
+
+  // One row per clear, unclipped daylight hour.
+  const rows = [];
+  candidates[0].hours.forEach((hour, i) => {
+    const date = hour.time.slice(0, 10);
+    if (!clearDates.has(date)) return;
+    const actual = power[date].hours[Number(hour.time.slice(11, 13))];
+    const ideals = candidates.map((c) => idealHourlyWh(c.hours[i], peakPowerW));
+    if (!(Math.max(...ideals) > 0.05 * peakPowerW) || typeof actual !== 'number' || actual >= 0.95 * capW) return;
+    rows.push({ actual, ideals });
+  });
+  if (rows.length < 50) fail(`Only ${rows.length} clear hours to learn from; try more --months.`);
+
+  const y = rows.map((r) => r.actual);
+  const columns = candidates.map((_, c) => rows.map((r) => r.ideals[c]));
+  const mix = nnls(columns, y);
+
+  console.log(`\nDetect: ${clearDates.size} clear days, ${rows.length} hours (months ${[...months].join(',')}), tilts ${tilts.join('/')}°`);
+  console.log('\nEach direction on its own (error = total |hourly miss| / production):');
+  const singles = candidates.map((c, i) => ({ ...c, error: nnls([columns[i]], y).error }));
+  for (const tilt of tilts) {
+    console.log(`  tilt ${String(tilt).padStart(2)}°  ${singles.filter((c) => c.tilt === tilt).map((c) => `${String(c.azimuth).padStart(5)}°:${(c.error * 100).toFixed(1).padStart(5)}%`).join('  ')}`);
+  }
+
+  // Merge neighbouring weighted directions (same tilt, within 45°) into groups.
+  const weighted = candidates.map((c, i) => ({ ...c, weight: mix.weights[i] })).filter((c) => c.weight > 0);
+  const total = weighted.reduce((sum, c) => sum + c.weight, 0);
+  const groups = [];
+  for (const c of weighted.sort((a, b) => b.weight - a.weight)) {
+    const group = groups.find((g) => g.tilt === c.tilt && Math.min(Math.abs(g.azimuth - c.azimuth), 360 - Math.abs(g.azimuth - c.azimuth)) <= 45);
+    if (!group) {
+      groups.push({
+        tilt: c.tilt, azimuth: c.azimuth, x: Math.cos((c.azimuth * Math.PI) / 180) * c.weight, y: Math.sin((c.azimuth * Math.PI) / 180) * c.weight, weight: c.weight,
+      });
+      continue;
+    }
+    group.x += Math.cos((c.azimuth * Math.PI) / 180) * c.weight;
+    group.y += Math.sin((c.azimuth * Math.PI) / 180) * c.weight;
+    group.weight += c.weight;
+    group.azimuth = (((Math.atan2(group.y, group.x) * 180) / Math.PI) + 360) % 360;
+  }
+
+  console.log(`\nBest mix (error ${(mix.error * 100).toFixed(1)}%, overall factor ${total.toFixed(2)}):`);
+  for (const g of groups) {
+    console.log(`  ${String(Math.round((100 * g.weight) / total)).padStart(3)}%  tilt ${g.tilt}°  facing ${Math.round(g.azimuth)}°`);
+  }
+  const best = singles.reduce((a, b) => (b.error < a.error ? b : a));
+  console.log(`Best single plane: tilt ${best.tilt}° facing ${best.azimuth}° (error ${(best.error * 100).toFixed(1)}%)`);
+  console.log(`\nTry: npm run forecast -- backtest --planes ${groups.map((g) => `${Math.round((100 * g.weight) / total)}@${g.tilt}/${Math.round(g.azimuth)}`).join(',')}`);
+}
+
 try {
-  if (!['forecast', 'backtest'].includes(command)) {
-    fail(`Unknown command "${command}". Use "forecast" or "backtest".`);
+  if (!['forecast', 'backtest', 'detect'].includes(command)) {
+    fail(`Unknown command "${command}". Use "forecast", "backtest" or "detect".`);
   }
 
   const context = await setup();
-  await (command === 'forecast' ? runForecast : runBacktest)(context);
+  await ({ forecast: runForecast, backtest: runBacktest, detect: runDetect }[command])(context);
 } catch (err) {
   console.error(`\n${err instanceof UsageError ? err.message : err.stack}`);
   process.exitCode = 1;

@@ -374,11 +374,28 @@
         {
           "type": "group",
           "label": {
-            "en": "Solar forecast",
-            "nl": "Zonneprognose",
-            "de": "Solarprognose"
+            "en": "Solar forecast: panels",
+            "nl": "Zonneprognose: panelen",
+            "de": "Solarprognose: Module"
           },
           "children": [
+            {
+              "id": "forecast_panels",
+              "type": "number",
+              "value": 0,
+              "min": 0,
+              "max": 500,
+              "label": {
+                "de": "Anzahl der Module",
+                "en": "Number of panels",
+                "nl": "Aantal panelen"
+              },
+              "hint": {
+                "de": "Wie viele Module in diese Richtung zeigen. Nur nötig, wenn ein Teil in eine andere Richtung zeigt (siehe die nächsten Gruppen).",
+                "en": "How many panels face this way. Only needed when some face another way (see the next groups).",
+                "nl": "Hoeveel panelen deze kant op liggen. Alleen nodig als een deel een andere kant op ligt (zie de volgende groepen)."
+              }
+            },
             {
               "id": "forecast_tilt",
               "type": "number",
@@ -409,7 +426,7 @@
                   "label": {
                     "de": "Automatisch (zum Äquator)",
                     "en": "Automatic (facing the equator)",
-                    "nl": "Automatisch (naar de evenaar)"
+                    "nl": "Automatisch (richting de evenaar)"
                   }
                 },
                 {
@@ -421,11 +438,27 @@
                   }
                 },
                 {
+                  "id": "22.5",
+                  "label": {
+                    "de": "Nordnordost",
+                    "en": "North-north-east",
+                    "nl": "Noord-noordoost"
+                  }
+                },
+                {
                   "id": "45",
                   "label": {
                     "de": "Nordost",
                     "en": "North-east",
                     "nl": "Noordoost"
+                  }
+                },
+                {
+                  "id": "67.5",
+                  "label": {
+                    "de": "Ostnordost",
+                    "en": "East-north-east",
+                    "nl": "Oost-noordoost"
                   }
                 },
                 {
@@ -437,11 +470,27 @@
                   }
                 },
                 {
+                  "id": "112.5",
+                  "label": {
+                    "de": "Ostsüdost",
+                    "en": "East-south-east",
+                    "nl": "Oost-zuidoost"
+                  }
+                },
+                {
                   "id": "135",
                   "label": {
                     "de": "Südost",
                     "en": "South-east",
                     "nl": "Zuidoost"
+                  }
+                },
+                {
+                  "id": "157.5",
+                  "label": {
+                    "de": "Südsüdost",
+                    "en": "South-south-east",
+                    "nl": "Zuid-zuidoost"
                   }
                 },
                 {
@@ -453,11 +502,27 @@
                   }
                 },
                 {
+                  "id": "202.5",
+                  "label": {
+                    "de": "Südsüdwest",
+                    "en": "South-south-west",
+                    "nl": "Zuid-zuidwest"
+                  }
+                },
+                {
                   "id": "225",
                   "label": {
                     "de": "Südwest",
                     "en": "South-west",
                     "nl": "Zuidwest"
+                  }
+                },
+                {
+                  "id": "247.5",
+                  "label": {
+                    "de": "Westsüdwest",
+                    "en": "West-south-west",
+                    "nl": "West-zuidwest"
                   }
                 },
                 {
@@ -469,11 +534,27 @@
                   }
                 },
                 {
+                  "id": "292.5",
+                  "label": {
+                    "de": "Westnordwest",
+                    "en": "West-north-west",
+                    "nl": "West-noordwest"
+                  }
+                },
+                {
                   "id": "315",
                   "label": {
                     "de": "Nordwest",
                     "en": "North-west",
                     "nl": "Noordwest"
+                  }
+                },
+                {
+                  "id": "337.5",
+                  "label": {
+                    "de": "Nordnordwest",
+                    "en": "North-north-west",
+                    "nl": "Noord-noordwest"
                   }
                 }
               ],
@@ -483,9 +564,409 @@
                 "nl": "Richting panelen"
               },
               "hint": {
-                "de": "Die Richtung, in die die Module zeigen. Die Prognose lernt aus Ihrem Ertrag, ein ungefährer Wert genügt.",
-                "en": "The way the panels face. The forecast learns from your production, so an approximate value is fine.",
-                "nl": "De richting waarin de panelen liggen. De prognose leert van je opbrengst, dus een benadering is prima."
+                "de": "Die Richtung, in die die Module zeigen. Die Prognose lernt aus Ihrem Ertrag, die nächstliegende Richtung genügt.",
+                "en": "The way the panels face. The forecast learns from your production, so the nearest direction is fine.",
+                "nl": "De richting waarin de panelen liggen. De prognose leert van je opbrengst, dus de dichtstbijzijnde richting is prima."
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Solar forecast: second group of panels",
+            "nl": "Zonneprognose: tweede groep panelen",
+            "de": "Solarprognose: zweite Modulgruppe"
+          },
+          "children": [
+            {
+              "id": "forecast_panels_2",
+              "type": "number",
+              "value": 0,
+              "min": 0,
+              "max": 500,
+              "label": {
+                "de": "Anzahl der Module",
+                "en": "Number of panels",
+                "nl": "Aantal panelen"
+              },
+              "hint": {
+                "de": "Module, die in eine zweite (oder dritte) Richtung zeigen. 0, wenn alle Module in dieselbe Richtung zeigen.",
+                "en": "Panels facing a second (or third) way. 0 when all your panels face the same way.",
+                "nl": "Panelen die een tweede (of derde) kant op liggen. 0 als al je panelen dezelfde kant op liggen."
+              }
+            },
+            {
+              "id": "forecast_tilt_2",
+              "type": "number",
+              "value": 20,
+              "min": 0,
+              "max": 90,
+              "units": {
+                "en": "°"
+              },
+              "label": {
+                "de": "Neigung der Module",
+                "en": "Panel tilt",
+                "nl": "Hellingshoek panelen"
+              },
+              "hint": {
+                "de": "Winkel der Module zur Horizontalen. Flach ist 0°, ein typisches Dach 15–35°.",
+                "en": "Angle of the panels from horizontal. Flat is 0°, a typical roof is 15–35°.",
+                "nl": "Hoek van de panelen ten opzichte van horizontaal. Plat is 0°, een gemiddeld dak is 15–35°."
+              }
+            },
+            {
+              "id": "forecast_orientation_2",
+              "type": "dropdown",
+              "value": "auto",
+              "values": [
+                {
+                  "id": "auto",
+                  "label": {
+                    "de": "Automatisch (zum Äquator)",
+                    "en": "Automatic (facing the equator)",
+                    "nl": "Automatisch (richting de evenaar)"
+                  }
+                },
+                {
+                  "id": "0",
+                  "label": {
+                    "de": "Nord",
+                    "en": "North",
+                    "nl": "Noord"
+                  }
+                },
+                {
+                  "id": "22.5",
+                  "label": {
+                    "de": "Nordnordost",
+                    "en": "North-north-east",
+                    "nl": "Noord-noordoost"
+                  }
+                },
+                {
+                  "id": "45",
+                  "label": {
+                    "de": "Nordost",
+                    "en": "North-east",
+                    "nl": "Noordoost"
+                  }
+                },
+                {
+                  "id": "67.5",
+                  "label": {
+                    "de": "Ostnordost",
+                    "en": "East-north-east",
+                    "nl": "Oost-noordoost"
+                  }
+                },
+                {
+                  "id": "90",
+                  "label": {
+                    "de": "Ost",
+                    "en": "East",
+                    "nl": "Oost"
+                  }
+                },
+                {
+                  "id": "112.5",
+                  "label": {
+                    "de": "Ostsüdost",
+                    "en": "East-south-east",
+                    "nl": "Oost-zuidoost"
+                  }
+                },
+                {
+                  "id": "135",
+                  "label": {
+                    "de": "Südost",
+                    "en": "South-east",
+                    "nl": "Zuidoost"
+                  }
+                },
+                {
+                  "id": "157.5",
+                  "label": {
+                    "de": "Südsüdost",
+                    "en": "South-south-east",
+                    "nl": "Zuid-zuidoost"
+                  }
+                },
+                {
+                  "id": "180",
+                  "label": {
+                    "de": "Süd",
+                    "en": "South",
+                    "nl": "Zuid"
+                  }
+                },
+                {
+                  "id": "202.5",
+                  "label": {
+                    "de": "Südsüdwest",
+                    "en": "South-south-west",
+                    "nl": "Zuid-zuidwest"
+                  }
+                },
+                {
+                  "id": "225",
+                  "label": {
+                    "de": "Südwest",
+                    "en": "South-west",
+                    "nl": "Zuidwest"
+                  }
+                },
+                {
+                  "id": "247.5",
+                  "label": {
+                    "de": "Westsüdwest",
+                    "en": "West-south-west",
+                    "nl": "West-zuidwest"
+                  }
+                },
+                {
+                  "id": "270",
+                  "label": {
+                    "de": "West",
+                    "en": "West",
+                    "nl": "West"
+                  }
+                },
+                {
+                  "id": "292.5",
+                  "label": {
+                    "de": "Westnordwest",
+                    "en": "West-north-west",
+                    "nl": "West-noordwest"
+                  }
+                },
+                {
+                  "id": "315",
+                  "label": {
+                    "de": "Nordwest",
+                    "en": "North-west",
+                    "nl": "Noordwest"
+                  }
+                },
+                {
+                  "id": "337.5",
+                  "label": {
+                    "de": "Nordnordwest",
+                    "en": "North-north-west",
+                    "nl": "Noord-noordwest"
+                  }
+                }
+              ],
+              "label": {
+                "de": "Ausrichtung der Module",
+                "en": "Panel direction",
+                "nl": "Richting panelen"
+              },
+              "hint": {
+                "de": "Die Richtung, in die die Module zeigen. Die Prognose lernt aus Ihrem Ertrag, die nächstliegende Richtung genügt.",
+                "en": "The way the panels face. The forecast learns from your production, so the nearest direction is fine.",
+                "nl": "De richting waarin de panelen liggen. De prognose leert van je opbrengst, dus de dichtstbijzijnde richting is prima."
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Solar forecast: third group of panels",
+            "nl": "Zonneprognose: derde groep panelen",
+            "de": "Solarprognose: dritte Modulgruppe"
+          },
+          "children": [
+            {
+              "id": "forecast_panels_3",
+              "type": "number",
+              "value": 0,
+              "min": 0,
+              "max": 500,
+              "label": {
+                "de": "Anzahl der Module",
+                "en": "Number of panels",
+                "nl": "Aantal panelen"
+              },
+              "hint": {
+                "de": "Module, die in eine zweite (oder dritte) Richtung zeigen. 0, wenn alle Module in dieselbe Richtung zeigen.",
+                "en": "Panels facing a second (or third) way. 0 when all your panels face the same way.",
+                "nl": "Panelen die een tweede (of derde) kant op liggen. 0 als al je panelen dezelfde kant op liggen."
+              }
+            },
+            {
+              "id": "forecast_tilt_3",
+              "type": "number",
+              "value": 20,
+              "min": 0,
+              "max": 90,
+              "units": {
+                "en": "°"
+              },
+              "label": {
+                "de": "Neigung der Module",
+                "en": "Panel tilt",
+                "nl": "Hellingshoek panelen"
+              },
+              "hint": {
+                "de": "Winkel der Module zur Horizontalen. Flach ist 0°, ein typisches Dach 15–35°.",
+                "en": "Angle of the panels from horizontal. Flat is 0°, a typical roof is 15–35°.",
+                "nl": "Hoek van de panelen ten opzichte van horizontaal. Plat is 0°, een gemiddeld dak is 15–35°."
+              }
+            },
+            {
+              "id": "forecast_orientation_3",
+              "type": "dropdown",
+              "value": "auto",
+              "values": [
+                {
+                  "id": "auto",
+                  "label": {
+                    "de": "Automatisch (zum Äquator)",
+                    "en": "Automatic (facing the equator)",
+                    "nl": "Automatisch (richting de evenaar)"
+                  }
+                },
+                {
+                  "id": "0",
+                  "label": {
+                    "de": "Nord",
+                    "en": "North",
+                    "nl": "Noord"
+                  }
+                },
+                {
+                  "id": "22.5",
+                  "label": {
+                    "de": "Nordnordost",
+                    "en": "North-north-east",
+                    "nl": "Noord-noordoost"
+                  }
+                },
+                {
+                  "id": "45",
+                  "label": {
+                    "de": "Nordost",
+                    "en": "North-east",
+                    "nl": "Noordoost"
+                  }
+                },
+                {
+                  "id": "67.5",
+                  "label": {
+                    "de": "Ostnordost",
+                    "en": "East-north-east",
+                    "nl": "Oost-noordoost"
+                  }
+                },
+                {
+                  "id": "90",
+                  "label": {
+                    "de": "Ost",
+                    "en": "East",
+                    "nl": "Oost"
+                  }
+                },
+                {
+                  "id": "112.5",
+                  "label": {
+                    "de": "Ostsüdost",
+                    "en": "East-south-east",
+                    "nl": "Oost-zuidoost"
+                  }
+                },
+                {
+                  "id": "135",
+                  "label": {
+                    "de": "Südost",
+                    "en": "South-east",
+                    "nl": "Zuidoost"
+                  }
+                },
+                {
+                  "id": "157.5",
+                  "label": {
+                    "de": "Südsüdost",
+                    "en": "South-south-east",
+                    "nl": "Zuid-zuidoost"
+                  }
+                },
+                {
+                  "id": "180",
+                  "label": {
+                    "de": "Süd",
+                    "en": "South",
+                    "nl": "Zuid"
+                  }
+                },
+                {
+                  "id": "202.5",
+                  "label": {
+                    "de": "Südsüdwest",
+                    "en": "South-south-west",
+                    "nl": "Zuid-zuidwest"
+                  }
+                },
+                {
+                  "id": "225",
+                  "label": {
+                    "de": "Südwest",
+                    "en": "South-west",
+                    "nl": "Zuidwest"
+                  }
+                },
+                {
+                  "id": "247.5",
+                  "label": {
+                    "de": "Westsüdwest",
+                    "en": "West-south-west",
+                    "nl": "West-zuidwest"
+                  }
+                },
+                {
+                  "id": "270",
+                  "label": {
+                    "de": "West",
+                    "en": "West",
+                    "nl": "West"
+                  }
+                },
+                {
+                  "id": "292.5",
+                  "label": {
+                    "de": "Westnordwest",
+                    "en": "West-north-west",
+                    "nl": "West-noordwest"
+                  }
+                },
+                {
+                  "id": "315",
+                  "label": {
+                    "de": "Nordwest",
+                    "en": "North-west",
+                    "nl": "Noordwest"
+                  }
+                },
+                {
+                  "id": "337.5",
+                  "label": {
+                    "de": "Nordnordwest",
+                    "en": "North-north-west",
+                    "nl": "Noord-noordwest"
+                  }
+                }
+              ],
+              "label": {
+                "de": "Ausrichtung der Module",
+                "en": "Panel direction",
+                "nl": "Richting panelen"
+              },
+              "hint": {
+                "de": "Die Richtung, in die die Module zeigen. Die Prognose lernt aus Ihrem Ertrag, die nächstliegende Richtung genügt.",
+                "en": "The way the panels face. The forecast learns from your production, so the nearest direction is fine.",
+                "nl": "De richting waarin de panelen liggen. De prognose leert van je opbrengst, dus de dichtstbijzijnde richting is prima."
               }
             }
           ]

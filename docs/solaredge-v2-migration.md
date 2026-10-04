@@ -55,6 +55,15 @@ All are `GET https://monitoring.solaredge.com/services/dashboard/...`, authentic
 | `/power-flow/v2/sites/{id}?components=…` | newer live power flow, `updateRefreshRate: 3`, same shape as the mobile one the app polls | — |
 | `/live-power/sites/{id}` | `currentAcPower` | — |
 | `/services/cni/ui-api/sites/{id}` | timezone, location, peakPowerPkw | — |
+| `POST /services/layout/information/optimizers` with a JSON array of optimizer serials | per optimizer: model, and its modules' `tilt`/`azimuth` (radians; azimuth anticlockwise from north, so compass = 360° − azimuth), manufacturer and model; plus live `power_W`, voltage, current. Cookie login is enough (the web app also sends `x-se-user-id`, not needed). | 22 serials in one call OK |
+| `/services/cni/ui-api/user-info` | userId, email, names, display units | — |
+| `/services/cni/ui-api/pages/operations/commands/site/{id}/devices/communication` | inverter, battery and meter serials and connectivity (no optimizers) | — |
+
+`GET /services/layout/physical/site/{id}` lists the optimizer serials (`physicalDevicesMap.optimizers[].serialNumber`, plus inverters and strings). It also returns presigned S3 links (valid 5 days) to the site's Designer model and image. Cookie login is enough. With the POST above, that's the drawn layout in two requests.
+
+**Not used: the layout is the installer's drawing, not a survey.** On the author's site it puts the 13 panels in a separate column, which they aren't (aerial photo), and its directions don't match a phone compass. Read as plain compass bearings, the stored azimuths say 69° for the 13 and 341° for the 9. The compass on the roof says 306° and 33°, roughly the reverse. No reading of the azimuths gets both groups right. So the app takes panel groups from settings, and `npm run forecast -- detect` checks them against production.
+
+The author's site: 22 × Canadian Solar CS6P-260 (5.72 kWp), flush on a 22° roof (owner; the installer's drawing says 20°). By phone compass (true north), 13 face 306° (NW) and 9 face 33° (NE). Detection from clear-day production finds the combined direction at 339°, matching the 13/9 weighted mean of 340°. It can't split the direction into two groups: on clear days two roof faces look like one plane at their average direction. A 300-day backtest barely separates orientations: daily error is 15.9% for a single plane facing north and 15.6% for the measured groups. Calibration, the seasonal multiplier and the shading profile absorb most of a wrong direction.
 | `/services/m/so/dashboard/site/{id}/energyOverview` | LIFE_TIME/LAST_YEAR/LAST_MONTH/LAST_DAY energy (already used) | — |
 
 Not reachable with a homeowner login: `/services/charts/site/{id}/tree` and `/devices-measurements` (the Charts tab) return 403 `NO_PERMISSION`. That's the only internal source of inverter AC/DC voltage. The `/services/charts/measurements-map` catalogue lists no inverter or battery temperature at all.
