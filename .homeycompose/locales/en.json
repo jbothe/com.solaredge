@@ -138,8 +138,8 @@
         "meter_power.exported_total": {
           "title": "Exported (total)"
         },
-        "measure_power.grid": {
-          "title": "Grid Power"
+        "measure_power.consumption": {
+          "title": "Consumption"
         },
         "measure_power.solar": {
           "title": "Solar Power"

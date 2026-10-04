@@ -9,7 +9,7 @@
   },
   "insights": true,
   "desc": {
-    "en": "Battery SoH Percentage"
+    "en": "Estimated from discharge energy per percent of charge, relative to rated capacity"
   },
   "chartType": "stepLine",
   "min": 0,

@@ -9,7 +9,6 @@
     "meter_power.discharged_today",
     "meter_power.charged_total",
     "meter_power.discharged_total",
-    "measure_temperature",
     "battery_soh"
   ],
   "capabilitiesOptions": {

@@ -2,6 +2,18 @@ import SolarEdgeDevice from '../../lib/SolarEdgeDevice.mjs';
 
 export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
 
+  // Read from the V1 API's inverter telemetry, which SolarEdge retired on
+  // 2026-11-03. Nothing a homeowner login can reach reports them any more.
+  static RETIRED_CAPABILITIES = ['measure_temperature', 'measure_voltage', 'measure_voltage.dc'];
+
+  async onInit() {
+    // Puts everything in the manifest's order (power, today, month, year,
+    // total) for devices that gained capabilities at runtime.
+    await this.orderCapabilities(this.driver.manifest.capabilities);
+
+    await super.onInit();
+  }
+
   async onSitePowerflow(sitePowerflow) {
     // Solar
     if (typeof sitePowerflow.solarProduction?.currentPower === 'number') {
@@ -43,57 +55,6 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
         }
         default: {
           break;
-        }
-      }
-    }
-
-    // Get Inverter Serial
-    let inverterSerial = await this.getStoreValue('inverterSerial');
-    if (!inverterSerial) {
-      const reporters = await this.api.getEquipmentList({
-        apikey: this.getSettings().apikey,
-        siteId: this.getData().siteId,
-      });
-
-      inverterSerial = reporters?.list?.[0]?.serialNumber;
-      if (inverterSerial) {
-        await this.setStoreValue('inverterSerial', inverterSerial);
-      }
-    }
-
-    if (inverterSerial) {
-      // Get Inverter Data
-      const inverterData = await this.api.getSiteInverter({
-        apikey: this.getSettings().apikey,
-        siteId: this.getData().siteId,
-        inverterSerial,
-      });
-
-      if (inverterData.telemetries?.length > 0) {
-        const latestTelemetry = inverterData.telemetries[inverterData.telemetries.length - 1];
-
-        const voltage = latestTelemetry.L1Data?.acVoltage;
-        if (typeof voltage === 'number') {
-          if (!this.hasCapability('measure_voltage')) {
-            await this.addCapability('measure_voltage');
-          }
-          await this.setCapabilityValue('measure_voltage', voltage).catch(this.error);
-        }
-
-        const temp = latestTelemetry.temperature;
-        if (typeof temp === 'number') {
-          if (!this.hasCapability('measure_temperature')) {
-            await this.addCapability('measure_temperature');
-          }
-          await this.setCapabilityValue('measure_temperature', temp).catch(this.error);
-        }
-
-        const { dcVoltage } = latestTelemetry;
-        if (typeof dcVoltage === 'number') {
-          if (!this.hasCapability('measure_voltage.dc')) {
-            await this.addCapability('measure_voltage.dc');
-          }
-          await this.setCapabilityValue('measure_voltage.dc', dcVoltage).catch(this.error);
         }
       }
     }

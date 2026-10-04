@@ -120,8 +120,8 @@
         "meter_power.exported_total": {
           "title": "Exportiert (gesamt)"
         },
-        "measure_power.grid": {
-          "title": "Netzleistung"
+        "measure_power.consumption": {
+          "title": "Verbrauch"
         },
         "measure_power.solar": {
           "title": "Solar Leistung"

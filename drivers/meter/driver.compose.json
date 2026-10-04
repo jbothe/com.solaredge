@@ -3,9 +3,9 @@
   "class": "sensor",
   "capabilities": [
     "measure_power",
-    "alarm_generic",
-    "measure_power.grid",
+    "measure_power.consumption",
     "measure_power.solar",
+    "alarm_generic",
     "meter_power.imported_today",
     "meter_power.exported_today",
     "meter_power.imported_total",

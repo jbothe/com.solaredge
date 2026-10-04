@@ -5,13 +5,17 @@
     "moduleResolution": "node",
     "allowJs": true,
     "checkJs": false,
-    "types": ["@types/homey"],
+    "types": [
+      "@types/homey"
+    ],
     "noEmit": true
   },
   "include": [
     "app.mjs",
     "lib/**/*.mjs",
-    "drivers/**/*.mjs"
+    "drivers/**/*.mjs",
+    "scripts/**/*.mjs",
+    "test/**/*.mjs"
   ],
   "exclude": [
     "node_modules",

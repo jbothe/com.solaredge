@@ -85,16 +85,6 @@
             "de": "Passwort",
             "nl": "Wachtwoord"
           }
-        },
-        {
-          "id": "apikey",
-          "type": "password",
-          "label": {
-            "en": "API Key"
-          },
-          "hint": {
-            "en": "Your SolarEdge (read-only) API key."
-          }
         }
       ],
       "class": "battery",
@@ -106,7 +96,6 @@
         "meter_power.discharged_today",
         "meter_power.charged_total",
         "meter_power.discharged_total",
-        "measure_temperature",
         "battery_soh"
       ],
       "capabilitiesOptions": {
@@ -234,16 +223,6 @@
             "de": "Passwort",
             "nl": "Wachtwoord"
           }
-        },
-        {
-          "id": "apikey",
-          "type": "password",
-          "label": {
-            "en": "API Key"
-          },
-          "hint": {
-            "en": "Your SolarEdge (read-only) API key."
-          }
         }
       ],
       "class": "evcharger",
@@ -329,16 +308,6 @@
           "label": {
             "en": "Password"
           }
-        },
-        {
-          "id": "apikey",
-          "type": "password",
-          "label": {
-            "en": "API Key"
-          },
-          "hint": {
-            "en": "Your SolarEdge (read-only) API key."
-          }
         }
       ],
       "class": "other",
@@ -401,28 +370,15 @@
             "de": "Passwort",
             "nl": "Wachtwoord"
           }
-        },
-        {
-          "id": "apikey",
-          "type": "password",
-          "label": {
-            "en": "API Key"
-          },
-          "hint": {
-            "en": "Your SolarEdge (read-only) API key."
-          }
         }
       ],
       "class": "solarpanel",
       "capabilities": [
         "measure_power",
-        "measure_temperature",
         "meter_power.day",
         "meter_power.month",
         "meter_power.year",
-        "meter_power",
-        "measure_voltage",
-        "measure_voltage.dc"
+        "meter_power"
       ],
       "capabilitiesOptions": {
         "measure_power": {
@@ -540,24 +496,14 @@
             "de": "Passwort",
             "nl": "Wachtwoord"
           }
-        },
-        {
-          "id": "apikey",
-          "type": "password",
-          "label": {
-            "en": "API Key"
-          },
-          "hint": {
-            "en": "Your SolarEdge (read-only) API key."
-          }
         }
       ],
       "class": "sensor",
       "capabilities": [
         "measure_power",
-        "alarm_generic",
-        "measure_power.grid",
+        "measure_power.consumption",
         "measure_power.solar",
+        "alarm_generic",
         "meter_power.imported_today",
         "meter_power.exported_today",
         "meter_power.imported_total",
@@ -603,11 +549,11 @@
             "nl": "Stroomstoring"
           }
         },
-        "measure_power.grid": {
+        "measure_power.consumption": {
           "title": {
-            "de": "Netzleistung",
-            "en": "Grid Power",
-            "nl": "Netvermogen"
+            "de": "Verbrauch",
+            "en": "Consumption",
+            "nl": "Verbruik"
           }
         },
         "measure_power.solar": {
@@ -742,7 +688,7 @@
       },
       "insights": true,
       "desc": {
-        "en": "Battery SoH Percentage"
+        "en": "Estimated from discharge energy per percent of charge, relative to rated capacity"
       },
       "chartType": "stepLine",
       "min": 0,

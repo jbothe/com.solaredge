@@ -42,14 +42,6 @@
       "label": {
         "en": "Password"
       }
-    },
-    {
-      "id": "apikey",
-      "type": "password",
-      "label": {
-        "en": "API Key"
-      },
-      "hint": { "en": "Your SolarEdge (read-only) API key." }
     }
   ]
 }

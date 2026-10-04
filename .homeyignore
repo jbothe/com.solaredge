@@ -1,0 +1,6 @@
+.env
+.cache/
+scripts/
+test/
+API Info.txt
+docs/

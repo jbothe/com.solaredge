@@ -120,8 +120,8 @@
         "meter_power.exported_total": {
           "title": "Geëxporteerd (totaal)"
         },
-        "measure_power.grid": {
-          "title": "Netvermogen"
+        "measure_power.consumption": {
+          "title": "Verbruik"
         },
         "measure_power.solar": {
           "title": "Zonne Energie"

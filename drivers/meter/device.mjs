@@ -2,6 +2,25 @@ import SolarEdgeDevice from '../../lib/SolarEdgeDevice.mjs';
 
 export default class SolarEdgeDeviceMeter extends SolarEdgeDevice {
 
+  static RETIRED_CAPABILITIES = [
+    // Renamed to meter_power.imported_total / exported_total in a21da26.
+    'meter_power.imported',
+    'meter_power.exported',
+    // Upstream added it (aaf2f03) when measure_power was house consumption.
+    // Since this fork made measure_power the grid reading (bff1db2), merging
+    // the two (fca4919) left it a duplicate. measure_power.consumption takes
+    // its place.
+    'measure_power.grid',
+  ];
+
+  async onInit() {
+    // Adds measure_power.consumption and puts everything in the manifest's
+    // order (power, consumption, solar, outage, today, totals).
+    await this.orderCapabilities(this.driver.manifest.capabilities);
+
+    await super.onInit();
+  }
+
   async onSitePowerflow(sitePowerflow) {
     if (typeof sitePowerflow.grid?.currentPower === 'number') {
       let power = Math.round(sitePowerflow.grid.currentPower * 1000);
@@ -23,32 +42,17 @@ export default class SolarEdgeDeviceMeter extends SolarEdgeDevice {
       }
     }
 
-    // Grid
-    if (typeof sitePowerflow.grid?.currentPower === 'number') {
-      if (!this.hasCapability('measure_power.grid')) {
-        await this.addCapability('measure_power.grid');
-      }
-
-      let power = Math.round(sitePowerflow.grid.currentPower * 1000);
-      if (sitePowerflow.grid?.status === 'export') {
-        power *= -1;
-      }
-
-      await this.setCapabilityValue('measure_power.grid', power).catch(this.error);
+    // House consumption. SolarEdge reports null rather than 0 when the house
+    // draws nothing measurable.
+    if (sitePowerflow.consumption?.currentPower === null) {
+      await this.setCapabilityValue('measure_power.consumption', 0).catch(this.error);
+    } else if (typeof sitePowerflow.consumption?.currentPower === 'number') {
+      await this.setCapabilityValue('measure_power.consumption', Math.round(sitePowerflow.consumption.currentPower * 1000)).catch(this.error);
     }
 
     // Solar
     if (typeof sitePowerflow.solarProduction?.currentPower === 'number') {
-      if (!this.hasCapability('measure_power.solar')) {
-        await this.addCapability('measure_power.solar');
-      }
-
-      let power = Math.round(sitePowerflow.solarProduction.currentPower * 1000);
-      if (sitePowerflow.solarProduction?.isProducing === false) {
-        power *= -1;
-      }
-
-      await this.setCapabilityValue('measure_power.solar', power).catch(this.error);
+      await this.setCapabilityValue('measure_power.solar', Math.round(sitePowerflow.solarProduction.currentPower * 1000)).catch(this.error);
     }
 
     // Set Device Availability
