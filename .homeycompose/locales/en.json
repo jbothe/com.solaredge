@@ -107,11 +107,14 @@
         "meter_power.discharged_total": {
           "title": "Discharged (total)"
         },
-        "measure_temperature": {
-          "title": "Internal Temperature"
-        },
         "battery_soh": {
           "title": "State of Health (SoH)"
+        },
+        "meter_power.charged_solar_today": {
+          "title": "Charged from solar (today)"
+        },
+        "meter_power.charged_grid_today": {
+          "title": "Charged from grid (today)"
         }
       }
     },
@@ -398,9 +401,6 @@
         },
         "measure_power.consumption": {
           "title": "Consumption"
-        },
-        "measure_power.solar": {
-          "title": "Solar Power"
         }
       }
     },

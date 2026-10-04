@@ -4,8 +4,9 @@
   "capabilities": [
     "measure_power",
     "measure_power.consumption",
-    "measure_power.solar",
     "alarm_generic",
+    "solar_self_sufficiency",
+    "solar_self_consumption",
     "meter_power.imported_today",
     "meter_power.exported_today",
     "meter_power.imported_total",

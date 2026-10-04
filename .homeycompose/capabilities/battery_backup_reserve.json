@@ -1,0 +1,25 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Backup reserve",
+    "nl": "Noodstroomreserve",
+    "de": "Notstromreserve"
+  },
+  "desc": {
+    "en": "Charge the battery keeps back for a power cut, as set in SolarEdge",
+    "nl": "Lading die de batterij achterhoudt voor een stroomstoring, zoals ingesteld in SolarEdge",
+    "de": "Ladung, die der Speicher für einen Stromausfall zurückhält, wie in SolarEdge eingestellt"
+  },
+  "units": {
+    "en": "%"
+  },
+  "icon": "/assets/capabilities/battery-soc.svg",
+  "insights": true,
+  "chartType": "stepLine",
+  "min": 0,
+  "max": 100,
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor"
+}

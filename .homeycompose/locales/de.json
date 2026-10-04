@@ -30,11 +30,14 @@
         "meter_power.discharged_total": {
           "title": "Entladen (gesamt)"
         },
-        "measure_temperature": {
-          "title": "Innentemperatur"
-        },
         "battery_soh": {
           "title": "Gesundheitszustand (SoH)"
+        },
+        "meter_power.charged_solar_today": {
+          "title": "Geladen aus Solar (heute)"
+        },
+        "meter_power.charged_grid_today": {
+          "title": "Geladen aus dem Netz (heute)"
         }
       }
     },
@@ -321,9 +324,6 @@
         },
         "measure_power.consumption": {
           "title": "Verbrauch"
-        },
-        "measure_power.solar": {
-          "title": "Solar Leistung"
         }
       }
     }

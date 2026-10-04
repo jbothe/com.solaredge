@@ -1,0 +1,24 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Self-sufficiency (today)",
+    "nl": "Zelfvoorziening (vandaag)",
+    "de": "Autarkie (heute)"
+  },
+  "desc": {
+    "en": "Share of today’s consumption that came from your solar, directly or through the battery (grid-charged battery energy not counted)",
+    "nl": "Deel van het verbruik van vandaag dat uit je zonnepanelen kwam, direct of via de batterij (batterij-energie uit het net telt niet mee)",
+    "de": "Anteil des heutigen Verbrauchs aus Ihrer Solaranlage, direkt oder über den Speicher (aus dem Netz geladene Speicherenergie zählt nicht)"
+  },
+  "units": {
+    "en": "%"
+  },
+  "icon": "/assets/capabilities/self-sufficiency.svg",
+  "insights": true,
+  "min": 0,
+  "max": 100,
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor"
+}

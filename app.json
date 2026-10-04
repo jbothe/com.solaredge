@@ -93,10 +93,13 @@
         "measure_power",
         "battery_charging_state",
         "meter_power.charged_today",
+        "meter_power.charged_solar_today",
+        "meter_power.charged_grid_today",
         "meter_power.discharged_today",
         "meter_power.charged_total",
         "meter_power.discharged_total",
-        "battery_soh"
+        "battery_soh",
+        "battery_backup_reserve"
       ],
       "capabilitiesOptions": {
         "meter_power.charged_today": {
@@ -139,18 +142,27 @@
             "nl": "Gezondheidsstatus (SoH)"
           }
         },
+        "meter_power.charged_solar_today": {
+          "preventInsights": true,
+          "title": {
+            "de": "Geladen aus Solar (heute)",
+            "en": "Charged from solar (today)",
+            "nl": "Opgeladen uit zon (vandaag)"
+          }
+        },
+        "meter_power.charged_grid_today": {
+          "preventInsights": true,
+          "title": {
+            "de": "Geladen aus dem Netz (heute)",
+            "en": "Charged from grid (today)",
+            "nl": "Opgeladen uit net (vandaag)"
+          }
+        },
         "battery_charging_state": {
           "title": {
             "de": "Batteriestatus",
             "en": "Battery State",
             "nl": "Batterijstatus"
-          }
-        },
-        "measure_temperature": {
-          "title": {
-            "de": "Innentemperatur",
-            "en": "Internal Temperature",
-            "nl": "Interne temperatuur"
           }
         }
       },
@@ -1131,8 +1143,9 @@
       "capabilities": [
         "measure_power",
         "measure_power.consumption",
-        "measure_power.solar",
         "alarm_generic",
+        "solar_self_sufficiency",
+        "solar_self_consumption",
         "meter_power.imported_today",
         "meter_power.exported_today",
         "meter_power.imported_total",
@@ -1183,13 +1196,6 @@
             "de": "Verbrauch",
             "en": "Consumption",
             "nl": "Verbruik"
-          }
-        },
-        "measure_power.solar": {
-          "title": {
-            "de": "Solar Leistung",
-            "en": "Solar Power",
-            "nl": "Zonne Energie"
           }
         }
       },
@@ -1439,6 +1445,31 @@
     ]
   },
   "capabilities": {
+    "battery_backup_reserve": {
+      "type": "number",
+      "title": {
+        "en": "Backup reserve",
+        "nl": "Noodstroomreserve",
+        "de": "Notstromreserve"
+      },
+      "desc": {
+        "en": "Charge the battery keeps back for a power cut, as set in SolarEdge",
+        "nl": "Lading die de batterij achterhoudt voor een stroomstoring, zoals ingesteld in SolarEdge",
+        "de": "Ladung, die der Speicher für einen Stromausfall zurückhält, wie in SolarEdge eingestellt"
+      },
+      "units": {
+        "en": "%"
+      },
+      "icon": "/assets/capabilities/battery-soc.svg",
+      "insights": true,
+      "chartType": "stepLine",
+      "min": 0,
+      "max": 100,
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
     "battery_soc": {
       "type": "number",
       "title": {
@@ -1554,6 +1585,54 @@
       "insights": true,
       "chartType": "stepLine",
       "decimals": 1,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "solar_self_consumption": {
+      "type": "number",
+      "title": {
+        "en": "Self-consumption (today)",
+        "nl": "Eigen verbruik (vandaag)",
+        "de": "Eigenverbrauch (heute)"
+      },
+      "desc": {
+        "en": "Share of today’s solar production used at home or stored in the battery, rather than exported",
+        "nl": "Deel van de zonne-opbrengst van vandaag dat thuis is gebruikt of in de batterij opgeslagen, in plaats van teruggeleverd",
+        "de": "Anteil der heutigen Solarproduktion, der selbst verbraucht oder gespeichert statt eingespeist wurde"
+      },
+      "units": {
+        "en": "%"
+      },
+      "icon": "/assets/capabilities/self-sufficiency.svg",
+      "insights": true,
+      "min": 0,
+      "max": 100,
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "solar_self_sufficiency": {
+      "type": "number",
+      "title": {
+        "en": "Self-sufficiency (today)",
+        "nl": "Zelfvoorziening (vandaag)",
+        "de": "Autarkie (heute)"
+      },
+      "desc": {
+        "en": "Share of today’s consumption that came from your solar, directly or through the battery (grid-charged battery energy not counted)",
+        "nl": "Deel van het verbruik van vandaag dat uit je zonnepanelen kwam, direct of via de batterij (batterij-energie uit het net telt niet mee)",
+        "de": "Anteil des heutigen Verbrauchs aus Ihrer Solaranlage, direkt oder über den Speicher (aus dem Netz geladene Speicherenergie zählt nicht)"
+      },
+      "units": {
+        "en": "%"
+      },
+      "icon": "/assets/capabilities/self-sufficiency.svg",
+      "insights": true,
+      "min": 0,
+      "max": 100,
+      "decimals": 0,
       "getable": true,
       "setable": false,
       "uiComponent": "sensor"

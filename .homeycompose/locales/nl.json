@@ -30,11 +30,14 @@
         "meter_power.discharged_total": {
           "title": "Ontladen (totaal)"
         },
-        "measure_temperature": {
-          "title": "Interne temperatuur"
-        },
         "battery_soh": {
           "title": "Gezondheidsstatus (SoH)"
+        },
+        "meter_power.charged_solar_today": {
+          "title": "Opgeladen uit zon (vandaag)"
+        },
+        "meter_power.charged_grid_today": {
+          "title": "Opgeladen uit net (vandaag)"
         }
       }
     },
@@ -321,9 +324,6 @@
         },
         "measure_power.consumption": {
           "title": "Verbruik"
-        },
-        "measure_power.solar": {
-          "title": "Zonne Energie"
         }
       }
     }

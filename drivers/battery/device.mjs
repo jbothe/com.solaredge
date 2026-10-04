@@ -28,6 +28,9 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
 
   static HEALTH_RETRY_AFTER = 1000 * 60 * 60; // 1 hour
 
+  // The backup reserve is a setting that rarely changes.
+  static RESERVE_REFRESH_AFTER = 1000 * 60 * 60; // 1 hour
+
   async onInit() {
     // Devices paired before the today/total split got the totals added at
     // runtime and the today meters after them; this restores the manifest's
@@ -35,6 +38,7 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
     await this.orderCapabilities(this.driver.manifest.capabilities);
 
     this.lastHealthAttempt = 0;
+    this.lastReserveUpdate = 0;
 
     await super.onInit();
   }
@@ -96,7 +100,13 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
 
     const daily = await this.api.getStorageEnergyDistribution({ siteId, startDate: today, endDate: today });
     await this.setEnergyCapability('meter_power.charged_today', daily.sources?.total, 2);
+    await this.setEnergyCapability('meter_power.charged_solar_today', daily.sources?.pv, 2);
+    await this.setEnergyCapability('meter_power.charged_grid_today', daily.sources?.grid, 2);
     await this.setEnergyCapability('meter_power.discharged_today', daily.destinations?.total, 2);
+
+    await this.updateReserve().catch((err) => {
+      this.error(`Error reading the backup reserve: ${err.message}`);
+    });
 
     // Its own failures shouldn't mark the energy totals as stale.
     await this.updateHealth({ site, today, lifetime }).catch((err) => {
@@ -113,6 +123,16 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
 
     const scale = 10 ** decimals;
     await this.setCapabilityValue(capability, Math.round((wh / 1000) * scale) / scale).catch(this.error);
+  }
+
+  async updateReserve() {
+    if (Date.now() - this.lastReserveUpdate < this.constructor.RESERVE_REFRESH_AFTER) return;
+
+    const { backupReserve } = await this.api.getSiteDetails({ siteId: this.getData().siteId });
+    this.lastReserveUpdate = Date.now();
+    if (typeof backupReserve === 'number') {
+      await this.setCapabilityValue('battery_backup_reserve', backupReserve).catch(this.error);
+    }
   }
 
   // Installation date and rated capacity. Neither changes, so they are fetched

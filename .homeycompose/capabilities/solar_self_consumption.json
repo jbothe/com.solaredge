@@ -1,0 +1,24 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Self-consumption (today)",
+    "nl": "Eigen verbruik (vandaag)",
+    "de": "Eigenverbrauch (heute)"
+  },
+  "desc": {
+    "en": "Share of today’s solar production used at home or stored in the battery, rather than exported",
+    "nl": "Deel van de zonne-opbrengst van vandaag dat thuis is gebruikt of in de batterij opgeslagen, in plaats van teruggeleverd",
+    "de": "Anteil der heutigen Solarproduktion, der selbst verbraucht oder gespeichert statt eingespeist wurde"
+  },
+  "units": {
+    "en": "%"
+  },
+  "icon": "/assets/capabilities/self-sufficiency.svg",
+  "insights": true,
+  "min": 0,
+  "max": 100,
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor"
+}

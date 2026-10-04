@@ -6,10 +6,13 @@
     "measure_power",
     "battery_charging_state",
     "meter_power.charged_today",
+    "meter_power.charged_solar_today",
+    "meter_power.charged_grid_today",
     "meter_power.discharged_today",
     "meter_power.charged_total",
     "meter_power.discharged_total",
-    "battery_soh"
+    "battery_soh",
+    "battery_backup_reserve"
   ],
   "capabilitiesOptions": {
     "meter_power.charged_today": {
@@ -25,6 +28,12 @@
       "preventInsights": true
     },
     "battery_soh": {
+      "preventInsights": true
+    },
+    "meter_power.charged_solar_today": {
+      "preventInsights": true
+    },
+    "meter_power.charged_grid_today": {
       "preventInsights": true
     }
   },
