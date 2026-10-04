@@ -260,6 +260,10 @@
               "label": "Nordnordwest"
             }
           }
+        },
+        "forecast_accuracy": {
+          "label": "Letzte 30 Tage",
+          "hint": "Die Prognose für morgen verglichen mit dem Ertrag Ihrer Module. Jeden Morgen aktualisiert."
         }
       },
       "capabilitiesOptions": {

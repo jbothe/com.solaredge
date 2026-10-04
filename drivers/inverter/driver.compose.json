@@ -9,6 +9,7 @@
     "meter_power.day",
     "meter_power.month",
     "meter_power.year",
-    "meter_power"
+    "meter_power",
+    "solar_forecast_accuracy"
   ]
 }

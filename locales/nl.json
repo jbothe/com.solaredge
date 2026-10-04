@@ -1,5 +1,7 @@
 {
   "forecast": {
-    "notReady": "De zonneprognose is nog niet beschikbaar."
+    "notReady": "De zonneprognose is nog niet beschikbaar.",
+    "accuracyPending": "Nog te weinig dagen: de beoordeling begint na __needed__ dagen met een prognose voor morgen (nu __days__).",
+    "accuracySummary": "__accuracy__% over __days__ dagen. Dagelijkse afwijking __error__%, scheefheid __bias__% (boven 0 is te hoog voorspeld). Werkelijke opbrengst binnen de bandbreedte op __coverage__% van de dagen (80% is ideaal). Afwijking per uur __hourly__%."
   }
 }

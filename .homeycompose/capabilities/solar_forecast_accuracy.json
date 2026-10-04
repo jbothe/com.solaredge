@@ -1,0 +1,24 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Forecast accuracy",
+    "nl": "Nauwkeurigheid prognose",
+    "de": "Prognosegenauigkeit"
+  },
+  "desc": {
+    "en": "How close the day-ahead forecast came over the last 30 days: 100% less the daily error",
+    "nl": "Hoe dicht de prognose voor morgen de afgelopen 30 dagen zat: 100% min de dagelijkse afwijking",
+    "de": "Wie nah die Prognose für morgen in den letzten 30 Tagen lag: 100 % minus die tägliche Abweichung"
+  },
+  "units": {
+    "en": "%"
+  },
+  "icon": "/assets/capabilities/solar-forecast.svg",
+  "insights": true,
+  "min": 0,
+  "max": 100,
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor"
+}

@@ -1,7 +1,17 @@
+import {
+  MIN_ACCURACY_DAYS,
+  ACCURACY_DAYS,
+  accuracyPercent,
+  dayAheadEntry,
+  recordDayAhead,
+  scoreForecasts,
+} from '../../lib/ForecastAccuracy.mjs';
 import SolarEdgeDevice from '../../lib/SolarEdgeDevice.mjs';
 import { describePlanes, planesFromGroups } from '../../lib/PanelLayout.mjs';
 import SolarForecaster from '../../lib/SolarForecaster.mjs';
-import { daysBetween, localDate, localDateTime } from '../../lib/SolarForecastModel.mjs';
+import {
+  addDays, daysBetween, localDate, localDateTime,
+} from '../../lib/SolarForecastModel.mjs';
 
 export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
 
@@ -57,7 +67,9 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
   }
 
   async onSettings({ newSettings, changedKeys }) {
-    const forecastChanged = changedKeys.some((key) => key.startsWith('forecast_'));
+    // forecast_accuracy is a label the app writes; it changing isn't a reason
+    // to rebuild anything.
+    const forecastChanged = changedKeys.some((key) => key.startsWith('forecast_') && key !== 'forecast_accuracy');
 
     // Rejects panel groups that don't add up, with the reason, before
     // anything is saved.
@@ -66,6 +78,10 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
     await super.onSettings({ newSettings, changedKeys });
 
     if (forecastChanged) {
+      // Homey saves the settings only after this returns, so getSettings()
+      // still has the old ones: the forecaster is rebuilt from these.
+      this.pendingSettings = newSettings;
+
       // The stored profile and calibration are keyed on their config, so
       // they are rebuilt on the next tick rather than discarded here.
       this.forecaster = null;
@@ -85,12 +101,15 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
   async getForecaster() {
     if (this.forecaster) return this.forecaster;
 
+    const settings = this.pendingSettings ?? this.getSettings();
+    this.pendingSettings = null;
+
     // Location comes from the site's coordinates in SolarEdge.
     const forecaster = new SolarForecaster({
       solarEdgeApi: this.api,
       siteId: this.getData().siteId,
       timeZone: this.homey.clock.getTimezone(),
-      planes: this.constructor.panelPlanes(this.getSettings()),
+      planes: this.constructor.panelPlanes(settings),
       // SolarEdge history the forecast learns from, kept across restarts so
       // they don't refetch it (about 100 bytes a day, a year and a month of
       // it).
@@ -192,12 +211,65 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
         this.forecast = await forecaster.forecast({ calibration, profile });
         this.forecastFetchedAt = now.getTime();
         this.forecastDate = today;
+        await this.recordDayAhead(today);
       }
 
       await this.setForecastCapabilities(now);
+
+      // Its own failures shouldn't stop the forecast.
+      await this.updateAccuracy(forecaster, today).catch((err) => {
+        this.error(`Error scoring the forecast: ${err.message}`);
+      });
     } finally {
       this.forecasting = false;
     }
+  }
+
+  // Keeps tomorrow's forecast for scoring once tomorrow is over. Each
+  // refresh replaces the last, so the one kept is the last made before the
+  // day: the day-ahead forecast.
+  async recordDayAhead(today) {
+    const tomorrow = addDays(today, 1);
+    const day = this.forecast?.days?.[tomorrow];
+    if (!day) return;
+
+    const log = recordDayAhead(this.getStoreValue('forecastLog'), tomorrow, dayAheadEntry(tomorrow, day, this.forecast.hours));
+    await this.setStoreValue('forecastLog', log);
+  }
+
+  // Once a day, scores the last ACCURACY_DAYS of day-ahead forecasts against
+  // production (from the forecaster's history, so no extra requests) and
+  // shows the result.
+  async updateAccuracy(forecaster, today) {
+    if (this.accuracyDate === today) return;
+
+    const endDate = addDays(today, -1);
+    const range = { startDate: addDays(endDate, -(ACCURACY_DAYS - 1)), endDate };
+    const energy = Object.fromEntries((await forecaster.getEnergy(range)).map(({ date, value }) => [date, value]));
+    const power = await forecaster.getPowerDays(range);
+
+    const log = this.getStoreValue('forecastLog') ?? {};
+    const score = scoreForecasts(log, { energy, power }, { endDate });
+    this.accuracyDate = today;
+
+    const pct = (fraction) => Math.round(fraction * 100);
+    const details = score
+      ? this.homey.__('forecast.accuracySummary', {
+        accuracy: accuracyPercent(score),
+        days: score.days,
+        error: pct(score.error),
+        bias: `${score.bias >= 0 ? '+' : ''}${pct(score.bias)}`,
+        coverage: pct(score.coverage),
+        hourly: score.hourlyError === null ? '–' : pct(score.hourlyError),
+      })
+      : this.homey.__('forecast.accuracyPending', {
+        needed: MIN_ACCURACY_DAYS,
+        days: Object.keys(log).filter((date) => date <= endDate && date >= range.startDate).length,
+      });
+
+    await this.setCapabilityValue('solar_forecast_accuracy', accuracyPercent(score)).catch(this.error);
+    await this.setSettings({ forecast_accuracy: details }).catch(this.error);
+    this.log(`Forecast accuracy: ${details}`);
   }
 
   getForecastSummary(now = new Date()) {

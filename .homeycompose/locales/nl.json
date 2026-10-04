@@ -260,6 +260,10 @@
               "label": "Noord-noordwest"
             }
           }
+        },
+        "forecast_accuracy": {
+          "label": "Afgelopen 30 dagen",
+          "hint": "De prognose voor morgen vergeleken met wat je panelen opbrachten. Elke ochtend bijgewerkt."
         }
       },
       "capabilitiesOptions": {

@@ -1,5 +1,7 @@
 {
   "forecast": {
-    "notReady": "Die Solarprognose ist noch nicht verfügbar."
+    "notReady": "Die Solarprognose ist noch nicht verfügbar.",
+    "accuracyPending": "Noch zu wenige Tage: Die Bewertung beginnt nach __needed__ Tagen mit einer Prognose für morgen (bisher __days__).",
+    "accuracySummary": "__accuracy__ % über __days__ Tage. Tägliche Abweichung __error__ %, Verzerrung __bias__ % (über 0 heißt zu hoch vorhergesagt). Tatsächlicher Ertrag innerhalb der Spanne an __coverage__ % der Tage (ideal sind 80 %). Stündliche Abweichung __hourly__ %."
   }
 }

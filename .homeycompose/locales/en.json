@@ -337,6 +337,10 @@
               "label": "North-north-west"
             }
           }
+        },
+        "forecast_accuracy": {
+          "label": "Last 30 days",
+          "hint": "The day-ahead forecast against what your panels produced. Updated each morning."
         }
       },
       "capabilitiesOptions": {

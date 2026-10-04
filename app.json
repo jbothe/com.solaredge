@@ -970,6 +970,31 @@
               }
             }
           ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Solar forecast: accuracy",
+            "nl": "Zonneprognose: nauwkeurigheid",
+            "de": "Solarprognose: Genauigkeit"
+          },
+          "children": [
+            {
+              "id": "forecast_accuracy",
+              "type": "label",
+              "value": "",
+              "label": {
+                "de": "Letzte 30 Tage",
+                "en": "Last 30 days",
+                "nl": "Afgelopen 30 dagen"
+              },
+              "hint": {
+                "de": "Die Prognose für morgen verglichen mit dem Ertrag Ihrer Module. Jeden Morgen aktualisiert.",
+                "en": "The day-ahead forecast against what your panels produced. Updated each morning.",
+                "nl": "De prognose voor morgen vergeleken met wat je panelen opbrachten. Elke ochtend bijgewerkt."
+              }
+            }
+          ]
         }
       ],
       "class": "solarpanel",
@@ -981,7 +1006,8 @@
         "meter_power.day",
         "meter_power.month",
         "meter_power.year",
-        "meter_power"
+        "meter_power",
+        "solar_forecast_accuracy"
       ],
       "capabilitiesOptions": {
         "measure_power": {
@@ -1449,6 +1475,30 @@
       "min": 0,
       "max": 100,
       "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "solar_forecast_accuracy": {
+      "type": "number",
+      "title": {
+        "en": "Forecast accuracy",
+        "nl": "Nauwkeurigheid prognose",
+        "de": "Prognosegenauigkeit"
+      },
+      "desc": {
+        "en": "How close the day-ahead forecast came over the last 30 days: 100% less the daily error",
+        "nl": "Hoe dicht de prognose voor morgen de afgelopen 30 dagen zat: 100% min de dagelijkse afwijking",
+        "de": "Wie nah die Prognose für morgen in den letzten 30 Tagen lag: 100 % minus die tägliche Abweichung"
+      },
+      "units": {
+        "en": "%"
+      },
+      "icon": "/assets/capabilities/solar-forecast.svg",
+      "insights": true,
+      "min": 0,
+      "max": 100,
       "decimals": 0,
       "getable": true,
       "setable": false,

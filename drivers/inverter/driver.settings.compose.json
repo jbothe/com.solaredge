@@ -264,5 +264,20 @@
         ]
       }
     ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Solar forecast: accuracy",
+      "nl": "Zonneprognose: nauwkeurigheid",
+      "de": "Solarprognose: Genauigkeit"
+    },
+    "children": [
+      {
+        "id": "forecast_accuracy",
+        "type": "label",
+        "value": ""
+      }
+    ]
   }
 ]

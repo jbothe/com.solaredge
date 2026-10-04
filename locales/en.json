@@ -1,5 +1,7 @@
 {
   "forecast": {
-    "notReady": "The solar forecast isn't available yet."
+    "notReady": "The solar forecast isn't available yet.",
+    "accuracyPending": "Not enough days yet: scoring starts after __needed__ days of day-ahead forecasts (__days__ so far).",
+    "accuracySummary": "__accuracy__% over __days__ days. Daily error __error__%, bias __bias__% (above 0 is over-forecasting). Actual within the forecast range on __coverage__% of days (80% is ideal). Hourly error __hourly__%."
   }
 }
