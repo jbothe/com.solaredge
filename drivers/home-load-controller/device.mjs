@@ -5,9 +5,9 @@ export default class SolarEdgeDeviceEVCharger extends SolarEdgeDevice {
   static POLL_INTERVAL = 1000 * 10; // 10 seconds
 
   async onInit() {
-    // This driver doesn't consume site powerflow data (it polls
+    // This driver doesn't use the site powerflow data (it polls
     // getSiteDevices instead), so it runs its own interval alongside the
-    // base class's long-poll rather than registering with the site poller.
+    // base class's long poll. It still shares the site poller's session.
     await super.onInit();
 
     this.registerCapabilityListener('solaredge-home-load-controller-state', async (value) => {
