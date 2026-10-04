@@ -1,0 +1,22 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Projected today",
+    "nl": "Verwacht vandaag",
+    "de": "Hochrechnung heute"
+  },
+  "desc": {
+    "en": "Produced so far plus the latest forecast for the rest of the day",
+    "nl": "Opbrengst tot nu toe plus de laatste prognose voor de rest van de dag",
+    "de": "Bisheriger Ertrag plus die aktuelle Prognose für den Rest des Tages"
+  },
+  "icon": "/assets/capabilities/solar-forecast.svg",
+  "units": {
+    "en": "kWh"
+  },
+  "insights": true,
+  "decimals": 1,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor"
+}

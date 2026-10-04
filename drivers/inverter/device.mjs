@@ -7,6 +7,7 @@ import {
   scoreForecasts,
 } from '../../lib/ForecastAccuracy.mjs';
 import SolarEdgeDevice from '../../lib/SolarEdgeDevice.mjs';
+import { todayProgress } from '../../lib/TodayProgress.mjs';
 import { describePlanes, planesFromGroups } from '../../lib/PanelLayout.mjs';
 import SolarForecaster from '../../lib/SolarForecaster.mjs';
 import {
@@ -229,6 +230,18 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
   // refresh replaces the last, so the one kept is the last made before the
   // day: the day-ahead forecast.
   async recordDayAhead(today) {
+    // Today's plan for "today vs forecast" is last night's day-ahead
+    // forecast. On a day without one (the app was just installed, say), the
+    // first forecast made today stands in.
+    const baseline = this.getStoreValue('forecastTodayBaseline');
+    const todayForecast = this.forecast?.days?.[today];
+    if (todayForecast && !this.getStoreValue('forecastLog')?.[today] && baseline?.date !== today) {
+      await this.setStoreValue('forecastTodayBaseline', {
+        date: today,
+        hours: dayAheadEntry(today, todayForecast, this.forecast.hours).hours,
+      });
+    }
+
     const tomorrow = addDays(today, 1);
     const day = this.forecast?.days?.[tomorrow];
     if (!day) return;
@@ -291,6 +304,34 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
     return SolarForecaster.expectedPowerAt(this.forecast, { at, timeZone });
   }
 
+  // Today vs forecast, projected today and remaining today.
+  async setTodayProgress(now) {
+    const timeZone = this.homey.clock.getTimezone();
+    const today = localDate(now, timeZone);
+    const clock = localDateTime(now, timeZone).slice(11, 16);
+
+    const baseline = this.getStoreValue('forecastTodayBaseline');
+    const planHours = this.getStoreValue('forecastLog')?.[today]?.hours
+      ?? (baseline?.date === today ? baseline.hours : null);
+    const latest = this.forecast?.days?.[today];
+    const latestHours = latest ? dayAheadEntry(today, latest, this.forecast.hours).hours : null;
+    // Only once the long poll has read today's production: just after
+    // midnight the figure still holds yesterday's.
+    const producedWh = this.producedToday?.date === today ? this.producedToday.wh : null;
+
+    const progress = todayProgress({
+      planHours,
+      latestHours,
+      producedWh,
+      at: { hour: Number(clock.slice(0, 2)), minute: Number(clock.slice(3, 5)) },
+    });
+
+    const toKwh = (wh) => (wh === null ? null : Math.round(wh / 100) / 10);
+    await this.setCapabilityValue('solar_forecast_vs_actual', progress.vsForecast === null ? null : Math.round(progress.vsForecast * 100)).catch(this.error);
+    await this.setCapabilityValue('solar_forecast_projected', toKwh(progress.projectedWh)).catch(this.error);
+    await this.setCapabilityValue('solar_forecast_remaining', toKwh(progress.remainingWh)).catch(this.error);
+  }
+
   async setForecastCapabilities(now) {
     const { today, tomorrow, powerNowW } = this.getForecastSummary(now);
     const toKwh = (wh) => Math.round(wh / 100) / 10;
@@ -301,6 +342,8 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
     await this.setCapabilityValue('solar_forecast_power', Math.round(powerNowW)).catch(this.error);
     await this.setCapabilityValue('solar_forecast_today', toKwh(today.p50)).catch(this.error);
     await this.setCapabilityValue('solar_forecast_tomorrow', tomorrowKwh).catch(this.error);
+
+    await this.setTodayProgress(now);
 
     if (tomorrowKwh !== previousTomorrowKwh) {
       await this.homey.flow
@@ -351,6 +394,13 @@ export default class SolarEdgeDeviceInverter extends SolarEdgeDevice {
         }
         case 'LAST_DAY': {
           await this.setCapabilityValue('meter_power.day', energyProducedOverviewListItem.energy / 1000).catch(this.error);
+          this.producedToday = {
+            date: localDate(new Date(), this.homey.clock.getTimezone()),
+            wh: energyProducedOverviewListItem.energy,
+          };
+          // Fresh production: bring the comparison up to date now rather
+          // than at the next forecast tick.
+          if (this.forecast) await this.setTodayProgress(new Date()).catch(this.error);
           break;
         }
         default: {

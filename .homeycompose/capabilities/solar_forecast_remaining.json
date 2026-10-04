@@ -1,0 +1,22 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Remaining today",
+    "nl": "Nog te verwachten vandaag",
+    "de": "Verbleibend heute"
+  },
+  "desc": {
+    "en": "The latest forecast for the rest of the day",
+    "nl": "De laatste prognose voor de rest van de dag",
+    "de": "Die aktuelle Prognose für den Rest des Tages"
+  },
+  "icon": "/assets/capabilities/solar-forecast.svg",
+  "units": {
+    "en": "kWh"
+  },
+  "insights": true,
+  "decimals": 1,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor"
+}

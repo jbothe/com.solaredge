@@ -10,6 +10,9 @@
     "meter_power.month",
     "meter_power.year",
     "meter_power",
+    "solar_forecast_vs_actual",
+    "solar_forecast_projected",
+    "solar_forecast_remaining",
     "solar_forecast_accuracy"
   ]
 }

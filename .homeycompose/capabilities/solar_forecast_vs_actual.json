@@ -1,0 +1,23 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Today vs forecast",
+    "nl": "Vandaag t.o.v. prognose",
+    "de": "Heute vs. Prognose"
+  },
+  "desc": {
+    "en": "Produced so far as a share of what last night’s forecast expected by now: 100% is on track",
+    "nl": "Opbrengst tot nu toe als deel van wat de prognose van gisteravond tot nu verwachtte: 100% is op koers",
+    "de": "Bisheriger Ertrag im Verhältnis zu dem, was die Prognose von gestern Abend bis jetzt erwartete: 100 % liegt im Plan"
+  },
+  "icon": "/assets/capabilities/solar-forecast.svg",
+  "units": {
+    "en": "%"
+  },
+  "insights": true,
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "min": 0
+}
