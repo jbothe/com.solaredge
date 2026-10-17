@@ -93,10 +93,13 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
     const timeZone = this.homey.clock.getTimezone();
     const today = localDate(new Date(), timeZone);
 
-    // Energy into the battery (sources) and out of it (destinations).
+    // Energy into the battery (sources) and out of it (destinations). Homey
+    // Energy works out each hour's charge and discharge from how much these
+    // move, so they keep Wh precision: in whole kWh a morning's discharge
+    // lands as 1 kWh steps in whichever hours the total crosses one.
     const lifetime = await this.api.getStorageEnergyDistribution({ siteId, startDate: site.installationDate, endDate: today });
-    await this.setEnergyCapability('meter_power.charged_total', lifetime.sources?.total);
-    await this.setEnergyCapability('meter_power.discharged_total', lifetime.destinations?.total);
+    await this.setEnergyCapability('meter_power.charged_total', lifetime.sources?.total, 3);
+    await this.setEnergyCapability('meter_power.discharged_total', lifetime.destinations?.total, 3);
 
     const daily = await this.api.getStorageEnergyDistribution({ siteId, startDate: today, endDate: today });
     await this.setEnergyCapability('meter_power.charged_today', daily.sources?.total, 2);
@@ -114,7 +117,7 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
     });
   }
 
-  async setEnergyCapability(capability, wh, decimals = 0) {
+  async setEnergyCapability(capability, wh, decimals) {
     if (typeof wh !== 'number') return;
 
     if (!this.hasCapability(capability)) {

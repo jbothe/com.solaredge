@@ -42,9 +42,6 @@
     "batteries": [
       "INTERNAL"
     ],
-    "approximation": {
-      "usageConstant": 60
-    },
     "meterPowerImportedCapability": "meter_power.charged_total",
     "meterPowerExportedCapability": "meter_power.discharged_total"
   }

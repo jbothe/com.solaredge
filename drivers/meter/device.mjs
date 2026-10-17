@@ -2,6 +2,12 @@ import energyShares from '../../lib/EnergyShares.mjs';
 import { localDate } from '../../lib/LocalDate.mjs';
 import SolarEdgeDevice from '../../lib/SolarEdgeDevice.mjs';
 
+// Wh to kWh, rounded to the given number of decimals.
+const kwh = (wh, decimals) => {
+  const scale = 10 ** decimals;
+  return Math.round((wh / 1000) * scale) / scale;
+};
+
 export default class SolarEdgeDeviceMeter extends SolarEdgeDevice {
 
   static RETIRED_CAPABILITIES = [
@@ -68,17 +74,15 @@ export default class SolarEdgeDeviceMeter extends SolarEdgeDevice {
     const { siteId } = this.getData();
     const summary = await this.api.getSiteEnergySummary(siteId, 'LIFETIME');
 
+    // Homey Energy works out each hour's import and export from how much
+    // these totals move, so they keep Wh precision rather than whole kWh.
     if (summary.import && summary.export) {
-      let imported = summary.import;
-      if (typeof imported === 'number') {
-        imported = Math.round(summary.import / 1000);
-        await this.setCapabilityValue('meter_power.imported_total', imported).catch(this.error);
+      if (typeof summary.import === 'number') {
+        await this.setCapabilityValue('meter_power.imported_total', kwh(summary.import, 3)).catch(this.error);
       }
 
-      let exported = summary.export;
-      if (typeof exported === 'number') {
-        exported = Math.round(summary.export / 1000);
-        await this.setCapabilityValue('meter_power.exported_total', exported).catch(this.error);
+      if (typeof summary.export === 'number') {
+        await this.setCapabilityValue('meter_power.exported_total', kwh(summary.export, 3)).catch(this.error);
       }
     }
 
@@ -96,10 +100,10 @@ export default class SolarEdgeDeviceMeter extends SolarEdgeDevice {
     const battery = await this.api.getStorageEnergyDistribution({ siteId, startDate: today, endDate: today }).catch(() => null);
 
     if (typeof summaryToday?.import === 'number') {
-      await this.setCapabilityValue('meter_power.imported_today', Math.round(summaryToday.import / 1000)).catch(this.error);
+      await this.setCapabilityValue('meter_power.imported_today', kwh(summaryToday.import, 2)).catch(this.error);
     }
     if (typeof summaryToday?.export === 'number') {
-      await this.setCapabilityValue('meter_power.exported_today', Math.round(summaryToday.export / 1000)).catch(this.error);
+      await this.setCapabilityValue('meter_power.exported_today', kwh(summaryToday.export, 2)).catch(this.error);
     }
 
     const { selfConsumption, selfSufficiency } = energyShares(summaryToday, battery?.sources);
