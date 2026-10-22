@@ -7,7 +7,7 @@
   "units": {
     "en": "kWh"
   },
-  "insights": true,
+  "insights": false,
   "chartType": "stepLine",
   "decimals": 1,
   "getable": true,

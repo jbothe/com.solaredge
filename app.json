@@ -1569,7 +1569,7 @@
       "units": {
         "en": "kWh"
       },
-      "insights": true,
+      "insights": false,
       "decimals": 1,
       "getable": true,
       "setable": false,
@@ -1591,7 +1591,7 @@
       "units": {
         "en": "kWh"
       },
-      "insights": true,
+      "insights": false,
       "decimals": 1,
       "getable": true,
       "setable": false,
@@ -1608,7 +1608,7 @@
       "units": {
         "en": "kWh"
       },
-      "insights": true,
+      "insights": false,
       "chartType": "stepLine",
       "decimals": 1,
       "getable": true,
@@ -1626,7 +1626,7 @@
       "units": {
         "en": "kWh"
       },
-      "insights": true,
+      "insights": false,
       "chartType": "stepLine",
       "decimals": 1,
       "getable": true,
@@ -1649,7 +1649,7 @@
       "units": {
         "en": "%"
       },
-      "insights": true,
+      "insights": false,
       "decimals": 0,
       "getable": true,
       "setable": false,

@@ -14,7 +14,7 @@
   "units": {
     "en": "kWh"
   },
-  "insights": true,
+  "insights": false,
   "decimals": 1,
   "getable": true,
   "setable": false,

@@ -14,7 +14,7 @@
   "units": {
     "en": "%"
   },
-  "insights": true,
+  "insights": false,
   "decimals": 0,
   "getable": true,
   "setable": false,
