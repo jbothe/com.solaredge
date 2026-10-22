@@ -201,7 +201,43 @@ const shared = (client, key, ttl, fetch) => {
 
 const siteEquipment = (client, siteId) => shared(client, `equipment ${siteId}`, TICK_SHARE_TIME, () => client.getSiteEquipment({ siteId }));
 
-const invertersInformation = (client, serials) => shared(client, `information ${serials}`, TICK_SHARE_TIME, () => client.getInvertersInformation({ serials }));
+// client -> the inverter serials getInvertersInformation refuses (403), left out for the app run
+const deniedSerials = new WeakMap();
+
+/** The answers of getInvertersInformation for single serials as one: lists joined, { serial: value } maps merged. */
+const mergeInformation = (answers) => answers.reduce((merged, answer) => {
+  for (const [key, value] of Object.entries(answer || {})) {
+    if (Array.isArray(value)) merged[key] = [...(merged[key] || []), ...value];
+    else if (value && typeof value === 'object') merged[key] = { ...merged[key], ...value };
+    else merged[key] ??= value;
+  }
+  return merged;
+}, {});
+
+/**
+ * getInvertersInformation of `serials`, without those it refuses. One inverter without access makes
+ * the whole answer 403 (bleushuis69 2026-10-22: an 'Unknown' inverter of three, NO_ACCESS on its own,
+ * the other two answered alone and together); then each is asked on its own.
+ */
+const invertersInformation = (client, serials) => {
+  const denied = deniedSerials.get(client) || new Set();
+  const allowed = serials.filter((serial) => !denied.has(serial));
+  return shared(client, `information ${allowed}`, TICK_SHARE_TIME, async () => {
+    try {
+      return await client.getInvertersInformation({ serials: allowed });
+    } catch (error) {
+      if (error.status !== 403 || allowed.length < 2) throw error;
+      const answers = await Promise.all(allowed.map((serial) => client.getInvertersInformation({ serials: [serial] }).catch((single) => {
+        if (single.status !== 403) throw single;
+        denied.add(serial);
+        return null;
+      })));
+      deniedSerials.set(client, denied);
+      if (answers.every((answer) => answer === null)) throw error;
+      return mergeInformation(answers);
+    }
+  });
+};
 
 /** Today's getSiteEnergyByInverter of all the site's inverters, with temperatures. */
 const dayEnergy = (client, siteId, today, serials) => shared(client, `day ${siteId} ${today} ${serials}`, TICK_SHARE_TIME, () => client.getSiteEnergyByInverter({

@@ -252,6 +252,34 @@ const inverterSplit = async () => {
   }
 };
 
+// bleushuis69 2026-10-22: one inverter without access makes the whole answer 403; the others are asked alone, the refused one not again
+const inverterDenied = async () => {
+  const asked = [];
+  const client = {
+    getSiteEquipment: async () => ({ inverters: { details: [{ serialNumbers: ['I0', 'I1', 'I2'] }] } }),
+    getInvertersInformation: async ({ serials }) => {
+      asked.push(serials.join());
+      if (serials.includes('I0')) throw Object.assign(new Error(serials.length > 1 ? 'NO_PERMISSION' : 'NO_ACCESS'), { status: 403 });
+      return {
+        basicInformationList: serials.map((serial) => ({ serial })),
+        serialToLiveData: Object.fromEntries(serials.map((serial) => [serial, {
+          lastMeasurement: new Date().toISOString(), inverterStatus: 'production', pAc_W: 500,
+        }])),
+        serialToPhaseMeasurements: Object.fromEntries(serials.map((serial) => [serial, [{ v_ac_V: 228 + Number(serial[1]) }]])),
+      };
+    },
+    getSites: async () => ({ 1: { id: 1, timezone: 'UTC' } }),
+    getSiteEnergyByInverter: async () => ({ inverters: [] }),
+  };
+  const device = newDevice('inverter', { serialNumber: 'I2' }, client);
+  await device.updateInverterDetails();
+  check(device.values['measure_voltage.1'] === 230 && device.values.inverter_status === 'production', `inverter next to a refused one: ${JSON.stringify(device.values)}`);
+  check(asked.join(' ') === 'I0,I1,I2 I0 I1 I2', `refused inverter: asked ${asked.join(' ')}`);
+  const later = newDevice('inverter', { serialNumber: 'I1' }, client);
+  await later.updateInverterDetails();
+  check(asked.at(-1) === 'I1,I2', `refused inverter asked again: ${asked.join(' ')}`);
+};
+
 const inverterStatus = async () => {
   const device = newDevice('inverter', {}, {
     getSiteEquipment: async () => ({ inverters: { details: [{ serialNumbers: ['I1', 'I2'] }] } }),
@@ -323,6 +351,7 @@ const nightAlarm = async () => {
   await evNoSessions();
   await inverterUnknown();
   await inverterSplit();
+  await inverterDenied();
   await inverterStatus();
   await fahrenheit();
   if (failures.length) {
@@ -330,7 +359,7 @@ const nightAlarm = async () => {
     failures.forEach((failure) => console.error(`  ${failure}`));
     process.exitCode = 1;
   } else {
-    console.log(`OK - devices: ${Object.keys(responses).length} EV charger states, 2 load controllers, monotonic counters, battery kWh and totals, inverter split and status, Fahrenheit, night alarm`);
+    console.log(`OK - devices: ${Object.keys(responses).length} EV charger states, 2 load controllers, monotonic counters, battery kWh+totals, inverter split/status/refused serials, °F, night alarm`);
   }
 })().catch((error) => {
   console.error(error);
