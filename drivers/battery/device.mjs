@@ -31,6 +31,14 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
   // The backup reserve is a setting that rarely changes.
   static RESERVE_REFRESH_AFTER = 1000 * 60 * 60; // 1 hour
 
+  // Homey only moves a capability's lastUpdated when its value changes, and
+  // the Energy tab appears to stop showing the battery's power, and its
+  // flow, once that's been a while: on 2026-10-18 a grid charge held a steady 3290 W
+  // from 11:00, and by 11:35 the battery tile read just "Charging" while
+  // Homey's live energy report still had the 3290 W. A power held this long
+  // is sent 1 W off and straight back, which refreshes it.
+  static POWER_REFRESH_AFTER = 1000 * 60 * 5; // 5 mins
+
   async onInit() {
     // Devices paired before the today/total split got the totals added at
     // runtime and the today meters after them; this restores the manifest's
@@ -39,6 +47,7 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
 
     this.lastHealthAttempt = 0;
     this.lastReserveUpdate = 0;
+    this.lastPowerChange = Date.now();
 
     await super.onInit();
   }
@@ -52,7 +61,7 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
         power *= -1;
       }
 
-      await this.setCapabilityValue('measure_power', power).catch(this.error);
+      await this.setPower(power);
     }
 
     if (typeof sitePowerflow.storage?.chargeLevel === 'number') {
@@ -115,6 +124,22 @@ export default class SolarEdgeDeviceBattery extends SolarEdgeDevice {
     await this.updateHealth({ site, today, lifetime }).catch((err) => {
       this.error(`Error estimating battery health: ${err.message}`);
     });
+  }
+
+  async setPower(power) {
+    const now = Date.now();
+
+    if (power !== this.getCapabilityValue('measure_power')) {
+      this.lastPowerChange = now;
+    } else if (now - this.lastPowerChange > this.constructor.POWER_REFRESH_AFTER) {
+      this.lastPowerChange = now;
+      // Towards zero, so a charge or discharge doesn't flip direction for
+      // that instant; 0 W (idle) has no direction to keep.
+      const nudged = power === 0 ? 1 : power - Math.sign(power);
+      await this.setCapabilityValue('measure_power', nudged).catch(this.error);
+    }
+
+    await this.setCapabilityValue('measure_power', power).catch(this.error);
   }
 
   async setEnergyCapability(capability, wh, decimals) {
