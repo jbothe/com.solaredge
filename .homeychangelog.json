@@ -73,5 +73,8 @@
   },
   "2.1.2": {
     "en": "Fixed multiple inverters and batteries. Added inverter throttled status and voltage. Improved Modbus and EV charger energy. Minor other fixes and improvements."
+  },
+  "2.2.0": {
+    "en": "Added Modbus battery charge and discharge limits. Added PV charge only mode. Fixed Modbus PV power during battery activity. Improved polling of multiple inverters. Minor other fixes and improvements."
   }
 }
