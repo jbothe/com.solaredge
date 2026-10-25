@@ -3800,24 +3800,26 @@
         "measure_frequency",
         "measure_voltage.dc",
         "inverter_status",
-        "alarm_problem"
+        "alarm_problem",
+        "measure_power.ac",
+        "meter_power.ac"
       ],
       "capabilitiesOptions": {
         "measure_power": {
           "title": {
-            "en": "Solar power (AC)",
-            "nl": "Zonnevermogen (AC)",
-            "de": "Solarleistung (AC)",
-            "fr": "Puissance solaire (CA)",
-            "es": "Potencia solar (CA)",
-            "it": "Potenza solare (CA)",
-            "da": "Soleffekt (AC)",
-            "sv": "Soleffekt (AC)",
-            "no": "Soleffekt (AC)",
-            "pl": "Moc słoneczna (AC)",
-            "ru": "Солнечная мощность (AC)",
-            "ar": "القدرة الشمسية (AC)",
-            "ko": "태양광 전력 (AC)"
+            "en": "Solar power",
+            "nl": "Zonnevermogen",
+            "de": "Solarleistung",
+            "fr": "Puissance solaire",
+            "es": "Potencia solar",
+            "it": "Potenza solare",
+            "da": "Soleffekt",
+            "sv": "Soleffekt",
+            "no": "Soleffekt",
+            "pl": "Moc słoneczna",
+            "ru": "Солнечная мощность",
+            "ar": "القدرة الشمسية",
+            "ko": "태양광 전력"
           }
         },
         "target_power": {
@@ -3843,19 +3845,19 @@
         },
         "meter_power": {
           "title": {
-            "en": "Solar energy (AC)",
-            "nl": "Zonopbrengst (AC)",
-            "de": "Solarertrag (AC)",
-            "fr": "Production solaire (CA)",
-            "es": "Producción solar (CA)",
-            "it": "Produzione solare (CA)",
-            "da": "Solproduktion (AC)",
-            "sv": "Solproduktion (AC)",
-            "no": "Solproduksjon (AC)",
-            "pl": "Uzysk słoneczny (AC)",
-            "ru": "Солнечная энергия (AC)",
-            "ar": "الطاقة الشمسية (AC)",
-            "ko": "태양광 발전량 (AC)"
+            "en": "Solar energy",
+            "nl": "Zonopbrengst",
+            "de": "Solarertrag",
+            "fr": "Production solaire",
+            "es": "Producción solar",
+            "it": "Produzione solare",
+            "da": "Solproduktion",
+            "sv": "Solproduktion",
+            "no": "Solproduksjon",
+            "pl": "Uzysk słoneczny",
+            "ru": "Солнечная энергия",
+            "ar": "الطاقة الشمسية",
+            "ko": "태양광 발전량"
           },
           "decimals": 3
         },
@@ -3927,6 +3929,41 @@
             "ko": "PV 전압"
           },
           "decimals": 1
+        },
+        "measure_power.ac": {
+          "title": {
+            "en": "Inverter power (AC)",
+            "nl": "Omvormervermogen (AC)",
+            "de": "Wechselrichterleistung (AC)",
+            "fr": "Puissance de l'onduleur (CA)",
+            "es": "Potencia del inversor (CA)",
+            "it": "Potenza dell'inverter (CA)",
+            "da": "Invertereffekt (AC)",
+            "sv": "Växelriktareffekt (AC)",
+            "no": "Invertereffekt (AC)",
+            "pl": "Moc falownika (AC)",
+            "ru": "Мощность инвертора (AC)",
+            "ar": "قدرة العاكس (AC)",
+            "ko": "인버터 전력 (AC)"
+          }
+        },
+        "meter_power.ac": {
+          "title": {
+            "en": "Inverter energy (AC)",
+            "nl": "Omvormeropbrengst (AC)",
+            "de": "Wechselrichterertrag (AC)",
+            "fr": "Énergie de l'onduleur (CA)",
+            "es": "Energía del inversor (CA)",
+            "it": "Energia dell'inverter (CA)",
+            "da": "Inverterenergi (AC)",
+            "sv": "Växelriktarenergi (AC)",
+            "no": "Inverterenergi (AC)",
+            "pl": "Energia falownika (AC)",
+            "ru": "Энергия инвертора (AC)",
+            "ar": "طاقة العاكس (AC)",
+            "ko": "인버터 발전량 (AC)"
+          },
+          "decimals": 3
         }
       },
       "id": "inverter_modbus",

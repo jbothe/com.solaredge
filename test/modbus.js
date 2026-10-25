@@ -280,11 +280,36 @@ const CASES = [
       meter_modbus: { phases: '3' }, // wye; the dump lacks the meter common block
       battery_modbus: { ratedEnergy: '19.4 kWh', maxChargePower: '', maxDischargePower: '' },
     },
+    // with a DC-coupled battery the PV energy is summed from the PV power, on from the AC counter
+    scenario: {
+      inverter_modbus: async ({ device, name }) => {
+        const realNow = Date.now;
+        let now = realNow();
+        Date.now = () => now;
+        try {
+          await device.poll();
+          const start = device.getCapabilityValue('meter_power');
+          for (let i = 0; i < 6; i += 1) {
+            now += 10 * 60 * 1000;
+            await device.poll(); // eslint-disable-line no-await-in-loop
+          }
+          now += 11 * 60 * 1000; // a gap: not counted
+          await device.poll();
+          const kwh = Math.round((device.getCapabilityValue('meter_power') - start) * 1000) / 1000;
+          check(start === 18785.652 && kwh === 9.49, `${name}: PV energy from ${start}, +${kwh} kWh in an hour at 9490 W`);
+        } finally {
+          Date.now = realNow;
+        }
+      },
+    },
   },
   {
     dump: 'issue827_u1',
     // charging the battery from the grid at night
-    inverter_modbus: [{ measure_power: -5008, inverter_status: 'off' }],
+    // PV is AC plus the battery: -5008 + 5002 W, nothing from the panels
+    inverter_modbus: [{
+      measure_power: 0, 'measure_power.ac': -5008, meter_power: 2836.303, 'meter_power.ac': 2836.303, inverter_status: 'off',
+    }],
     meter_modbus: [{ measure_power: -3484 }, { measure_power: -2471 }, { measure_power: -2740 }],
     battery_modbus: [{
       measure_power: 5002, measure_battery: 66.7, battery_charging_state: 'charging', alarm_problem: false,
