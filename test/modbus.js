@@ -308,7 +308,7 @@ const CASES = [
     // charging the battery from the grid at night
     // PV is AC plus the battery: -5008 + 5002 W, nothing from the panels
     inverter_modbus: [{
-      measure_power: 0, 'measure_power.ac': -5008, meter_power: 2836.303, 'meter_power.ac': 2836.303, inverter_status: 'off',
+      measure_power: 0, 'measure_power.ac_inverter': -5008, meter_power: 2836.303, 'meter_power.ac_inverter': 2836.303, inverter_status: 'off',
     }],
     meter_modbus: [{ measure_power: -3484 }, { measure_power: -2471 }, { measure_power: -2740 }],
     battery_modbus: [{

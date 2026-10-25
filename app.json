@@ -3801,8 +3801,8 @@
         "measure_voltage.dc",
         "inverter_status",
         "alarm_problem",
-        "measure_power.ac",
-        "meter_power.ac"
+        "measure_power.ac_inverter",
+        "meter_power.ac_inverter"
       ],
       "capabilitiesOptions": {
         "measure_power": {
@@ -3930,7 +3930,7 @@
           },
           "decimals": 1
         },
-        "measure_power.ac": {
+        "measure_power.ac_inverter": {
           "title": {
             "en": "Inverter power (AC)",
             "nl": "Omvormervermogen (AC)",
@@ -3947,7 +3947,7 @@
             "ko": "인버터 전력 (AC)"
           }
         },
-        "meter_power.ac": {
+        "meter_power.ac_inverter": {
           "title": {
             "en": "Inverter energy (AC)",
             "nl": "Omvormeropbrengst (AC)",
