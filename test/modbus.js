@@ -376,6 +376,19 @@ const CASES = [
         await device.runAction('powerLimit', { direction: 'charge', watts: 2000 });
         await settle(device);
         check(holding[0xe00d] === 3 && floatAt(holding, 0xe00e) === 2000, `${name}: charge limit ${holding[0xe00d]} ${floatAt(holding, 0xe00e)}`);
+        // a refusal reads as the guard words it, once
+        const exportControl = holding[0xe000];
+        holding[0xe000] = 1; // eslint-disable-line no-param-reassign
+        const logged = device.problems.length;
+        const refusal = await device.runAction('powerLimit', { direction: 'charge', watts: 2000 }).then(() => null, (error) => error.message);
+        device.problems.splice(logged); // the 'action failed' log line of the refusal
+        holding[0xe000] = exportControl; // eslint-disable-line no-param-reassign
+        check(refusal === device.homey.__('errors.exportLimitActive'), `${name}: charge limit refused with ${refusal}`);
+        // someone else left remote control: the limit is kept, the mode not taken back
+        holding[0xe004] = 1; // eslint-disable-line no-param-reassign
+        await device.runAction('powerLimit', { direction: 'charge', watts: 2000 });
+        check(holding[0xe004] === 1, `${name}: a charge limit took back remote control (${holding[0xe004]})`);
+        holding[0xe004] = 4; // eslint-disable-line no-param-reassign
         await act(device, { target_power_mode: 'pv_charge_only' });
         check(holding[0xe004] === 4 && holding[0xe00d] === 1 && floatAt(holding, 0xe00e) === 2000, `${name}: pv charge only ${holding[0xe00d]} ${floatAt(holding, 0xe00e)}`);
         await device.poll();
@@ -527,16 +540,27 @@ const runDriver = async ({
 
   const DeviceClass = require(path.join(ROOT, 'drivers', driverId, 'device.js')); // eslint-disable-line import/no-dynamic-require, global-require
   for (const [index, offer] of offered.entries()) {
-    const device = new DeviceClass({ driverManifest: driver.manifest, data: offer.data, settings: { ...offer.settings } });
+    const device = new DeviceClass({
+      driverManifest: driver.manifest, data: offer.data, settings: { ...offer.settings }, capabilities: offer.capabilities,
+    });
     device.store = structuredClone(offer.store);
-    device.blocks = device.definition.blocks(device.base).map((block) => ({ ...block, failures: 0 }));
+    device.buildBlocks();
     device.unmappedLogged = new Set();
+    // a new device starts with its capabilities: its first start (migrate, detection) changes none
+    const changed = [];
+    device.addCapability = async (id) => changed.push(`+${id}`);
+    device.removeCapability = async (id) => changed.push(`-${id}`);
     device.client = new ModbusClient({
       host: '127.0.0.1', port, unitId: offer.settings.unitId, timeout: 1000,
     });
     let values;
     try {
+      // as onInit
+      await device.applyCapabilityOptions({ force: await device.migrate() }); // eslint-disable-line no-await-in-loop
       await device.runDetection(); // eslint-disable-line no-await-in-loop
+      check(!changed.length, `${dump} ${driverId} ${index + 1}: migrated right after pairing (${changed.join(' ')})`);
+      delete device.addCapability;
+      delete device.removeCapability;
       await device.registerControls(); // eslint-disable-line no-await-in-loop
       await device.poll(); // eslint-disable-line no-await-in-loop
       values = Object.fromEntries(device.getCapabilities().map((id) => [id, device.getCapabilityValue(id)]));
@@ -642,6 +666,46 @@ const unitChecks = async () => {
     'battery: a timed-out read of the 2nd battery dropped it');
   check(isDeepStrictEqual(detect(firstOnly, { batteries: [0, 256] }, 0, new Set([57600 + 256 + 66])).batteries, [0]),
     'battery: a refused 2nd battery was kept');
+  // a rated energy of 0 (a BMS offline at a restart) keeps it too
+  const zeroRated = new Map([...ratings, [57600 + 256 + 66, 0], [57600 + 256 + 67, 0]]);
+  check(isDeepStrictEqual(detect(zeroRated, { batteries: [0, 256] }, 0, new Set()).batteries, [0, 256]),
+    'battery: a 2nd battery with rated energy 0 was dropped');
+  check(isDeepStrictEqual(pointMap.inverter_modbus.detect(zeroRated, { batteries: [0, 256] }, 0, new Set()).batteries, [0, 256]),
+    'inverter: a battery with rated energy 0 was dropped');
+
+  // the inverter's PV energy: from meter_power or the store after a restart, nothing for a clock set back
+  const inverterStore = { pvEnergy: 100 };
+  const inverter = {
+    base: 0,
+    detected: { batteries: [0] },
+    getStoreValue: (key) => inverterStore[key] ?? null,
+    setStoreValue: async (key, value) => {
+      inverterStore[key] = value;
+    },
+    getCapabilityValue: (capability) => (capability === 'meter_power' ? 100.1 : null),
+  };
+  const pvRegs = (ac, battery) => {
+    const regs = new Map([[40083, ac & 0xffff], [40084, 0]]); // eslint-disable-line no-bitwise
+    const buffer = Buffer.alloc(4);
+    buffer.writeFloatLE(battery);
+    return regs.set(57600 + 116, buffer.readUInt16LE(0)).set(57600 + 117, buffer.readUInt16LE(2));
+  };
+  const { meter_power: pvMeter, measure_power: pvPower } = pointMap.inverter_modbus.capabilities;
+  const RealNow = Date.now;
+  try {
+    const energies = [];
+    // 3600 W: 0.06 kWh in a minute
+    for (const seconds of [0, 60, 30]) {
+      Date.now = () => 1e12 + seconds * 1000;
+      energies.push(await pvMeter(pvRegs(3600, 0), inverter)); // eslint-disable-line no-await-in-loop
+    }
+    check(isDeepStrictEqual(energies, [100.1, 100.16, 100.16]), `inverter: PV energy after a restart and a clock set back ${JSON.stringify(energies)}`);
+  } finally {
+    Date.now = RealNow;
+  }
+  const noBattery = new Map([[40083, 2000], [40084, 0]]);
+  check(pvPower(pvRegs(-5008, 5002), inverter) === 0 && pvPower(noBattery, inverter) === 2000,
+    `inverter: PV power while grid charging ${pvPower(pvRegs(-5008, 5002), inverter)}, without a battery reading ${pvPower(noBattery, inverter)}`);
 
   // two batteries: a counter that reads 0 gives no sum; the 1st battery's counter continues on both
   const pairStore = { chargedLast: 6 };

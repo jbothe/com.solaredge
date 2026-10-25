@@ -227,13 +227,15 @@ const invertersInformation = (client, serials) => {
       return await client.getInvertersInformation({ serials: allowed });
     } catch (error) {
       if (error.status !== 403 || allowed.length < 2) throw error;
+      const refused = new Set();
       const answers = await Promise.all(allowed.map((serial) => client.getInvertersInformation({ serials: [serial] }).catch((single) => {
         if (single.status !== 403) throw single;
-        denied.add(serial);
+        refused.add(serial);
         return null;
       })));
-      deniedSerials.set(client, denied);
-      if (answers.every((answer) => answer === null)) throw error;
+      // all refused: the account rather than an inverter, asked again next tick
+      if (refused.size === allowed.length) throw error;
+      deniedSerials.set(client, new Set([...denied, ...refused]));
       return mergeInformation(answers);
     }
   });

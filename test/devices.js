@@ -278,6 +278,20 @@ const inverterDenied = async () => {
   const later = newDevice('inverter', { serialNumber: 'I1' }, client);
   await later.updateInverterDetails();
   check(asked.at(-1) === 'I1,I2', `refused inverter asked again: ${asked.join(' ')}`);
+
+  // every inverter refused: the account, not an inverter; all are asked again next time
+  const allAsked = [];
+  const refusing = {
+    ...client,
+    getInvertersInformation: async ({ serials }) => {
+      allAsked.push(serials.join());
+      throw Object.assign(new Error('NO_PERMISSION'), { status: 403 });
+    },
+  };
+  for (let tick = 0; tick < 2; tick += 1) {
+    await newDevice('inverter', { serialNumber: 'I1' }, refusing).updateInverterDetails().catch(() => {}); // eslint-disable-line no-await-in-loop
+  }
+  check(allAsked.join(' ') === 'I0,I1,I2 I0 I1 I2 I0,I1,I2 I0 I1 I2', `all inverters refused: asked ${allAsked.join(' ')}`);
 };
 
 const inverterStatus = async () => {
