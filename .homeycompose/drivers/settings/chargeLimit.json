@@ -1,0 +1,20 @@
+{
+  "id": "chargeLimit",
+  "type": "label",
+  "value": "",
+  "label": {
+    "en": "Charge limit (Flow)",
+    "nl": "Laadlimiet (Flow)",
+    "de": "Ladelimit (Flow)",
+    "fr": "Limite de charge (Flow)",
+    "es": "Límite de carga (Flow)",
+    "it": "Limite di carica (Flow)",
+    "da": "Opladegrænse (Flow)",
+    "sv": "Laddgräns (Flow)",
+    "no": "Ladegrense (Flow)",
+    "pl": "Limit ładowania (Flow)",
+    "ru": "Лимит заряда (Flow)",
+    "ar": "حد الشحن (Flow)",
+    "ko": "충전 한도 (Flow)"
+  }
+}

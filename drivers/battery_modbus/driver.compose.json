@@ -160,8 +160,29 @@
             "ar": "تفريغ إجباري",
             "ko": "강제 방전"
           }
+        },
+        {
+          "id": "pv_charge_only",
+          "title": {
+            "en": "Charge from solar only",
+            "nl": "Alleen laden van zon",
+            "de": "Nur mit Solarstrom laden",
+            "fr": "Charger uniquement au solaire",
+            "es": "Cargar solo con solar",
+            "it": "Carica solo da solare",
+            "da": "Kun opladning fra sol",
+            "sv": "Ladda endast från sol",
+            "no": "Lad kun fra sol",
+            "pl": "Ładuj tylko z PV",
+            "ru": "Заряд только от солнца",
+            "ar": "الشحن من الطاقة الشمسية فقط",
+            "ko": "태양광으로만 충전"
+          }
         }
       ]
+    },
+    "measure_battery": {
+      "decimals": 1
     },
     "battery_min_soc": {
       "title": {

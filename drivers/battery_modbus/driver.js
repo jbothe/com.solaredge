@@ -27,6 +27,10 @@ module.exports = class SolarEdgeBatteryModbusDriver extends ModbusDriver {
     await super.onInit();
     this.homey.flow.getActionCard('set_backup_reserve')
       .registerRunListener(({ device, soc }) => device.setControl({ battery_min_soc: soc / 100 }));
+    this.homey.flow.getActionCard('set_charge_limit')
+      .registerRunListener(({ device, watts }) => device.runAction('powerLimit', { direction: 'charge', watts }));
+    this.homey.flow.getActionCard('set_discharge_limit')
+      .registerRunListener(({ device, watts }) => device.runAction('powerLimit', { direction: 'discharge', watts }));
   }
 
 };

@@ -1,0 +1,20 @@
+{
+  "id": "dischargeLimit",
+  "type": "label",
+  "value": "",
+  "label": {
+    "en": "Discharge limit (Flow)",
+    "nl": "Ontlaadlimiet (Flow)",
+    "de": "Entladelimit (Flow)",
+    "fr": "Limite de décharge (Flow)",
+    "es": "Límite de descarga (Flow)",
+    "it": "Limite di scarica (Flow)",
+    "da": "Afladegrænse (Flow)",
+    "sv": "Urladdningsgräns (Flow)",
+    "no": "Utladegrense (Flow)",
+    "pl": "Limit rozładowania (Flow)",
+    "ru": "Лимит разряда (Flow)",
+    "ar": "حد التفريغ (Flow)",
+    "ko": "방전 한도 (Flow)"
+  }
+}

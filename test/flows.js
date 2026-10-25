@@ -113,6 +113,8 @@ const run = async () => {
     set_backup_reserve: [{ soc: 30 }, ['setControl', { battery_min_soc: 0.3 }]],
     set_session_energy_limit: [{ kwh: 20 }, ['setControl', { session_energy_limit: 20 }]],
     set_charging_phases: [{ phases: '1' }, ['runAction', 'chargingPhases', { phases: '1' }]],
+    set_charge_limit: [{ watts: 2000 }, ['runAction', 'powerLimit', { direction: 'charge', watts: 2000 }]],
+    set_discharge_limit: [{ watts: 0 }, ['runAction', 'powerLimit', { direction: 'discharge', watts: 0 }]],
   };
   for (const [id, [args, expected]] of Object.entries(ACTION_CALLS)) {
     calls.length = 0;

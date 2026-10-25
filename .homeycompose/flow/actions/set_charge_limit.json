@@ -1,0 +1,91 @@
+{
+  "title": {
+    "en": "Set maximum charge power",
+    "nl": "Stel maximaal laadvermogen in",
+    "de": "Maximale Ladeleistung einstellen",
+    "fr": "Définir la puissance de charge max.",
+    "es": "Establecer potencia de carga máx.",
+    "it": "Imposta potenza di carica max.",
+    "da": "Indstil maks. opladeeffekt",
+    "sv": "Ställ in max. laddeffekt",
+    "no": "Still inn maks. ladeeffekt",
+    "pl": "Ustaw maks. moc ładowania",
+    "ru": "Установить макс. мощность заряда",
+    "ar": "تعيين أقصى قدرة شحن",
+    "ko": "최대 충전 전력 설정"
+  },
+  "titleFormatted": {
+    "en": "Set maximum charge power to [[watts]] W",
+    "nl": "Stel maximaal laadvermogen in op [[watts]] W",
+    "de": "Maximale Ladeleistung auf [[watts]] W einstellen",
+    "fr": "Définir la puissance de charge max. à [[watts]] W",
+    "es": "Establecer potencia de carga máx. en [[watts]] W",
+    "it": "Imposta potenza di carica max. a [[watts]] W",
+    "da": "Indstil maks. opladeeffekt til [[watts]] W",
+    "sv": "Ställ in max. laddeffekt på [[watts]] W",
+    "no": "Still inn maks. ladeeffekt til [[watts]] W",
+    "pl": "Ustaw maks. moc ładowania na [[watts]] W",
+    "ru": "Установить макс. мощность заряда [[watts]] Вт",
+    "ar": "تعيين أقصى قدرة شحن إلى [[watts]] واط",
+    "ko": "최대 충전 전력을 [[watts]] W로 설정"
+  },
+  "hint": {
+    "en": "The battery never charges faster than this in the modes Homey runs (Homey, Force charge, Charge from solar only). Self-use, Time of use and Backup ignore it. A value at or above the battery's rating removes the limit.",
+    "nl": "De batterij laadt nooit sneller dan dit in de modi die Homey aanstuurt (Homey, Geforceerd laden, Alleen laden van zon). Eigen verbruik, Tijdprofiel en Back-up negeren het. Een waarde gelijk aan of boven het vermogen van de batterij heft de limiet op.",
+    "de": "Die Batterie lädt in den von Homey gesteuerten Modi (Homey, Zwangsladung, Nur mit Solarstrom laden) nie schneller. Eigenverbrauch, Zeitprofil und Notstromreserve ignorieren es. Ein Wert ab der Nennleistung der Batterie hebt das Limit auf.",
+    "fr": "La batterie ne charge jamais plus vite dans les modes pilotés par Homey (Homey, Charge forcée, Charger uniquement au solaire). Autoconsommation, Profil horaire et Secours l'ignorent. Une valeur égale ou supérieure à la puissance de la batterie supprime la limite.",
+    "es": "La batería nunca carga más rápido en los modos que controla Homey (Homey, Carga forzada, Cargar solo con solar). Autoconsumo, Perfil horario y Respaldo lo ignoran. Un valor igual o superior a la potencia de la batería elimina el límite.",
+    "it": "La batteria non carica mai più velocemente nelle modalità gestite da Homey (Homey, Carica forzata, Carica solo da solare). Autoconsumo, Profilo orario e Backup lo ignorano. Un valore pari o superiore alla potenza della batteria rimuove il limite.",
+    "da": "Batteriet oplader aldrig hurtigere i de tilstande Homey styrer (Homey, Tvungen opladning, Kun opladning fra sol). Eget forbrug, Tidsprofil og Backup ignorerer det. En værdi på eller over batteriets effekt fjerner grænsen.",
+    "sv": "Batteriet laddar aldrig snabbare i de lägen Homey styr (Homey, Tvingad laddning, Ladda endast från sol). Egenanvändning, Tidsprofil och Reserv ignorerar det. Ett värde på eller över batteriets effekt tar bort gränsen.",
+    "no": "Batteriet lader aldri raskere i modusene Homey styrer (Homey, Tvungen lading, Lad kun fra sol). Egetforbruk, Tidsprofil og Reserve ignorerer det. En verdi på eller over batteriets effekt fjerner grensen.",
+    "pl": "Akumulator nigdy nie ładuje się szybciej w trybach sterowanych przez Homey (Homey, Wymuszone ładowanie, Ładuj tylko z PV). Autokonsumpcja, Profil czasowy i Rezerwa to ignorują. Wartość równa lub wyższa od mocy akumulatora znosi limit.",
+    "ru": "В режимах под управлением Homey (Homey, Принудительный заряд, Заряд только от солнца) аккумулятор не заряжается быстрее. Собственное потребление, Профиль по времени и Резерв это игнорируют. Значение не ниже мощности аккумулятора снимает лимит.",
+    "ar": "لا تُشحن البطارية أسرع من ذلك في الأوضاع التي يتحكم بها Homey (Homey، شحن إجباري، الشحن من الطاقة الشمسية فقط). تتجاهله أوضاع الاستهلاك الذاتي والملف الزمني والاحتياطي. القيمة المساوية لقدرة البطارية أو الأعلى منها تلغي الحد.",
+    "ko": "Homey가 제어하는 모드(Homey, 강제 충전, 태양광으로만 충전)에서는 배터리가 이보다 빠르게 충전되지 않습니다. 자가 소비, 시간대 프로필, 백업 모드는 이를 무시합니다. 배터리 정격 이상의 값은 한도를 해제합니다."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=battery_modbus&capabilities=target_power"
+    },
+    {
+      "type": "number",
+      "name": "watts",
+      "min": 0,
+      "max": 100000,
+      "step": 50,
+      "placeholder": {
+        "en": "W",
+        "nl": "W",
+        "de": "W",
+        "fr": "W",
+        "es": "W",
+        "it": "W",
+        "da": "W",
+        "sv": "W",
+        "no": "W",
+        "pl": "W",
+        "ru": "W",
+        "ar": "W",
+        "ko": "W"
+      },
+      "title": {
+        "en": "Charge power",
+        "nl": "Laadvermogen",
+        "de": "Ladeleistung",
+        "fr": "Puissance de charge",
+        "es": "Potencia de carga",
+        "it": "Potenza di carica",
+        "da": "Opladeeffekt",
+        "sv": "Laddeffekt",
+        "no": "Ladeeffekt",
+        "pl": "Moc ładowania",
+        "ru": "Мощность заряда",
+        "ar": "قدرة الشحن",
+        "ko": "충전 전력"
+      }
+    }
+  ]
+}

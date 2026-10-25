@@ -1298,6 +1298,98 @@
       },
       {
         "title": {
+          "en": "Set maximum charge power",
+          "nl": "Stel maximaal laadvermogen in",
+          "de": "Maximale Ladeleistung einstellen",
+          "fr": "Définir la puissance de charge max.",
+          "es": "Establecer potencia de carga máx.",
+          "it": "Imposta potenza di carica max.",
+          "da": "Indstil maks. opladeeffekt",
+          "sv": "Ställ in max. laddeffekt",
+          "no": "Still inn maks. ladeeffekt",
+          "pl": "Ustaw maks. moc ładowania",
+          "ru": "Установить макс. мощность заряда",
+          "ar": "تعيين أقصى قدرة شحن",
+          "ko": "최대 충전 전력 설정"
+        },
+        "titleFormatted": {
+          "en": "Set maximum charge power to [[watts]] W",
+          "nl": "Stel maximaal laadvermogen in op [[watts]] W",
+          "de": "Maximale Ladeleistung auf [[watts]] W einstellen",
+          "fr": "Définir la puissance de charge max. à [[watts]] W",
+          "es": "Establecer potencia de carga máx. en [[watts]] W",
+          "it": "Imposta potenza di carica max. a [[watts]] W",
+          "da": "Indstil maks. opladeeffekt til [[watts]] W",
+          "sv": "Ställ in max. laddeffekt på [[watts]] W",
+          "no": "Still inn maks. ladeeffekt til [[watts]] W",
+          "pl": "Ustaw maks. moc ładowania na [[watts]] W",
+          "ru": "Установить макс. мощность заряда [[watts]] Вт",
+          "ar": "تعيين أقصى قدرة شحن إلى [[watts]] واط",
+          "ko": "최대 충전 전력을 [[watts]] W로 설정"
+        },
+        "hint": {
+          "en": "The battery never charges faster than this in the modes Homey runs (Homey, Force charge, Charge from solar only). Self-use, Time of use and Backup ignore it. A value at or above the battery's rating removes the limit.",
+          "nl": "De batterij laadt nooit sneller dan dit in de modi die Homey aanstuurt (Homey, Geforceerd laden, Alleen laden van zon). Eigen verbruik, Tijdprofiel en Back-up negeren het. Een waarde gelijk aan of boven het vermogen van de batterij heft de limiet op.",
+          "de": "Die Batterie lädt in den von Homey gesteuerten Modi (Homey, Zwangsladung, Nur mit Solarstrom laden) nie schneller. Eigenverbrauch, Zeitprofil und Notstromreserve ignorieren es. Ein Wert ab der Nennleistung der Batterie hebt das Limit auf.",
+          "fr": "La batterie ne charge jamais plus vite dans les modes pilotés par Homey (Homey, Charge forcée, Charger uniquement au solaire). Autoconsommation, Profil horaire et Secours l'ignorent. Une valeur égale ou supérieure à la puissance de la batterie supprime la limite.",
+          "es": "La batería nunca carga más rápido en los modos que controla Homey (Homey, Carga forzada, Cargar solo con solar). Autoconsumo, Perfil horario y Respaldo lo ignoran. Un valor igual o superior a la potencia de la batería elimina el límite.",
+          "it": "La batteria non carica mai più velocemente nelle modalità gestite da Homey (Homey, Carica forzata, Carica solo da solare). Autoconsumo, Profilo orario e Backup lo ignorano. Un valore pari o superiore alla potenza della batteria rimuove il limite.",
+          "da": "Batteriet oplader aldrig hurtigere i de tilstande Homey styrer (Homey, Tvungen opladning, Kun opladning fra sol). Eget forbrug, Tidsprofil og Backup ignorerer det. En værdi på eller over batteriets effekt fjerner grænsen.",
+          "sv": "Batteriet laddar aldrig snabbare i de lägen Homey styr (Homey, Tvingad laddning, Ladda endast från sol). Egenanvändning, Tidsprofil och Reserv ignorerar det. Ett värde på eller över batteriets effekt tar bort gränsen.",
+          "no": "Batteriet lader aldri raskere i modusene Homey styrer (Homey, Tvungen lading, Lad kun fra sol). Egetforbruk, Tidsprofil og Reserve ignorerer det. En verdi på eller over batteriets effekt fjerner grensen.",
+          "pl": "Akumulator nigdy nie ładuje się szybciej w trybach sterowanych przez Homey (Homey, Wymuszone ładowanie, Ładuj tylko z PV). Autokonsumpcja, Profil czasowy i Rezerwa to ignorują. Wartość równa lub wyższa od mocy akumulatora znosi limit.",
+          "ru": "В режимах под управлением Homey (Homey, Принудительный заряд, Заряд только от солнца) аккумулятор не заряжается быстрее. Собственное потребление, Профиль по времени и Резерв это игнорируют. Значение не ниже мощности аккумулятора снимает лимит.",
+          "ar": "لا تُشحن البطارية أسرع من ذلك في الأوضاع التي يتحكم بها Homey (Homey، شحن إجباري، الشحن من الطاقة الشمسية فقط). تتجاهله أوضاع الاستهلاك الذاتي والملف الزمني والاحتياطي. القيمة المساوية لقدرة البطارية أو الأعلى منها تلغي الحد.",
+          "ko": "Homey가 제어하는 모드(Homey, 강제 충전, 태양광으로만 충전)에서는 배터리가 이보다 빠르게 충전되지 않습니다. 자가 소비, 시간대 프로필, 백업 모드는 이를 무시합니다. 배터리 정격 이상의 값은 한도를 해제합니다."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=battery_modbus&capabilities=target_power"
+          },
+          {
+            "type": "number",
+            "name": "watts",
+            "min": 0,
+            "max": 100000,
+            "step": 50,
+            "placeholder": {
+              "en": "W",
+              "nl": "W",
+              "de": "W",
+              "fr": "W",
+              "es": "W",
+              "it": "W",
+              "da": "W",
+              "sv": "W",
+              "no": "W",
+              "pl": "W",
+              "ru": "W",
+              "ar": "W",
+              "ko": "W"
+            },
+            "title": {
+              "en": "Charge power",
+              "nl": "Laadvermogen",
+              "de": "Ladeleistung",
+              "fr": "Puissance de charge",
+              "es": "Potencia de carga",
+              "it": "Potenza di carica",
+              "da": "Opladeeffekt",
+              "sv": "Laddeffekt",
+              "no": "Ladeeffekt",
+              "pl": "Moc ładowania",
+              "ru": "Мощность заряда",
+              "ar": "قدرة الشحن",
+              "ko": "충전 전력"
+            }
+          }
+        ],
+        "id": "set_charge_limit"
+      },
+      {
+        "title": {
           "en": "Set charging phases",
           "nl": "Stel laadfasen in",
           "de": "Ladephasen einstellen",
@@ -1407,6 +1499,98 @@
           }
         ],
         "id": "set_charging_phases"
+      },
+      {
+        "title": {
+          "en": "Set maximum discharge power",
+          "nl": "Stel maximaal ontlaadvermogen in",
+          "de": "Maximale Entladeleistung einstellen",
+          "fr": "Définir la puissance de décharge max.",
+          "es": "Establecer potencia de descarga máx.",
+          "it": "Imposta potenza di scarica max.",
+          "da": "Indstil maks. afladeeffekt",
+          "sv": "Ställ in max. urladdningseffekt",
+          "no": "Still inn maks. utladeeffekt",
+          "pl": "Ustaw maks. moc rozładowania",
+          "ru": "Установить макс. мощность разряда",
+          "ar": "تعيين أقصى قدرة تفريغ",
+          "ko": "최대 방전 전력 설정"
+        },
+        "titleFormatted": {
+          "en": "Set maximum discharge power to [[watts]] W",
+          "nl": "Stel maximaal ontlaadvermogen in op [[watts]] W",
+          "de": "Maximale Entladeleistung auf [[watts]] W einstellen",
+          "fr": "Définir la puissance de décharge max. à [[watts]] W",
+          "es": "Establecer potencia de descarga máx. en [[watts]] W",
+          "it": "Imposta potenza di scarica max. a [[watts]] W",
+          "da": "Indstil maks. afladeeffekt til [[watts]] W",
+          "sv": "Ställ in max. urladdningseffekt på [[watts]] W",
+          "no": "Still inn maks. utladeeffekt til [[watts]] W",
+          "pl": "Ustaw maks. moc rozładowania na [[watts]] W",
+          "ru": "Установить макс. мощность разряда [[watts]] Вт",
+          "ar": "تعيين أقصى قدرة تفريغ إلى [[watts]] واط",
+          "ko": "최대 방전 전력을 [[watts]] W로 설정"
+        },
+        "hint": {
+          "en": "The battery never discharges faster than this in the modes Homey runs (Homey, Force discharge); 0 W stops discharging. Self-use, Time of use and Backup ignore it. A value at or above the battery's rating removes the limit.",
+          "nl": "De batterij ontlaadt nooit sneller dan dit in de modi die Homey aanstuurt (Homey, Geforceerd ontladen); 0 W stopt het ontladen. Eigen verbruik, Tijdprofiel en Back-up negeren het. Een waarde gelijk aan of boven het vermogen van de batterij heft de limiet op.",
+          "de": "Die Batterie entlädt in den von Homey gesteuerten Modi (Homey, Zwangsentladung) nie schneller; 0 W stoppt das Entladen. Eigenverbrauch, Zeitprofil und Notstromreserve ignorieren es. Ein Wert ab der Nennleistung der Batterie hebt das Limit auf.",
+          "fr": "La batterie ne se décharge jamais plus vite dans les modes pilotés par Homey (Homey, Décharge forcée) ; 0 W arrête la décharge. Autoconsommation, Profil horaire et Secours l'ignorent. Une valeur égale ou supérieure à la puissance de la batterie supprime la limite.",
+          "es": "La batería nunca se descarga más rápido en los modos que controla Homey (Homey, Descarga forzada); 0 W detiene la descarga. Autoconsumo, Perfil horario y Respaldo lo ignoran. Un valor igual o superior a la potencia de la batería elimina el límite.",
+          "it": "La batteria non si scarica mai più velocemente nelle modalità gestite da Homey (Homey, Scarica forzata); 0 W interrompe la scarica. Autoconsumo, Profilo orario e Backup lo ignorano. Un valore pari o superiore alla potenza della batteria rimuove il limite.",
+          "da": "Batteriet aflader aldrig hurtigere i de tilstande Homey styrer (Homey, Tvungen afladning); 0 W stopper afladningen. Eget forbrug, Tidsprofil og Backup ignorerer det. En værdi på eller over batteriets effekt fjerner grænsen.",
+          "sv": "Batteriet laddar aldrig ur snabbare i de lägen Homey styr (Homey, Tvingad urladdning); 0 W stoppar urladdningen. Egenanvändning, Tidsprofil och Reserv ignorerar det. Ett värde på eller över batteriets effekt tar bort gränsen.",
+          "no": "Batteriet lader aldri ut raskere i modusene Homey styrer (Homey, Tvungen utlading); 0 W stopper utladingen. Egetforbruk, Tidsprofil og Reserve ignorerer det. En verdi på eller over batteriets effekt fjerner grensen.",
+          "pl": "Akumulator nigdy nie rozładowuje się szybciej w trybach sterowanych przez Homey (Homey, Wymuszone rozładowanie); 0 W zatrzymuje rozładowanie. Autokonsumpcja, Profil czasowy i Rezerwa to ignorują. Wartość równa lub wyższa od mocy akumulatora znosi limit.",
+          "ru": "В режимах под управлением Homey (Homey, Принудительный разряд) аккумулятор не разряжается быстрее; 0 Вт останавливает разряд. Собственное потребление, Профиль по времени и Резерв это игнорируют. Значение не ниже мощности аккумулятора снимает лимит.",
+          "ar": "لا تُفرَّغ البطارية أسرع من ذلك في الأوضاع التي يتحكم بها Homey (Homey، تفريغ إجباري)؛ 0 واط يوقف التفريغ. تتجاهله أوضاع الاستهلاك الذاتي والملف الزمني والاحتياطي. القيمة المساوية لقدرة البطارية أو الأعلى منها تلغي الحد.",
+          "ko": "Homey가 제어하는 모드(Homey, 강제 방전)에서는 배터리가 이보다 빠르게 방전되지 않습니다. 0 W이면 방전을 멈춥니다. 자가 소비, 시간대 프로필, 백업 모드는 이를 무시합니다. 배터리 정격 이상의 값은 한도를 해제합니다."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=battery_modbus&capabilities=target_power"
+          },
+          {
+            "type": "number",
+            "name": "watts",
+            "min": 0,
+            "max": 100000,
+            "step": 50,
+            "placeholder": {
+              "en": "W",
+              "nl": "W",
+              "de": "W",
+              "fr": "W",
+              "es": "W",
+              "it": "W",
+              "da": "W",
+              "sv": "W",
+              "no": "W",
+              "pl": "W",
+              "ru": "W",
+              "ar": "W",
+              "ko": "W"
+            },
+            "title": {
+              "en": "Discharge power",
+              "nl": "Ontlaadvermogen",
+              "de": "Entladeleistung",
+              "fr": "Puissance de décharge",
+              "es": "Potencia de descarga",
+              "it": "Potenza di scarica",
+              "da": "Afladeeffekt",
+              "sv": "Urladdningseffekt",
+              "no": "Utladeeffekt",
+              "pl": "Moc rozładowania",
+              "ru": "Мощность разряда",
+              "ar": "قدرة التفريغ",
+              "ko": "방전 전력"
+            }
+          }
+        ],
+        "id": "set_discharge_limit"
       },
       {
         "title": {
@@ -1964,8 +2148,29 @@
                 "ar": "تفريغ إجباري",
                 "ko": "강제 방전"
               }
+            },
+            {
+              "id": "pv_charge_only",
+              "title": {
+                "en": "Charge from solar only",
+                "nl": "Alleen laden van zon",
+                "de": "Nur mit Solarstrom laden",
+                "fr": "Charger uniquement au solaire",
+                "es": "Cargar solo con solar",
+                "it": "Carica solo da solare",
+                "da": "Kun opladning fra sol",
+                "sv": "Ladda endast från sol",
+                "no": "Lad kun fra sol",
+                "pl": "Ładuj tylko z PV",
+                "ru": "Заряд только от солнца",
+                "ar": "الشحن من الطاقة الشمسية فقط",
+                "ko": "태양광으로만 충전"
+              }
             }
           ]
+        },
+        "measure_battery": {
+          "decimals": 1
         },
         "battery_min_soc": {
           "title": {
@@ -2430,6 +2635,46 @@
                 "ru": "Макс. мощность разряда",
                 "ar": "أقصى قدرة تفريغ",
                 "ko": "최대 방전 전력"
+              }
+            },
+            {
+              "id": "chargeLimit",
+              "type": "label",
+              "value": "",
+              "label": {
+                "en": "Charge limit (Flow)",
+                "nl": "Laadlimiet (Flow)",
+                "de": "Ladelimit (Flow)",
+                "fr": "Limite de charge (Flow)",
+                "es": "Límite de carga (Flow)",
+                "it": "Limite di carica (Flow)",
+                "da": "Opladegrænse (Flow)",
+                "sv": "Laddgräns (Flow)",
+                "no": "Ladegrense (Flow)",
+                "pl": "Limit ładowania (Flow)",
+                "ru": "Лимит заряда (Flow)",
+                "ar": "حد الشحن (Flow)",
+                "ko": "충전 한도 (Flow)"
+              }
+            },
+            {
+              "id": "dischargeLimit",
+              "type": "label",
+              "value": "",
+              "label": {
+                "en": "Discharge limit (Flow)",
+                "nl": "Ontlaadlimiet (Flow)",
+                "de": "Entladelimit (Flow)",
+                "fr": "Limite de décharge (Flow)",
+                "es": "Límite de descarga (Flow)",
+                "it": "Limite di scarica (Flow)",
+                "da": "Afladegrænse (Flow)",
+                "sv": "Urladdningsgräns (Flow)",
+                "no": "Utladegrense (Flow)",
+                "pl": "Limit rozładowania (Flow)",
+                "ru": "Лимит разряда (Flow)",
+                "ar": "حد التفريغ (Flow)",
+                "ko": "방전 한도 (Flow)"
               }
             }
           ]

@@ -266,7 +266,7 @@ const CASES = [
     // two batteries (SoE 100 and 99 %, 9.58 and 9.71 kWh left) in one device
     battery_modbus: [{
       measure_power: 0,
-      measure_battery: 100,
+      measure_battery: 99.6,
       measure_soh: 100,
       measure_residual_energy: 19.29,
       battery_charging_state: 'idle',
@@ -287,7 +287,7 @@ const CASES = [
     inverter_modbus: [{ measure_power: -5008, inverter_status: 'off' }],
     meter_modbus: [{ measure_power: -3484 }, { measure_power: -2471 }, { measure_power: -2740 }],
     battery_modbus: [{
-      measure_power: 5002, measure_battery: 67, battery_charging_state: 'charging', alarm_problem: false,
+      measure_power: 5002, measure_battery: 66.7, battery_charging_state: 'charging', alarm_problem: false,
     }],
   },
   {
@@ -295,7 +295,7 @@ const CASES = [
     // two batteries discharging 66 W each (SoE 96 and 95 %, SoH 98 and 99 %) in one device
     battery_modbus: [{
       measure_power: -132,
-      measure_battery: 95,
+      measure_battery: 95.2,
       battery_charging_state: 'discharging',
       measure_soh: 98.5,
       target_power_mode: 'time_of_use',
@@ -319,7 +319,7 @@ const CASES = [
       holding.units = { 2: load('issue944_u1') }; // eslint-disable-line no-param-reassign
     },
     inverter_modbus: [{ measure_power: 9490 }, {}],
-    battery_modbus: [{ measure_power: 0, measure_battery: 100 }, { measure_power: -132, measure_battery: 95 }],
+    battery_modbus: [{ measure_power: 0, measure_battery: 99.6 }, { measure_power: -132, measure_battery: 95.2 }],
     scenario: {
       inverter_modbus: async ({ device, index, name }) => {
         check(Number(device.getSetting('unitId')) === index + 1, `${name}: unit id ${device.getSetting('unitId')}`);
@@ -348,6 +348,19 @@ const CASES = [
         check(holding[0xe00d] === 4, `${name}: keep-alive did not renew the command (${holding[0xe00d]})`);
         await act(device, { target_power_mode: 'force_charge' });
         check(holding[0xe00d] === 3 && floatAt(holding, 0xe00e) === 5000, `${name}: force charge ${holding[0xe00d]} ${floatAt(holding, 0xe00e)}`);
+        await device.runAction('powerLimit', { direction: 'charge', watts: 2000 });
+        await settle(device);
+        check(holding[0xe00d] === 3 && floatAt(holding, 0xe00e) === 2000, `${name}: charge limit ${holding[0xe00d]} ${floatAt(holding, 0xe00e)}`);
+        await act(device, { target_power_mode: 'pv_charge_only' });
+        check(holding[0xe004] === 4 && holding[0xe00d] === 1 && floatAt(holding, 0xe00e) === 2000, `${name}: pv charge only ${holding[0xe00d]} ${floatAt(holding, 0xe00e)}`);
+        await device.poll();
+        check(device.getCapabilityValue('target_power_mode') === 'pv_charge_only', `${name}: mode ${device.getCapabilityValue('target_power_mode')}`);
+        await device.runAction('powerLimit', { direction: 'discharge', watts: 0 });
+        await act(device, { target_power: -1500 });
+        check(holding[0xe00d] === 0, `${name}: discharge limit 0 still discharges (${holding[0xe00d]})`);
+        await device.runAction('powerLimit', { direction: 'charge', watts: 100000 });
+        await device.runAction('powerLimit', { direction: 'discharge', watts: 100000 });
+        await settle(device);
         await device.releaseControls();
         check(holding[0xe00d] === 1, `${name}: release left command mode ${holding[0xe00d]}`);
         await act(device, { target_power_mode: 'self_use' });
