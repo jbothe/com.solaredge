@@ -9,3 +9,8 @@ zzz*
 AGENTS.md
 /test/captures/*
 !/test/captures/README.md
+
+# Local credentials and caches (fork)
+/.env
+/.cache/
+/API Info.txt
