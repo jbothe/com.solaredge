@@ -90,6 +90,7 @@ module.exports = class SolarEdgeBatteryDevice extends CommonDevice {
     if (this.energyDue()) {
       await this.updateBatteries().catch((error) => this.error(`Error Fetching Batteries: ${error.message}`));
       await this.updateStorageTotals().catch((error) => this.error(`Error Fetching Storage Totals: ${error.message}`));
+      await this.updateChargeSources().catch((error) => this.error(`Error Fetching Charge Sources: ${error.message}`));
       await this.updateSiteAlarms().catch((error) => this.error(`Error Fetching Site Alarms: ${error.message}`));
     }
   }
@@ -112,6 +113,21 @@ module.exports = class SolarEdgeBatteryDevice extends CommonDevice {
     ]) {
       // eslint-disable-next-line no-await-in-loop
       if (typeof total === 'number' && total > 0) await this.setCapability(capability, await this.monotonic(name, total / 1000));
+    }
+  }
+
+  /**
+   * meter_power.charged_solar_today/.charged_grid_today: what charged the batteries today, from
+   * getSiteStorageDistribution over today (sources pv and grid, Wh). They restart at 0 each day.
+   */
+  async updateChargeSources() {
+    const today = await this.siteToday();
+    const { sources } = await this.client.getSiteStorageDistribution({
+      siteId: this.getData().siteId, timeUnit: 'days', startDate: today, endDate: today,
+    }) || {};
+    for (const [capability, wh] of [['meter_power.charged_solar_today', sources?.pv], ['meter_power.charged_grid_today', sources?.grid]]) {
+      // eslint-disable-next-line no-await-in-loop
+      if (typeof wh === 'number') await this.setCapability(capability, wh / 1000);
     }
   }
 

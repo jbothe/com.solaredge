@@ -167,6 +167,12 @@
         },
         "meter_power.discharged": {
           "title": "Discharged energy"
+        },
+        "meter_power.charged_solar_today": {
+          "title": "Charged from solar (today)"
+        },
+        "meter_power.charged_grid_today": {
+          "title": "Charged from grid (today)"
         }
       }
     },

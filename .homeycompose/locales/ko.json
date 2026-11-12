@@ -167,6 +167,12 @@
         },
         "meter_power.discharged": {
           "title": "방전된 에너지"
+        },
+        "meter_power.charged_solar_today": {
+          "title": "태양광 충전량 (오늘)"
+        },
+        "meter_power.charged_grid_today": {
+          "title": "전력망 충전량 (오늘)"
         }
       }
     },

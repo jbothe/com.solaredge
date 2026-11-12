@@ -46,8 +46,11 @@ const LOCALES = ['en', 'nl', 'de', 'fr', 'es', 'it', 'da', 'sv', 'no', 'pl', 'ru
 // v1.8.1, the last version before the rewrite. Remove an entry only together with the
 // migration step that removes it from existing devices.
 const PINNED = {
-  appId: 'com.solaredge',
-  customCapabilities: ['solaredge-home-load-controller-state'],
+  // this fork is its own app, next to the store's com.solaredge
+  appId: 'bothe.family.solaredge',
+  // battery_*: the fork's, on the battery devices it paired; DeviceMigrator can only remove them
+  // while they are defined
+  customCapabilities: ['solaredge-home-load-controller-state', 'battery_soc', 'battery_soh', 'battery_backup_reserve'],
   settings: ['username', 'password'],
   drivers: {
     battery: ['measure_battery', 'measure_power', 'battery_charging_state'],

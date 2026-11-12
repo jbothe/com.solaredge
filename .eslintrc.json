@@ -1,8 +1,11 @@
 {
+  "root": true,
   "extends": "athom/homey-app",
   "overrides": [
     {
-      "files": ["test/**/*.js"],
+      "files": [
+        "test/**/*.js"
+      ],
       "rules": {
         "no-console": "off",
         "no-process-exit": "off",

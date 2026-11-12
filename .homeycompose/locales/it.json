@@ -167,6 +167,12 @@
         },
         "meter_power.discharged": {
           "title": "Energia scaricata"
+        },
+        "meter_power.charged_solar_today": {
+          "title": "Caricato dal solare (oggi)"
+        },
+        "meter_power.charged_grid_today": {
+          "title": "Caricato dalla rete (oggi)"
         }
       }
     },

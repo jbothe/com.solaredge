@@ -1,0 +1,40 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Forecast (today)",
+    "nl": "Prognose (vandaag)",
+    "de": "Prognose (heute)",
+    "fr": "Prévision (aujourd’hui)",
+    "es": "Previsión (hoy)",
+    "it": "Previsione (oggi)",
+    "da": "Prognose (i dag)",
+    "sv": "Prognos (idag)",
+    "no": "Prognose (i dag)",
+    "pl": "Prognoza (dziś)",
+    "ru": "Прогноз (сегодня)",
+    "ar": "التوقع (اليوم)",
+    "ko": "예측 (오늘)"
+  },
+  "units": {
+    "en": "kWh",
+    "nl": "kWh",
+    "de": "kWh",
+    "fr": "kWh",
+    "es": "kWh",
+    "it": "kWh",
+    "da": "kWh",
+    "sv": "kWh",
+    "no": "kWh",
+    "pl": "kWh",
+    "ru": "кВт·ч",
+    "ar": "ك.و.س",
+    "ko": "kWh"
+  },
+  "decimals": 1,
+  "chartType": "stepLine",
+  "getable": true,
+  "setable": false,
+  "insights": false,
+  "uiComponent": "sensor",
+  "icon": "./assets/solar_forecast.svg"
+}

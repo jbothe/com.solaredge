@@ -27,7 +27,8 @@
     "noCarConnected": "Ingen bil tilkoblet.",
     "noChargingSession": "Ingen ladeøkt: koble til en bil først.",
     "phaseSwitchingOff": "Slå først på \"Faseveksling via Modbus\" i enhetsinnstillingene.",
-    "batteryMerged": "Brukes ikke lenger: dette batteriet er nå en del av den første batterienheten til vekselretteren. Slett denne enheten."
+    "batteryMerged": "Brukes ikke lenger: dette batteriet er nå en del av den første batterienheten til vekselretteren. Slett denne enheten.",
+    "forecastFirstGroup": "Angi hvor mange paneler den første gruppen har, slik at gruppene kan vektes mot hverandre."
   },
   "migrating": "Oppdaterer funksjoner…",
   "pair": {
@@ -51,5 +52,10 @@
       "basic": "Grunnleggende",
       "unavailable": "Ikke tilgjengelig"
     }
+  },
+  "forecast": {
+    "notReady": "Solprognosen er ikke tilgjengelig ennå.",
+    "accuracyPending": "Ikke nok dager ennå: vurderingen starter etter __needed__ dager med prognoser for neste dag (__days__ hittil).",
+    "accuracySummary": "__accuracy__ % over __days__ dager. Daglig feil __error__ %, skjevhet __bias__ % (over 0 er for høy prognose). Faktisk produksjon innenfor intervallet __coverage__ % av dagene (80 % er ideelt). Feil per time __hourly__ %."
   }
 }

@@ -167,6 +167,12 @@
         },
         "meter_power.discharged": {
           "title": "Разряженная энергия"
+        },
+        "meter_power.charged_solar_today": {
+          "title": "Заряжено от солнца (сегодня)"
+        },
+        "meter_power.charged_grid_today": {
+          "title": "Заряжено от сети (сегодня)"
         }
       }
     },

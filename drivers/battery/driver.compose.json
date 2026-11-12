@@ -7,6 +7,8 @@
     "battery_charging_state",
     "meter_power.charged",
     "meter_power.discharged",
+    "meter_power.charged_solar_today",
+    "meter_power.charged_grid_today",
     "alarm_connectivity"
   ],
   "energy": {
@@ -20,6 +22,12 @@
     },
     "meter_power.discharged": {
       "decimals": 3
+    },
+    "meter_power.charged_solar_today": {
+      "decimals": 2
+    },
+    "meter_power.charged_grid_today": {
+      "decimals": 2
     }
   }
 }

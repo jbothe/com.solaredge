@@ -27,7 +27,8 @@
     "noCarConnected": "No hay ningún coche conectado.",
     "noChargingSession": "No hay sesión de carga: conecta primero un coche.",
     "phaseSwitchingOff": "Activa primero \"Conmutación de fases por Modbus\" en los ajustes del dispositivo.",
-    "batteryMerged": "Ya no se usa: esta batería forma parte ahora del primer dispositivo de batería de su inversor. Elimina este dispositivo."
+    "batteryMerged": "Ya no se usa: esta batería forma parte ahora del primer dispositivo de batería de su inversor. Elimina este dispositivo.",
+    "forecastFirstGroup": "Indica cuántos paneles tiene el primer grupo, para poder ponderar los grupos entre sí."
   },
   "migrating": "Actualizando capacidades…",
   "pair": {
@@ -51,5 +52,10 @@
       "basic": "Básica",
       "unavailable": "No disponible"
     }
+  },
+  "forecast": {
+    "notReady": "La previsión solar aún no está disponible.",
+    "accuracyPending": "Aún no hay suficientes días: la evaluación empieza tras __needed__ días de previsiones del día anterior (__days__ hasta ahora).",
+    "accuracySummary": "__accuracy__ % en __days__ días. Error diario __error__ %, sesgo __bias__ % (por encima de 0 es previsión demasiado alta). Producción real dentro del rango el __coverage__ % de los días (lo ideal es 80 %). Error por hora __hourly__ %."
   }
 }

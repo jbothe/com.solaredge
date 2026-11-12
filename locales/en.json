@@ -27,7 +27,8 @@
     "noCarConnected": "No car connected.",
     "noChargingSession": "No charging session: plug in a car first.",
     "phaseSwitchingOff": "Turn on \"Phase switching via Modbus\" in the device settings first.",
-    "batteryMerged": "No longer used: this battery is now part of the first battery device of its inverter. Please delete this device."
+    "batteryMerged": "No longer used: this battery is now part of the first battery device of its inverter. Please delete this device.",
+    "forecastFirstGroup": "Set how many panels the first group has, so the groups can be weighed against each other."
   },
   "migrating": "Updating capabilities…",
   "pair": {
@@ -51,5 +52,10 @@
       "basic": "Basic",
       "unavailable": "Not available"
     }
+  },
+  "forecast": {
+    "notReady": "The solar forecast isn’t available yet.",
+    "accuracyPending": "Not enough days yet: scoring starts after __needed__ days of day-ahead forecasts (__days__ so far).",
+    "accuracySummary": "__accuracy__% over __days__ days. Daily error __error__%, bias __bias__% (above 0 is over-forecasting). Actual within the forecast range on __coverage__% of days (80% is ideal). Hourly error __hourly__%."
   }
 }

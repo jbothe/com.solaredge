@@ -156,6 +156,12 @@ module.exports = class SolarEdgeApp extends Homey.App {
     }
     this.homey.flow.getConditionCard('ev_solar_charging_is')
       .registerRunListener(async ({ device }) => device.hasCapability('ev_solar_charging') && device.getCapabilityValue('ev_solar_charging') === true);
+
+    // the inverter's solar forecast (lib/InverterForecast.js); throws until the forecast is in
+    this.homey.flow.getConditionCard('solar_forecast_tomorrow_above')
+      .registerRunListener(async ({ device, estimate, kwh }) => device.forecastTomorrowAbove(estimate, kwh));
+    this.homey.flow.getConditionCard('solar_forecast_power_at_above')
+      .registerRunListener(async ({ device, time, watts }) => device.forecastPowerAtAbove(time, watts));
   }
 
   /**

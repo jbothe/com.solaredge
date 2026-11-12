@@ -167,6 +167,12 @@
         },
         "meter_power.discharged": {
           "title": "Ontladen energie"
+        },
+        "meter_power.charged_solar_today": {
+          "title": "Geladen uit zon (vandaag)"
+        },
+        "meter_power.charged_grid_today": {
+          "title": "Geladen uit net (vandaag)"
         }
       }
     },

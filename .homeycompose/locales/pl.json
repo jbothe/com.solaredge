@@ -167,6 +167,12 @@
         },
         "meter_power.discharged": {
           "title": "Rozładowana energia"
+        },
+        "meter_power.charged_solar_today": {
+          "title": "Naładowano ze słońca (dziś)"
+        },
+        "meter_power.charged_grid_today": {
+          "title": "Naładowano z sieci (dziś)"
         }
       }
     },

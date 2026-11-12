@@ -20,7 +20,9 @@ along with com.solaredge.  If not, see <http://www.gnu.org/licenses/>.
 'use strict';
 
 const CommonDevice = require('../../lib/common_device');
+const InverterForecast = require('../../lib/InverterForecast');
 const { dateIn } = require('../../lib/deviceHelpers');
+const deviceCapabilities = require('../../lib/deviceCapabilities');
 const finite = require('../../lib/finite');
 const { isAsleep } = require('../../lib/inverterSleep');
 
@@ -269,6 +271,49 @@ module.exports = class SolarEdgeInverterDevice extends CommonDevice {
     return siteEquipment(client, siteId);
   }
 
+  async onInit() {
+    // the solar forecast of the site (lib/InverterForecast.js); its own timer, not the poll ticks
+    this.solarForecast = new InverterForecast(this);
+    await super.onInit();
+    this.solarForecast.start();
+  }
+
+  /** As CommonDevice's, with the forecast capabilities the device already has (paired with them). */
+  capabilityList() {
+    const seenCaps = { ...this.getStoreValue('seenCaps') };
+    InverterForecast.CAPABILITIES.filter((capability) => this.hasCapability(capability)).forEach((capability) => {
+      seenCaps[capability] = true;
+    });
+    return deviceCapabilities.list(this.driver.id, this.driver.manifest.capabilities, seenCaps, (capability) => this.hasCapability(capability));
+  }
+
+  async onSettings({ oldSettings, newSettings, changedKeys }) {
+    // a throw keeps the old settings, with the reason
+    this.solarForecast.checkSettings(newSettings, changedKeys);
+    await super.onSettings({ oldSettings, newSettings, changedKeys });
+    this.solarForecast.settingsChanged(newSettings, changedKeys);
+  }
+
+  /** For the condition 'tomorrow's solar forecast is above': estimate p10, p50 or p90. */
+  forecastTomorrowAbove(estimate, kwh) {
+    return this.solarForecast.summary().tomorrow[estimate] / 1000 > kwh;
+  }
+
+  /** For the condition 'expected solar power at a time is above': time 'HH:MM'. */
+  forecastPowerAtAbove(time, watts) {
+    return this.solarForecast.expectedPowerAt(time) > watts;
+  }
+
+  onDeleted() {
+    this.solarForecast?.stop();
+    super.onDeleted();
+  }
+
+  async onUninit() {
+    this.solarForecast?.stop();
+    await super.onUninit();
+  }
+
   /** The inverter's serial; null for a device of the whole site. */
   get serial() {
     return this.getData().serialNumber ?? null;
@@ -335,6 +380,11 @@ module.exports = class SolarEdgeInverterDevice extends CommonDevice {
     for (const { timePeriod, energy: value } of Object.values(energyProducedOverviewList || {})) {
       const capability = ENERGY_CAPABILITIES[timePeriod];
       if (!capability || typeof value !== 'number') continue;
+      // the site's production today, for the forecast's 'today vs forecast'
+      if (timePeriod === 'LAST_DAY' && this.solarForecast) {
+        // eslint-disable-next-line no-await-in-loop
+        await this.solarForecast.noteProduced(await this.siteToday(), value).catch((error) => this.error(error));
+      }
       // a period whose share fails is left as it is; the others still update
       // eslint-disable-next-line no-await-in-loop
       const share = whole ? 1 : await this.energyShare(timePeriod).catch((error) => {

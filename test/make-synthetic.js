@@ -93,9 +93,24 @@ const backend = {
       }],
     },
   }),
-  getSiteStorageDistribution: async () => ({
+  // lifetime over years; today (timeUnit days) for the battery's charge sources and the meter's shares
+  getSiteStorageDistribution: async ({ timeUnit }) => (timeUnit === 'days' ? {
+    sources: { total: 6400, pv: 2400, grid: 4000 },
+    destinations: { total: 3100, building: 3100, grid: 0 },
+  } : {
     sources: { total: 1234567, pv: 1200000, grid: 34567 },
     destinations: { total: 1000000, building: 950000, grid: 50000 },
+  }),
+  // today's energy with distributions, field names as the fork (jbothe/com.solaredge) read them live
+  getSiteEnergyChart: async () => ({
+    summary: {
+      production: 7131,
+      consumption: 9800,
+      productionDistribution: { productionToHome: 3200, productionToBattery: 2400, productionToGrid: 1531 },
+      consumptionDistribution: { consumptionFromSolar: 3200, consumptionFromBattery: 3100, consumptionFromGrid: 3500 },
+      import: 3500,
+      export: 1531,
+    },
   }),
   getSiteMeasurements: async ({ endDate }) => {
     const totals = YEARS[endDate.slice(0, 4)];

@@ -113,6 +113,27 @@
    }
   },
   {
+   "method": "getSiteStorageDistribution",
+   "args": {
+    "siteId": 9999999,
+    "timeUnit": "days",
+    "startDate": "2026-10-15",
+    "endDate": "2026-10-15"
+   },
+   "result": {
+    "sources": {
+     "total": 6400,
+     "pv": 2400,
+     "grid": 4000
+    },
+    "destinations": {
+     "total": 3100,
+     "building": 3100,
+     "grid": 0
+    }
+   }
+  },
+  {
    "method": "getSiteCommunication",
    "args": {
     "siteId": 9999999
@@ -677,6 +698,41 @@
    "result": {
     "totalAlertsCount": 1,
     "topAlerts": []
+   }
+  },
+  {
+   "method": "getSiteEnergyChart",
+   "args": {
+    "siteId": 9999999,
+    "timeUnit": "days",
+    "startDate": "2026-10-15",
+    "endDate": "2026-10-15",
+    "measurementTypes": [
+     "production",
+     "consumption",
+     "production-distribution-with-storage",
+     "consumption-distribution-with-storage",
+     "import",
+     "export"
+    ]
+   },
+   "result": {
+    "summary": {
+     "production": 7131,
+     "consumption": 9800,
+     "productionDistribution": {
+      "productionToHome": 3200,
+      "productionToBattery": 2400,
+      "productionToGrid": 1531
+     },
+     "consumptionDistribution": {
+      "consumptionFromSolar": 3200,
+      "consumptionFromBattery": 3100,
+      "consumptionFromGrid": 3500
+     },
+     "import": 3500,
+     "export": 1531
+    }
    }
   },
   {

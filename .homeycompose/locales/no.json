@@ -167,6 +167,12 @@
         },
         "meter_power.discharged": {
           "title": "Utladet energi"
+        },
+        "meter_power.charged_solar_today": {
+          "title": "Ladet fra sol (i dag)"
+        },
+        "meter_power.charged_grid_today": {
+          "title": "Ladet fra nettet (i dag)"
         }
       }
     },

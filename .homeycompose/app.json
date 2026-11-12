@@ -1,5 +1,5 @@
 {
-  "id": "com.solaredge",
+  "id": "bothe.family.solaredge",
   "version": "2.2.0",
   "compatibility": ">=12.13.0",
   "brandColor": "#D82F37",
@@ -18,17 +18,20 @@
     "xlarge": "/assets/images/xlarge.png"
   },
   "author": {
-    "name": "R.M. de Gruijter"
+    "name": "John Bothe",
+    "email": "jbothe@gmail.com"
   },
   "contributors": {
     "developers": [
+      {
+        "name": "R.M. de Gruijter"
+      },
       {
         "name": "Emile Nijssen",
         "email": "emile@athom.nl"
       }
     ]
   },
-  "support": "https://community.homey.app/t/134605",
-  "homeyCommunityTopicId": 134605,
-  "source": "https://github.com/gruijter/com.solaredge"
+  "support": "https://github.com/jbothe/com.solaredge",
+  "source": "https://github.com/jbothe/com.solaredge"
 }

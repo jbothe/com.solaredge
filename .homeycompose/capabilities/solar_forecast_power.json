@@ -1,0 +1,40 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Forecast power",
+    "nl": "Verwacht vermogen",
+    "de": "Prognoseleistung",
+    "fr": "Puissance prévue",
+    "es": "Potencia prevista",
+    "it": "Potenza prevista",
+    "da": "Forventet effekt",
+    "sv": "Prognoseeffekt",
+    "no": "Prognosert effekt",
+    "pl": "Prognozowana moc",
+    "ru": "Прогноз мощности",
+    "ar": "القدرة المتوقعة",
+    "ko": "예상 출력"
+  },
+  "units": {
+    "en": "W",
+    "nl": "W",
+    "de": "W",
+    "fr": "W",
+    "es": "W",
+    "it": "W",
+    "da": "W",
+    "sv": "W",
+    "no": "W",
+    "pl": "W",
+    "ru": "W",
+    "ar": "W",
+    "ko": "W"
+  },
+  "decimals": 0,
+  "chartType": "spline",
+  "getable": true,
+  "setable": false,
+  "insights": true,
+  "uiComponent": "sensor",
+  "icon": "./assets/solar_forecast.svg"
+}

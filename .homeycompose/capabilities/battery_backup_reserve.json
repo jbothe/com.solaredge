@@ -1,0 +1,41 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Backup reserve",
+    "nl": "Noodstroomreserve",
+    "de": "Notstromreserve",
+    "fr": "Réserve de secours",
+    "es": "Reserva de respaldo",
+    "it": "Riserva di backup",
+    "da": "Nødstrømsreserve",
+    "sv": "Reservkraft",
+    "no": "Nødstrømsreserve",
+    "pl": "Rezerwa awaryjna",
+    "ru": "Резерв на случай отключения",
+    "ar": "احتياطي الطوارئ",
+    "ko": "백업 예비량"
+  },
+  "units": {
+    "en": "%",
+    "nl": "%",
+    "de": "%",
+    "fr": "%",
+    "es": "%",
+    "it": "%",
+    "da": "%",
+    "sv": "%",
+    "no": "%",
+    "pl": "%",
+    "ru": "%",
+    "ar": "%",
+    "ko": "%"
+  },
+  "decimals": 0,
+  "min": 0,
+  "max": 100,
+  "getable": true,
+  "setable": false,
+  "insights": true,
+  "uiComponent": "sensor",
+  "icon": "./assets/battery_soc.svg"
+}

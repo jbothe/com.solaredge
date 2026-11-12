@@ -27,7 +27,8 @@
     "noCarConnected": "Ingen bil tilsluttet.",
     "noChargingSession": "Ingen ladesession: tilslut først en bil.",
     "phaseSwitchingOff": "Slå først \"Faseskift via Modbus\" til i enhedsindstillingerne.",
-    "batteryMerged": "Bruges ikke længere: batteriet er nu en del af inverterens første batterienhed. Slet denne enhed."
+    "batteryMerged": "Bruges ikke længere: batteriet er nu en del af inverterens første batterienhed. Slet denne enhed.",
+    "forecastFirstGroup": "Angiv hvor mange paneler den første gruppe har, så grupperne kan vægtes mod hinanden."
   },
   "migrating": "Opdaterer funktioner…",
   "pair": {
@@ -51,5 +52,10 @@
       "basic": "Basis",
       "unavailable": "Ikke tilgængelig"
     }
+  },
+  "forecast": {
+    "notReady": "Solprognosen er ikke tilgængelig endnu.",
+    "accuracyPending": "Ikke nok dage endnu: vurderingen starter efter __needed__ dage med prognoser for næste dag (__days__ indtil nu).",
+    "accuracySummary": "__accuracy__ % over __days__ dage. Daglig fejl __error__ %, skævhed __bias__ % (over 0 er for høj prognose). Faktisk produktion inden for intervallet på __coverage__ % af dagene (80 % er ideelt). Fejl pr. time __hourly__ %."
   }
 }

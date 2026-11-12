@@ -1,0 +1,41 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Battery SoC",
+    "nl": "Laadtoestand batterij",
+    "de": "Ladezustand Speicher",
+    "fr": "Charge batterie",
+    "es": "Carga de la batería",
+    "it": "Carica batteria",
+    "da": "Batteriets ladetilstand",
+    "sv": "Batteriets laddnivå",
+    "no": "Batteriets ladenivå",
+    "pl": "Naładowanie akumulatora",
+    "ru": "Заряд батареи",
+    "ar": "شحن البطارية",
+    "ko": "배터리 충전 상태"
+  },
+  "units": {
+    "en": "%",
+    "nl": "%",
+    "de": "%",
+    "fr": "%",
+    "es": "%",
+    "it": "%",
+    "da": "%",
+    "sv": "%",
+    "no": "%",
+    "pl": "%",
+    "ru": "%",
+    "ar": "%",
+    "ko": "%"
+  },
+  "decimals": 0,
+  "min": 0,
+  "max": 100,
+  "getable": true,
+  "setable": false,
+  "insights": true,
+  "uiComponent": "sensor",
+  "icon": "./assets/battery_soc.svg"
+}

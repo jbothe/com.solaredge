@@ -20,6 +20,7 @@ along with com.solaredge.  If not, see <http://www.gnu.org/licenses/>.
 'use strict';
 
 const CommonDevice = require('../../lib/common_device');
+const energyShares = require('../../lib/energyShares');
 const { FIRST_YEAR } = require('../../lib/solarEdgeConstants');
 
 // a past year is stored only this long after it ended: then it has ended in every timezone and its
@@ -37,6 +38,7 @@ module.exports = class SolarEdgeMeterDevice extends CommonDevice {
     const { siteId } = this.getData();
 
     const sitePowerflow = await this.client.getSitePowerflow({ siteId });
+    this.storage = sitePowerflow.storage?.isActive === true;
 
     // currentPower in kW, always positive; null when there is none
 
@@ -73,6 +75,7 @@ module.exports = class SolarEdgeMeterDevice extends CommonDevice {
     if (!this.energyDue()) return;
 
     await this.updateSiteAlarms().catch((error) => this.error(`Error Fetching Site Alarms: ${error.message}`));
+    await this.updateShares(siteId).catch((error) => this.error(`Error Fetching Energy Shares: ${error.message}`));
 
     // the yearly totals take several calls: one run at a time, outside the poll
     if (!this.getTotalPromise) {
@@ -84,6 +87,35 @@ module.exports = class SolarEdgeMeterDevice extends CommonDevice {
           delete this.getTotalPromise;
         });
     }
+  }
+
+  /**
+   * Today's self-consumption and self-sufficiency (lib/energyShares.js), from the day's energy with
+   * where production went and consumption came from, and on a battery site what charged the battery.
+   * The distribution types are '-with-storage' on a battery site, '-without-storage' otherwise.
+   */
+  async updateShares(siteId) {
+    const today = await this.siteToday();
+    const storage = this.storage ? 'with-storage' : 'without-storage';
+    const { summary } = await this.client.getSiteEnergyChart({
+      siteId,
+      timeUnit: 'days',
+      startDate: today,
+      endDate: today,
+      measurementTypes: ['production', 'consumption', `production-distribution-${storage}`, `consumption-distribution-${storage}`, 'import', 'export'],
+    });
+    const battery = this.storage
+      ? await this.client.getSiteStorageDistribution({
+        siteId, timeUnit: 'days', startDate: today, endDate: today,
+      }).catch((error) => {
+        this.error(`Error Fetching Battery Sources: ${error.message}`);
+        return null;
+      })
+      : null;
+    const { selfConsumption, selfSufficiency } = energyShares(summary, battery?.sources);
+    const percent = (share) => (share === null ? null : Math.round(share * 100));
+    await this.setCapability('solar_self_consumption', percent(selfConsumption));
+    await this.setCapability('solar_self_sufficiency', percent(selfSufficiency));
   }
 
   /** The site's current and first year with data (installationDate, seen live), else FIRST_YEAR. */

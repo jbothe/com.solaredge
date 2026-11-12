@@ -1,0 +1,280 @@
+{
+  "triggers": [
+    {
+      "id": "solar_forecast_tomorrow_updated",
+      "$filter": "capabilities=solar_forecast_tomorrow",
+      "title": {
+        "en": "Tomorrow’s solar forecast changed",
+        "nl": "De zonneprognose voor morgen is gewijzigd",
+        "de": "Die Solarprognose für morgen hat sich geändert",
+        "fr": "La prévision solaire de demain a changé",
+        "es": "La previsión solar de mañana ha cambiado",
+        "it": "La previsione solare di domani è cambiata",
+        "da": "Morgendagens solprognose er ændret",
+        "sv": "Morgondagens solprognos har ändrats",
+        "no": "Morgendagens solprognose er endret",
+        "pl": "Zmieniła się prognoza słoneczna na jutro",
+        "ru": "Солнечный прогноз на завтра изменился",
+        "ar": "تغيّر التوقع الشمسي لغد",
+        "ko": "내일 태양광 예측이 변경됨"
+      },
+      "tokens": [
+        {
+          "name": "forecast",
+          "type": "number",
+          "example": 18.5,
+          "title": {
+            "en": "Forecast",
+            "nl": "Prognose",
+            "de": "Prognose",
+            "fr": "Prévision",
+            "es": "Previsión",
+            "it": "Previsione",
+            "da": "Prognose",
+            "sv": "Prognos",
+            "no": "Prognose",
+            "pl": "Prognoza",
+            "ru": "Прогноз",
+            "ar": "التوقع",
+            "ko": "예측"
+          }
+        },
+        {
+          "name": "forecast_low",
+          "type": "number",
+          "example": 12.1,
+          "title": {
+            "en": "Forecast (low, P10)",
+            "nl": "Prognose (laag, P10)",
+            "de": "Prognose (niedrig, P10)",
+            "fr": "Prévision (basse, P10)",
+            "es": "Previsión (baja, P10)",
+            "it": "Previsione (bassa, P10)",
+            "da": "Prognose (lav, P10)",
+            "sv": "Prognos (låg, P10)",
+            "no": "Prognose (lav, P10)",
+            "pl": "Prognoza (niska, P10)",
+            "ru": "Прогноз (низкий, P10)",
+            "ar": "التوقع (منخفض، P10)",
+            "ko": "예측 (낮음, P10)"
+          }
+        },
+        {
+          "name": "forecast_high",
+          "type": "number",
+          "example": 22.4,
+          "title": {
+            "en": "Forecast (high, P90)",
+            "nl": "Prognose (hoog, P90)",
+            "de": "Prognose (hoch, P90)",
+            "fr": "Prévision (haute, P90)",
+            "es": "Previsión (alta, P90)",
+            "it": "Previsione (alta, P90)",
+            "da": "Prognose (høj, P90)",
+            "sv": "Prognos (hög, P90)",
+            "no": "Prognose (høy, P90)",
+            "pl": "Prognoza (wysoka, P90)",
+            "ru": "Прогноз (высокий, P90)",
+            "ar": "التوقع (مرتفع، P90)",
+            "ko": "예측 (높음, P90)"
+          }
+        }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "id": "solar_forecast_tomorrow_above",
+      "$filter": "capabilities=solar_forecast_tomorrow",
+      "title": {
+        "en": "Tomorrow’s solar forecast is above…",
+        "nl": "De zonneprognose voor morgen is hoger dan…",
+        "de": "Die Solarprognose für morgen liegt über…",
+        "fr": "La prévision solaire de demain dépasse…",
+        "es": "La previsión solar de mañana supera…",
+        "it": "La previsione solare di domani supera…",
+        "da": "Morgendagens solprognose er over…",
+        "sv": "Morgondagens solprognos är över…",
+        "no": "Morgendagens solprognose er over…",
+        "pl": "Prognoza słoneczna na jutro przekracza…",
+        "ru": "Солнечный прогноз на завтра выше…",
+        "ar": "التوقع الشمسي لغد أعلى من…",
+        "ko": "내일 태양광 예측이 다음보다 큼…"
+      },
+      "titleFormatted": {
+        "en": "Tomorrow’s [[estimate]] solar forecast !{{is|is not}} above [[kwh]] kWh",
+        "nl": "De [[estimate]] zonneprognose voor morgen !{{is|is niet}} hoger dan [[kwh]] kWh",
+        "de": "Die [[estimate]] Solarprognose für morgen !{{liegt|liegt nicht}} über [[kwh]] kWh",
+        "fr": "La prévision solaire [[estimate]] de demain !{{dépasse|ne dépasse pas}} [[kwh]] kWh",
+        "es": "La previsión solar [[estimate]] de mañana !{{supera|no supera}} [[kwh]] kWh",
+        "it": "La previsione solare [[estimate]] di domani !{{supera|non supera}} [[kwh]] kWh",
+        "da": "Morgendagens [[estimate]] solprognose !{{er|er ikke}} over [[kwh]] kWh",
+        "sv": "Morgondagens [[estimate]] solprognos !{{är|är inte}} över [[kwh]] kWh",
+        "no": "Morgendagens [[estimate]] solprognose !{{er|er ikke}} over [[kwh]] kWh",
+        "pl": "Prognoza słoneczna na jutro ([[estimate]]) !{{przekracza|nie przekracza}} [[kwh]] kWh",
+        "ru": "Солнечный прогноз на завтра ([[estimate]]) !{{выше|не выше}} [[kwh]] кВт·ч",
+        "ar": "التوقع الشمسي لغد ([[estimate]]) !{{أعلى|ليس أعلى}} من [[kwh]] ك.و.س",
+        "ko": "내일 태양광 예측([[estimate]])이 [[kwh]] kWh !{{보다 큼|보다 크지 않음}}"
+      },
+      "args": [
+        {
+          "name": "estimate",
+          "type": "dropdown",
+          "values": [
+            {
+              "id": "p50",
+              "title": {
+                "en": "most likely",
+                "nl": "meest waarschijnlijke",
+                "de": "wahrscheinlichste",
+                "fr": "la plus probable",
+                "es": "más probable",
+                "it": "più probabile",
+                "da": "mest sandsynlige",
+                "sv": "mest sannolika",
+                "no": "mest sannsynlige",
+                "pl": "najbardziej prawdopodobna",
+                "ru": "наиболее вероятный",
+                "ar": "الأرجح",
+                "ko": "가장 가능성 높은"
+              }
+            },
+            {
+              "id": "p10",
+              "title": {
+                "en": "low (9 in 10 days beat it)",
+                "nl": "lage (9 op 10 dagen hoger)",
+                "de": "niedrige (an 9 von 10 Tagen übertroffen)",
+                "fr": "basse (dépassée 9 jours sur 10)",
+                "es": "baja (superada 9 de cada 10 días)",
+                "it": "bassa (superata 9 giorni su 10)",
+                "da": "lave (overgået 9 af 10 dage)",
+                "sv": "låga (överträffad 9 av 10 dagar)",
+                "no": "lave (overgått 9 av 10 dager)",
+                "pl": "niska (przekroczona w 9 na 10 dni)",
+                "ru": "низкий (превышен в 9 из 10 дней)",
+                "ar": "المنخفض (يُتجاوز في 9 من 10 أيام)",
+                "ko": "낮은 (10일 중 9일 초과)"
+              }
+            },
+            {
+              "id": "p90",
+              "title": {
+                "en": "high (1 in 10 days beat it)",
+                "nl": "hoge (1 op 10 dagen hoger)",
+                "de": "hohe (an 1 von 10 Tagen übertroffen)",
+                "fr": "haute (dépassée 1 jour sur 10)",
+                "es": "alta (superada 1 de cada 10 días)",
+                "it": "alta (superata 1 giorno su 10)",
+                "da": "høje (overgået 1 af 10 dage)",
+                "sv": "höga (överträffad 1 av 10 dagar)",
+                "no": "høye (overgått 1 av 10 dager)",
+                "pl": "wysoka (przekroczona w 1 na 10 dni)",
+                "ru": "высокий (превышен в 1 из 10 дней)",
+                "ar": "المرتفع (يُتجاوز في يوم من 10)",
+                "ko": "높은 (10일 중 1일 초과)"
+              }
+            }
+          ]
+        },
+        {
+          "name": "kwh",
+          "type": "number",
+          "min": 0,
+          "step": 0.1,
+          "placeholder": {
+            "en": "kWh",
+            "nl": "kWh",
+            "de": "kWh",
+            "fr": "kWh",
+            "es": "kWh",
+            "it": "kWh",
+            "da": "kWh",
+            "sv": "kWh",
+            "no": "kWh",
+            "pl": "kWh",
+            "ru": "кВт·ч",
+            "ar": "ك.و.س",
+            "ko": "kWh"
+          }
+        }
+      ]
+    },
+    {
+      "id": "solar_forecast_power_at_above",
+      "$filter": "capabilities=solar_forecast_tomorrow",
+      "title": {
+        "en": "Expected solar power at a time is above…",
+        "nl": "Verwacht zonnevermogen op een tijdstip is hoger dan…",
+        "de": "Erwartete Solarleistung zu einer Uhrzeit liegt über…",
+        "fr": "La puissance solaire prévue à une heure dépasse…",
+        "es": "La potencia solar prevista a una hora supera…",
+        "it": "La potenza solare prevista a un’ora supera…",
+        "da": "Forventet soleffekt på et tidspunkt er over…",
+        "sv": "Förväntad soleffekt vid en tidpunkt är över…",
+        "no": "Forventet soleffekt på et tidspunkt er over…",
+        "pl": "Oczekiwana moc słoneczna o danej godzinie przekracza…",
+        "ru": "Ожидаемая солнечная мощность в заданное время выше…",
+        "ar": "القدرة الشمسية المتوقعة في وقت ما أعلى من…",
+        "ko": "특정 시각의 예상 태양광 출력이 다음보다 큼…"
+      },
+      "titleFormatted": {
+        "en": "Expected solar power at [[time]] !{{is|is not}} above [[watts]] W",
+        "nl": "Verwacht zonnevermogen om [[time]] !{{is|is niet}} hoger dan [[watts]] W",
+        "de": "Erwartete Solarleistung um [[time]] !{{liegt|liegt nicht}} über [[watts]] W",
+        "fr": "La puissance solaire prévue à [[time]] !{{dépasse|ne dépasse pas}} [[watts]] W",
+        "es": "La potencia solar prevista a las [[time]] !{{supera|no supera}} [[watts]] W",
+        "it": "La potenza solare prevista alle [[time]] !{{supera|non supera}} [[watts]] W",
+        "da": "Forventet soleffekt kl. [[time]] !{{er|er ikke}} over [[watts]] W",
+        "sv": "Förväntad soleffekt kl. [[time]] !{{är|är inte}} över [[watts]] W",
+        "no": "Forventet soleffekt kl. [[time]] !{{er|er ikke}} over [[watts]] W",
+        "pl": "Oczekiwana moc słoneczna o [[time]] !{{przekracza|nie przekracza}} [[watts]] W",
+        "ru": "Ожидаемая солнечная мощность в [[time]] !{{выше|не выше}} [[watts]] Вт",
+        "ar": "القدرة الشمسية المتوقعة عند [[time]] !{{أعلى|ليست أعلى}} من [[watts]] واط",
+        "ko": "[[time]]의 예상 태양광 출력이 [[watts]] W !{{보다 큼|보다 크지 않음}}"
+      },
+      "hint": {
+        "en": "The next time the clock reads this: today, or tomorrow if it has passed.",
+        "nl": "De eerstvolgende keer dat de klok deze tijd aangeeft: vandaag, of morgen als die al voorbij is.",
+        "de": "Das nächste Mal, dass die Uhr diese Zeit zeigt: heute oder morgen, wenn sie vorbei ist.",
+        "fr": "La prochaine fois que l’horloge affiche cette heure : aujourd’hui, ou demain si elle est passée.",
+        "es": "La próxima vez que el reloj marque esta hora: hoy, o mañana si ya ha pasado.",
+        "it": "La prossima volta che l’orologio segna quest’ora: oggi, o domani se è già passata.",
+        "da": "Næste gang uret viser dette: i dag, eller i morgen hvis tidspunktet er passeret.",
+        "sv": "Nästa gång klockan visar detta: idag, eller imorgon om tiden har passerat.",
+        "no": "Neste gang klokken viser dette: i dag, eller i morgen hvis tidspunktet er passert.",
+        "pl": "Najbliższy raz, gdy zegar wskaże tę godzinę: dziś albo jutro, jeśli już minęła.",
+        "ru": "Ближайший раз, когда часы покажут это время: сегодня или завтра, если оно прошло.",
+        "ar": "المرة التالية التي تشير فيها الساعة إلى هذا الوقت: اليوم، أو غدًا إن كان قد مضى.",
+        "ko": "다음에 시계가 이 시각을 가리킬 때: 오늘, 이미 지났다면 내일."
+      },
+      "args": [
+        {
+          "name": "time",
+          "type": "time"
+        },
+        {
+          "name": "watts",
+          "type": "number",
+          "min": 0,
+          "step": 100,
+          "placeholder": {
+            "en": "W",
+            "nl": "W",
+            "de": "W",
+            "fr": "W",
+            "es": "W",
+            "it": "W",
+            "da": "W",
+            "sv": "W",
+            "no": "W",
+            "pl": "W",
+            "ru": "Вт",
+            "ar": "واط",
+            "ko": "W"
+          }
+        }
+      ]
+    }
+  ]
+}

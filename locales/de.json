@@ -27,7 +27,8 @@
     "noCarConnected": "Kein Auto angeschlossen.",
     "noChargingSession": "Kein Ladevorgang: schließe zuerst ein Auto an.",
     "phaseSwitchingOff": "Schalte zuerst „Phasenumschaltung über Modbus“ in den Geräteeinstellungen ein.",
-    "batteryMerged": "Nicht mehr verwendet: Diese Batterie gehört jetzt zum ersten Batteriegerät ihres Wechselrichters. Bitte lösche dieses Gerät."
+    "batteryMerged": "Nicht mehr verwendet: Diese Batterie gehört jetzt zum ersten Batteriegerät ihres Wechselrichters. Bitte lösche dieses Gerät.",
+    "forecastFirstGroup": "Geben Sie an, wie viele Module die erste Gruppe hat, damit die Gruppen gegeneinander gewichtet werden können."
   },
   "migrating": "Fähigkeiten werden aktualisiert…",
   "pair": {
@@ -51,5 +52,10 @@
       "basic": "Einfach",
       "unavailable": "Nicht verfügbar"
     }
+  },
+  "forecast": {
+    "notReady": "Die Solarprognose ist noch nicht verfügbar.",
+    "accuracyPending": "Noch zu wenige Tage: Die Bewertung beginnt nach __needed__ Tagen mit einer Prognose für morgen (bisher __days__).",
+    "accuracySummary": "__accuracy__ % über __days__ Tage. Tägliche Abweichung __error__ %, Verzerrung __bias__ % (über 0 heißt zu hoch vorhergesagt). Tatsächlicher Ertrag innerhalb der Spanne an __coverage__ % der Tage (ideal sind 80 %). Stündliche Abweichung __hourly__ %."
   }
 }

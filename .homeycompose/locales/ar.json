@@ -167,6 +167,12 @@
         },
         "meter_power.discharged": {
           "title": "الطاقة المفرغة"
+        },
+        "meter_power.charged_solar_today": {
+          "title": "شُحن من الطاقة الشمسية (اليوم)"
+        },
+        "meter_power.charged_grid_today": {
+          "title": "شُحن من الشبكة (اليوم)"
         }
       }
     },

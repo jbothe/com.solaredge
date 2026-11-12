@@ -1,6 +1,6 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
-  "id": "com.solaredge",
+  "id": "bothe.family.solaredge",
   "version": "2.2.0",
   "compatibility": ">=12.13.0",
   "brandColor": "#D82F37",
@@ -19,19 +19,22 @@
     "xlarge": "/assets/images/xlarge.png"
   },
   "author": {
-    "name": "R.M. de Gruijter"
+    "name": "John Bothe",
+    "email": "jbothe@gmail.com"
   },
   "contributors": {
     "developers": [
+      {
+        "name": "R.M. de Gruijter"
+      },
       {
         "name": "Emile Nijssen",
         "email": "emile@athom.nl"
       }
     ]
   },
-  "support": "https://community.homey.app/t/134605",
-  "homeyCommunityTopicId": 134605,
-  "source": "https://github.com/gruijter/com.solaredge",
+  "support": "https://github.com/jbothe/com.solaredge",
+  "source": "https://github.com/jbothe/com.solaredge",
   "flow": {
     "triggers": [
       {
@@ -558,6 +561,93 @@
           "ru": "Состояние изменилось",
           "sv": "Tillståndet har ändrats"
         }
+      },
+      {
+        "id": "solar_forecast_tomorrow_updated",
+        "title": {
+          "en": "Tomorrow’s solar forecast changed",
+          "nl": "De zonneprognose voor morgen is gewijzigd",
+          "de": "Die Solarprognose für morgen hat sich geändert",
+          "fr": "La prévision solaire de demain a changé",
+          "es": "La previsión solar de mañana ha cambiado",
+          "it": "La previsione solare di domani è cambiata",
+          "da": "Morgendagens solprognose er ændret",
+          "sv": "Morgondagens solprognos har ändrats",
+          "no": "Morgendagens solprognose er endret",
+          "pl": "Zmieniła się prognoza słoneczna na jutro",
+          "ru": "Солнечный прогноз на завтра изменился",
+          "ar": "تغيّر التوقع الشمسي لغد",
+          "ko": "내일 태양광 예측이 변경됨"
+        },
+        "tokens": [
+          {
+            "name": "forecast",
+            "type": "number",
+            "example": 18.5,
+            "title": {
+              "en": "Forecast",
+              "nl": "Prognose",
+              "de": "Prognose",
+              "fr": "Prévision",
+              "es": "Previsión",
+              "it": "Previsione",
+              "da": "Prognose",
+              "sv": "Prognos",
+              "no": "Prognose",
+              "pl": "Prognoza",
+              "ru": "Прогноз",
+              "ar": "التوقع",
+              "ko": "예측"
+            }
+          },
+          {
+            "name": "forecast_low",
+            "type": "number",
+            "example": 12.1,
+            "title": {
+              "en": "Forecast (low, P10)",
+              "nl": "Prognose (laag, P10)",
+              "de": "Prognose (niedrig, P10)",
+              "fr": "Prévision (basse, P10)",
+              "es": "Previsión (baja, P10)",
+              "it": "Previsione (bassa, P10)",
+              "da": "Prognose (lav, P10)",
+              "sv": "Prognos (låg, P10)",
+              "no": "Prognose (lav, P10)",
+              "pl": "Prognoza (niska, P10)",
+              "ru": "Прогноз (низкий, P10)",
+              "ar": "التوقع (منخفض، P10)",
+              "ko": "예측 (낮음, P10)"
+            }
+          },
+          {
+            "name": "forecast_high",
+            "type": "number",
+            "example": 22.4,
+            "title": {
+              "en": "Forecast (high, P90)",
+              "nl": "Prognose (hoog, P90)",
+              "de": "Prognose (hoch, P90)",
+              "fr": "Prévision (haute, P90)",
+              "es": "Previsión (alta, P90)",
+              "it": "Previsione (alta, P90)",
+              "da": "Prognose (høj, P90)",
+              "sv": "Prognos (hög, P90)",
+              "no": "Prognose (høy, P90)",
+              "pl": "Prognoza (wysoka, P90)",
+              "ru": "Прогноз (высокий, P90)",
+              "ar": "التوقع (مرتفع، P90)",
+              "ko": "예측 (높음, P90)"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=inverter&capabilities=solar_forecast_tomorrow"
+          }
+        ]
       }
     ],
     "conditions": [
@@ -1021,6 +1111,207 @@
           "ru": "Состояние !{{—|не}} [[state]]",
           "sv": "Tillståndet !{{är|är inte}} [[state]]"
         }
+      },
+      {
+        "id": "solar_forecast_tomorrow_above",
+        "title": {
+          "en": "Tomorrow’s solar forecast is above…",
+          "nl": "De zonneprognose voor morgen is hoger dan…",
+          "de": "Die Solarprognose für morgen liegt über…",
+          "fr": "La prévision solaire de demain dépasse…",
+          "es": "La previsión solar de mañana supera…",
+          "it": "La previsione solare di domani supera…",
+          "da": "Morgendagens solprognose er over…",
+          "sv": "Morgondagens solprognos är över…",
+          "no": "Morgendagens solprognose er over…",
+          "pl": "Prognoza słoneczna na jutro przekracza…",
+          "ru": "Солнечный прогноз на завтра выше…",
+          "ar": "التوقع الشمسي لغد أعلى من…",
+          "ko": "내일 태양광 예측이 다음보다 큼…"
+        },
+        "titleFormatted": {
+          "en": "Tomorrow’s [[estimate]] solar forecast !{{is|is not}} above [[kwh]] kWh",
+          "nl": "De [[estimate]] zonneprognose voor morgen !{{is|is niet}} hoger dan [[kwh]] kWh",
+          "de": "Die [[estimate]] Solarprognose für morgen !{{liegt|liegt nicht}} über [[kwh]] kWh",
+          "fr": "La prévision solaire [[estimate]] de demain !{{dépasse|ne dépasse pas}} [[kwh]] kWh",
+          "es": "La previsión solar [[estimate]] de mañana !{{supera|no supera}} [[kwh]] kWh",
+          "it": "La previsione solare [[estimate]] di domani !{{supera|non supera}} [[kwh]] kWh",
+          "da": "Morgendagens [[estimate]] solprognose !{{er|er ikke}} over [[kwh]] kWh",
+          "sv": "Morgondagens [[estimate]] solprognos !{{är|är inte}} över [[kwh]] kWh",
+          "no": "Morgendagens [[estimate]] solprognose !{{er|er ikke}} over [[kwh]] kWh",
+          "pl": "Prognoza słoneczna na jutro ([[estimate]]) !{{przekracza|nie przekracza}} [[kwh]] kWh",
+          "ru": "Солнечный прогноз на завтра ([[estimate]]) !{{выше|не выше}} [[kwh]] кВт·ч",
+          "ar": "التوقع الشمسي لغد ([[estimate]]) !{{أعلى|ليس أعلى}} من [[kwh]] ك.و.س",
+          "ko": "내일 태양광 예측([[estimate]])이 [[kwh]] kWh !{{보다 큼|보다 크지 않음}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=inverter&capabilities=solar_forecast_tomorrow"
+          },
+          {
+            "name": "estimate",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "p50",
+                "title": {
+                  "en": "most likely",
+                  "nl": "meest waarschijnlijke",
+                  "de": "wahrscheinlichste",
+                  "fr": "la plus probable",
+                  "es": "más probable",
+                  "it": "più probabile",
+                  "da": "mest sandsynlige",
+                  "sv": "mest sannolika",
+                  "no": "mest sannsynlige",
+                  "pl": "najbardziej prawdopodobna",
+                  "ru": "наиболее вероятный",
+                  "ar": "الأرجح",
+                  "ko": "가장 가능성 높은"
+                }
+              },
+              {
+                "id": "p10",
+                "title": {
+                  "en": "low (9 in 10 days beat it)",
+                  "nl": "lage (9 op 10 dagen hoger)",
+                  "de": "niedrige (an 9 von 10 Tagen übertroffen)",
+                  "fr": "basse (dépassée 9 jours sur 10)",
+                  "es": "baja (superada 9 de cada 10 días)",
+                  "it": "bassa (superata 9 giorni su 10)",
+                  "da": "lave (overgået 9 af 10 dage)",
+                  "sv": "låga (överträffad 9 av 10 dagar)",
+                  "no": "lave (overgått 9 av 10 dager)",
+                  "pl": "niska (przekroczona w 9 na 10 dni)",
+                  "ru": "низкий (превышен в 9 из 10 дней)",
+                  "ar": "المنخفض (يُتجاوز في 9 من 10 أيام)",
+                  "ko": "낮은 (10일 중 9일 초과)"
+                }
+              },
+              {
+                "id": "p90",
+                "title": {
+                  "en": "high (1 in 10 days beat it)",
+                  "nl": "hoge (1 op 10 dagen hoger)",
+                  "de": "hohe (an 1 von 10 Tagen übertroffen)",
+                  "fr": "haute (dépassée 1 jour sur 10)",
+                  "es": "alta (superada 1 de cada 10 días)",
+                  "it": "alta (superata 1 giorno su 10)",
+                  "da": "høje (overgået 1 af 10 dage)",
+                  "sv": "höga (överträffad 1 av 10 dagar)",
+                  "no": "høye (overgått 1 av 10 dager)",
+                  "pl": "wysoka (przekroczona w 1 na 10 dni)",
+                  "ru": "высокий (превышен в 1 из 10 дней)",
+                  "ar": "المرتفع (يُتجاوز في يوم من 10)",
+                  "ko": "높은 (10일 중 1일 초과)"
+                }
+              }
+            ]
+          },
+          {
+            "name": "kwh",
+            "type": "number",
+            "min": 0,
+            "step": 0.1,
+            "placeholder": {
+              "en": "kWh",
+              "nl": "kWh",
+              "de": "kWh",
+              "fr": "kWh",
+              "es": "kWh",
+              "it": "kWh",
+              "da": "kWh",
+              "sv": "kWh",
+              "no": "kWh",
+              "pl": "kWh",
+              "ru": "кВт·ч",
+              "ar": "ك.و.س",
+              "ko": "kWh"
+            }
+          }
+        ]
+      },
+      {
+        "id": "solar_forecast_power_at_above",
+        "title": {
+          "en": "Expected solar power at a time is above…",
+          "nl": "Verwacht zonnevermogen op een tijdstip is hoger dan…",
+          "de": "Erwartete Solarleistung zu einer Uhrzeit liegt über…",
+          "fr": "La puissance solaire prévue à une heure dépasse…",
+          "es": "La potencia solar prevista a una hora supera…",
+          "it": "La potenza solare prevista a un’ora supera…",
+          "da": "Forventet soleffekt på et tidspunkt er over…",
+          "sv": "Förväntad soleffekt vid en tidpunkt är över…",
+          "no": "Forventet soleffekt på et tidspunkt er over…",
+          "pl": "Oczekiwana moc słoneczna o danej godzinie przekracza…",
+          "ru": "Ожидаемая солнечная мощность в заданное время выше…",
+          "ar": "القدرة الشمسية المتوقعة في وقت ما أعلى من…",
+          "ko": "특정 시각의 예상 태양광 출력이 다음보다 큼…"
+        },
+        "titleFormatted": {
+          "en": "Expected solar power at [[time]] !{{is|is not}} above [[watts]] W",
+          "nl": "Verwacht zonnevermogen om [[time]] !{{is|is niet}} hoger dan [[watts]] W",
+          "de": "Erwartete Solarleistung um [[time]] !{{liegt|liegt nicht}} über [[watts]] W",
+          "fr": "La puissance solaire prévue à [[time]] !{{dépasse|ne dépasse pas}} [[watts]] W",
+          "es": "La potencia solar prevista a las [[time]] !{{supera|no supera}} [[watts]] W",
+          "it": "La potenza solare prevista alle [[time]] !{{supera|non supera}} [[watts]] W",
+          "da": "Forventet soleffekt kl. [[time]] !{{er|er ikke}} over [[watts]] W",
+          "sv": "Förväntad soleffekt kl. [[time]] !{{är|är inte}} över [[watts]] W",
+          "no": "Forventet soleffekt kl. [[time]] !{{er|er ikke}} over [[watts]] W",
+          "pl": "Oczekiwana moc słoneczna o [[time]] !{{przekracza|nie przekracza}} [[watts]] W",
+          "ru": "Ожидаемая солнечная мощность в [[time]] !{{выше|не выше}} [[watts]] Вт",
+          "ar": "القدرة الشمسية المتوقعة عند [[time]] !{{أعلى|ليست أعلى}} من [[watts]] واط",
+          "ko": "[[time]]의 예상 태양광 출력이 [[watts]] W !{{보다 큼|보다 크지 않음}}"
+        },
+        "hint": {
+          "en": "The next time the clock reads this: today, or tomorrow if it has passed.",
+          "nl": "De eerstvolgende keer dat de klok deze tijd aangeeft: vandaag, of morgen als die al voorbij is.",
+          "de": "Das nächste Mal, dass die Uhr diese Zeit zeigt: heute oder morgen, wenn sie vorbei ist.",
+          "fr": "La prochaine fois que l’horloge affiche cette heure : aujourd’hui, ou demain si elle est passée.",
+          "es": "La próxima vez que el reloj marque esta hora: hoy, o mañana si ya ha pasado.",
+          "it": "La prossima volta che l’orologio segna quest’ora: oggi, o domani se è già passata.",
+          "da": "Næste gang uret viser dette: i dag, eller i morgen hvis tidspunktet er passeret.",
+          "sv": "Nästa gång klockan visar detta: idag, eller imorgon om tiden har passerat.",
+          "no": "Neste gang klokken viser dette: i dag, eller i morgen hvis tidspunktet er passert.",
+          "pl": "Najbliższy raz, gdy zegar wskaże tę godzinę: dziś albo jutro, jeśli już minęła.",
+          "ru": "Ближайший раз, когда часы покажут это время: сегодня или завтра, если оно прошло.",
+          "ar": "المرة التالية التي تشير فيها الساعة إلى هذا الوقت: اليوم، أو غدًا إن كان قد مضى.",
+          "ko": "다음에 시계가 이 시각을 가리킬 때: 오늘, 이미 지났다면 내일."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=inverter&capabilities=solar_forecast_tomorrow"
+          },
+          {
+            "name": "time",
+            "type": "time"
+          },
+          {
+            "name": "watts",
+            "type": "number",
+            "min": 0,
+            "step": 100,
+            "placeholder": {
+              "en": "W",
+              "nl": "W",
+              "de": "W",
+              "fr": "W",
+              "es": "W",
+              "it": "W",
+              "da": "W",
+              "sv": "W",
+              "no": "W",
+              "pl": "W",
+              "ru": "Вт",
+              "ar": "واط",
+              "ko": "W"
+            }
+          }
+        ]
       }
     ],
     "actions": [
@@ -1897,6 +2188,8 @@
         "battery_charging_state",
         "meter_power.charged",
         "meter_power.discharged",
+        "meter_power.charged_solar_today",
+        "meter_power.charged_grid_today",
         "alarm_connectivity"
       ],
       "energy": {
@@ -1939,6 +2232,42 @@
             "pl": "Rozładowana energia",
             "ru": "Разряженная энергия",
             "sv": "Urladdad energi"
+          }
+        },
+        "meter_power.charged_solar_today": {
+          "decimals": 2,
+          "title": {
+            "ar": "شُحن من الطاقة الشمسية (اليوم)",
+            "da": "Ladet fra sol (i dag)",
+            "de": "Aus Solar geladen (heute)",
+            "en": "Charged from solar (today)",
+            "es": "Cargado desde solar (hoy)",
+            "fr": "Chargé par le solaire (aujourd’hui)",
+            "it": "Caricato dal solare (oggi)",
+            "ko": "태양광 충전량 (오늘)",
+            "nl": "Geladen uit zon (vandaag)",
+            "no": "Ladet fra sol (i dag)",
+            "pl": "Naładowano ze słońca (dziś)",
+            "ru": "Заряжено от солнца (сегодня)",
+            "sv": "Laddat från sol (idag)"
+          }
+        },
+        "meter_power.charged_grid_today": {
+          "decimals": 2,
+          "title": {
+            "ar": "شُحن من الشبكة (اليوم)",
+            "da": "Ladet fra nettet (i dag)",
+            "de": "Aus dem Netz geladen (heute)",
+            "en": "Charged from grid (today)",
+            "es": "Cargado desde la red (hoy)",
+            "fr": "Chargé par le réseau (aujourd’hui)",
+            "it": "Caricato dalla rete (oggi)",
+            "ko": "전력망 충전량 (오늘)",
+            "nl": "Geladen uit net (vandaag)",
+            "no": "Ladet fra nettet (i dag)",
+            "pl": "Naładowano z sieci (dziś)",
+            "ru": "Заряжено от сети (сегодня)",
+            "sv": "Laddat från nätet (idag)"
           }
         }
       },
@@ -3555,15 +3884,1426 @@
             "ru": "Применяется ко всем устройствам этой учётной записи.",
             "sv": "Gäller för alla enheter på det här kontot."
           }
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Solar forecast: panels",
+            "nl": "Zonneprognose: panelen",
+            "de": "Solarprognose: Module",
+            "fr": "Prévision solaire : panneaux",
+            "es": "Previsión solar: paneles",
+            "it": "Previsione solare: pannelli",
+            "da": "Solprognose: paneler",
+            "sv": "Solprognos: paneler",
+            "no": "Solprognose: paneler",
+            "pl": "Prognoza słoneczna: panele",
+            "ru": "Солнечный прогноз: панели",
+            "ar": "التوقع الشمسي: الألواح",
+            "ko": "태양광 예측: 패널"
+          },
+          "children": [
+            {
+              "id": "forecast_panels",
+              "type": "number",
+              "label": {
+                "en": "Number of panels",
+                "nl": "Aantal panelen",
+                "de": "Anzahl Module",
+                "fr": "Nombre de panneaux",
+                "es": "Número de paneles",
+                "it": "Numero di pannelli",
+                "da": "Antal paneler",
+                "sv": "Antal paneler",
+                "no": "Antall paneler",
+                "pl": "Liczba paneli",
+                "ru": "Количество панелей",
+                "ar": "عدد الألواح",
+                "ko": "패널 수"
+              },
+              "hint": {
+                "en": "How many panels face this way. Only needed when some face another way (see the next groups).",
+                "nl": "Hoeveel panelen deze kant op wijzen. Alleen nodig als er ook panelen een andere kant op wijzen (zie de volgende groepen).",
+                "de": "Wie viele Module in diese Richtung zeigen. Nur nötig, wenn einige in eine andere Richtung zeigen (siehe die nächsten Gruppen).",
+                "fr": "Combien de panneaux sont orientés ainsi. Seulement utile si certains sont orientés autrement (voir les groupes suivants).",
+                "es": "Cuántos paneles miran hacia aquí. Solo hace falta si algunos miran hacia otro lado (ver los grupos siguientes).",
+                "it": "Quanti pannelli sono rivolti da questa parte. Serve solo se alcuni sono rivolti altrove (vedi i gruppi successivi).",
+                "da": "Hvor mange paneler der vender denne vej. Kun nødvendigt, når nogle vender en anden vej (se de næste grupper).",
+                "sv": "Hur många paneler som är vända åt det här hållet. Behövs bara när några är vända åt ett annat håll (se nästa grupper).",
+                "no": "Hvor mange paneler som vender denne veien. Bare nødvendig når noen vender en annen vei (se de neste gruppene).",
+                "pl": "Ile paneli jest skierowanych w tę stronę. Potrzebne tylko, gdy część jest skierowana inaczej (zobacz kolejne grupy).",
+                "ru": "Сколько панелей смотрит в эту сторону. Нужно, только если часть смотрит в другую сторону (см. следующие группы).",
+                "ar": "عدد الألواح المتجهة في هذا الاتجاه. مطلوب فقط عندما يتجه بعضها في اتجاه آخر (انظر المجموعات التالية).",
+                "ko": "이 방향을 향한 패널 수. 일부가 다른 방향을 향할 때만 필요합니다(다음 그룹 참조)."
+              },
+              "value": 0,
+              "min": 0,
+              "max": 500
+            },
+            {
+              "id": "forecast_tilt",
+              "type": "number",
+              "label": {
+                "en": "Panel tilt",
+                "nl": "Hellingshoek panelen",
+                "de": "Modulneigung",
+                "fr": "Inclinaison des panneaux",
+                "es": "Inclinación de los paneles",
+                "it": "Inclinazione dei pannelli",
+                "da": "Panelernes hældning",
+                "sv": "Panelernas lutning",
+                "no": "Panelenes helning",
+                "pl": "Nachylenie paneli",
+                "ru": "Наклон панелей",
+                "ar": "ميل الألواح",
+                "ko": "패널 기울기"
+              },
+              "hint": {
+                "en": "Angle of the panels from horizontal. Flat is 0°, a typical roof is 15–35°.",
+                "nl": "Hoek van de panelen ten opzichte van horizontaal. Plat is 0°, een gewoon dak 15–35°.",
+                "de": "Winkel der Module zur Horizontalen. Flach ist 0°, ein typisches Dach 15–35°.",
+                "fr": "Angle des panneaux par rapport à l’horizontale. À plat : 0°, un toit courant : 15–35°.",
+                "es": "Ángulo de los paneles respecto a la horizontal. Plano es 0°, un tejado típico 15–35°.",
+                "it": "Angolo dei pannelli rispetto all’orizzontale. Piano è 0°, un tetto tipico 15–35°.",
+                "da": "Panelernes vinkel fra vandret. Fladt er 0°, et typisk tag 15–35°.",
+                "sv": "Panelernas vinkel mot horisontalplanet. Platt är 0°, ett vanligt tak 15–35°.",
+                "no": "Panelenes vinkel fra vannrett. Flatt er 0°, et vanlig tak 15–35°.",
+                "pl": "Kąt paneli względem poziomu. Płasko to 0°, typowy dach 15–35°.",
+                "ru": "Угол панелей относительно горизонта. Плоско — 0°, обычная крыша — 15–35°.",
+                "ar": "زاوية الألواح عن الأفقي. المسطح 0°، والسقف المعتاد 15–35°.",
+                "ko": "수평 기준 패널 각도. 평평하면 0°, 일반 지붕은 15–35°."
+              },
+              "value": 20,
+              "min": 0,
+              "max": 90,
+              "units": {
+                "en": "°",
+                "nl": "°",
+                "de": "°",
+                "fr": "°",
+                "es": "°",
+                "it": "°",
+                "da": "°",
+                "sv": "°",
+                "no": "°",
+                "pl": "°",
+                "ru": "°",
+                "ar": "°",
+                "ko": "°"
+              }
+            },
+            {
+              "id": "forecast_orientation",
+              "type": "dropdown",
+              "label": {
+                "en": "Panel direction",
+                "nl": "Richting panelen",
+                "de": "Modulausrichtung",
+                "fr": "Orientation des panneaux",
+                "es": "Orientación de los paneles",
+                "it": "Orientamento dei pannelli",
+                "da": "Panelernes retning",
+                "sv": "Panelernas riktning",
+                "no": "Panelenes retning",
+                "pl": "Kierunek paneli",
+                "ru": "Направление панелей",
+                "ar": "اتجاه الألواح",
+                "ko": "패널 방향"
+              },
+              "hint": {
+                "en": "The way the panels face. The forecast learns from your production, so the nearest direction is fine.",
+                "nl": "De kant waar de panelen op wijzen. De prognose leert van je opbrengst, dus de dichtstbijzijnde richting is goed genoeg.",
+                "de": "Die Richtung, in die die Module zeigen. Die Prognose lernt aus Ihrem Ertrag, die nächstgelegene Richtung genügt also.",
+                "fr": "La direction vers laquelle les panneaux sont tournés. La prévision apprend de votre production : la direction la plus proche suffit.",
+                "es": "Hacia dónde miran los paneles. La previsión aprende de tu producción, así que basta con la dirección más cercana.",
+                "it": "La direzione verso cui sono rivolti i pannelli. La previsione impara dalla tua produzione, quindi basta la direzione più vicina.",
+                "da": "Den vej panelerne vender. Prognosen lærer af din produktion, så den nærmeste retning er fin.",
+                "sv": "Det håll panelerna är vända åt. Prognosen lär sig av din produktion, så närmaste riktning räcker.",
+                "no": "Veien panelene vender. Prognosen lærer av produksjonen din, så nærmeste retning holder.",
+                "pl": "Kierunek, w którym zwrócone są panele. Prognoza uczy się z Twojej produkcji, więc wystarczy najbliższy kierunek.",
+                "ru": "Куда направлены панели. Прогноз учится на вашей выработке, поэтому подойдёт ближайшее направление.",
+                "ar": "الاتجاه الذي تواجهه الألواح. يتعلم التوقع من إنتاجك، لذا يكفي أقرب اتجاه.",
+                "ko": "패널이 향한 방향. 예측은 실제 발전량에서 학습하므로 가장 가까운 방향이면 충분합니다."
+              },
+              "value": "auto",
+              "values": [
+                {
+                  "id": "auto",
+                  "label": {
+                    "en": "Automatic (facing the equator)",
+                    "nl": "Automatisch (richting de evenaar)",
+                    "de": "Automatisch (zum Äquator gerichtet)",
+                    "fr": "Automatique (face à l’équateur)",
+                    "es": "Automático (orientado al ecuador)",
+                    "it": "Automatico (rivolto all’equatore)",
+                    "da": "Automatisk (mod ækvator)",
+                    "sv": "Automatiskt (mot ekvatorn)",
+                    "no": "Automatisk (mot ekvator)",
+                    "pl": "Automatycznie (w stronę równika)",
+                    "ru": "Автоматически (к экватору)",
+                    "ar": "تلقائي (باتجاه خط الاستواء)",
+                    "ko": "자동 (적도 방향)"
+                  }
+                },
+                {
+                  "id": "0",
+                  "label": {
+                    "en": "North",
+                    "nl": "Noord",
+                    "de": "Nord",
+                    "fr": "Nord",
+                    "es": "Norte",
+                    "it": "Nord",
+                    "da": "Nord",
+                    "sv": "Norr",
+                    "no": "Nord",
+                    "pl": "Północ",
+                    "ru": "Север",
+                    "ar": "شمال",
+                    "ko": "북"
+                  }
+                },
+                {
+                  "id": "22.5",
+                  "label": {
+                    "en": "North-north-east",
+                    "nl": "Noord-noordoost",
+                    "de": "Nordnordost",
+                    "fr": "Nord-nord-est",
+                    "es": "Nornoreste",
+                    "it": "Nord-nord-est",
+                    "da": "Nordnordøst",
+                    "sv": "Nordnordost",
+                    "no": "Nordnordøst",
+                    "pl": "Północ-północny wschód",
+                    "ru": "Север-северо-восток",
+                    "ar": "شمال-شمال شرق",
+                    "ko": "북북동"
+                  }
+                },
+                {
+                  "id": "45",
+                  "label": {
+                    "en": "North-east",
+                    "nl": "Noordoost",
+                    "de": "Nordost",
+                    "fr": "Nord-est",
+                    "es": "Noreste",
+                    "it": "Nord-est",
+                    "da": "Nordøst",
+                    "sv": "Nordost",
+                    "no": "Nordøst",
+                    "pl": "Północny wschód",
+                    "ru": "Северо-восток",
+                    "ar": "شمال شرق",
+                    "ko": "북동"
+                  }
+                },
+                {
+                  "id": "67.5",
+                  "label": {
+                    "en": "East-north-east",
+                    "nl": "Oost-noordoost",
+                    "de": "Ostnordost",
+                    "fr": "Est-nord-est",
+                    "es": "Estenoreste",
+                    "it": "Est-nord-est",
+                    "da": "Østnordøst",
+                    "sv": "Ostnordost",
+                    "no": "Østnordøst",
+                    "pl": "Wschód-północny wschód",
+                    "ru": "Восток-северо-восток",
+                    "ar": "شرق-شمال شرق",
+                    "ko": "동북동"
+                  }
+                },
+                {
+                  "id": "90",
+                  "label": {
+                    "en": "East",
+                    "nl": "Oost",
+                    "de": "Ost",
+                    "fr": "Est",
+                    "es": "Este",
+                    "it": "Est",
+                    "da": "Øst",
+                    "sv": "Öster",
+                    "no": "Øst",
+                    "pl": "Wschód",
+                    "ru": "Восток",
+                    "ar": "شرق",
+                    "ko": "동"
+                  }
+                },
+                {
+                  "id": "112.5",
+                  "label": {
+                    "en": "East-south-east",
+                    "nl": "Oost-zuidoost",
+                    "de": "Ostsüdost",
+                    "fr": "Est-sud-est",
+                    "es": "Estesureste",
+                    "it": "Est-sud-est",
+                    "da": "Østsydøst",
+                    "sv": "Ostsydost",
+                    "no": "Østsørøst",
+                    "pl": "Wschód-południowy wschód",
+                    "ru": "Восток-юго-восток",
+                    "ar": "شرق-جنوب شرق",
+                    "ko": "동남동"
+                  }
+                },
+                {
+                  "id": "135",
+                  "label": {
+                    "en": "South-east",
+                    "nl": "Zuidoost",
+                    "de": "Südost",
+                    "fr": "Sud-est",
+                    "es": "Sureste",
+                    "it": "Sud-est",
+                    "da": "Sydøst",
+                    "sv": "Sydost",
+                    "no": "Sørøst",
+                    "pl": "Południowy wschód",
+                    "ru": "Юго-восток",
+                    "ar": "جنوب شرق",
+                    "ko": "남동"
+                  }
+                },
+                {
+                  "id": "157.5",
+                  "label": {
+                    "en": "South-south-east",
+                    "nl": "Zuid-zuidoost",
+                    "de": "Südsüdost",
+                    "fr": "Sud-sud-est",
+                    "es": "Sursureste",
+                    "it": "Sud-sud-est",
+                    "da": "Sydsydøst",
+                    "sv": "Sydsydost",
+                    "no": "Sørsørøst",
+                    "pl": "Południe-południowy wschód",
+                    "ru": "Юг-юго-восток",
+                    "ar": "جنوب-جنوب شرق",
+                    "ko": "남남동"
+                  }
+                },
+                {
+                  "id": "180",
+                  "label": {
+                    "en": "South",
+                    "nl": "Zuid",
+                    "de": "Süd",
+                    "fr": "Sud",
+                    "es": "Sur",
+                    "it": "Sud",
+                    "da": "Syd",
+                    "sv": "Söder",
+                    "no": "Sør",
+                    "pl": "Południe",
+                    "ru": "Юг",
+                    "ar": "جنوب",
+                    "ko": "남"
+                  }
+                },
+                {
+                  "id": "202.5",
+                  "label": {
+                    "en": "South-south-west",
+                    "nl": "Zuid-zuidwest",
+                    "de": "Südsüdwest",
+                    "fr": "Sud-sud-ouest",
+                    "es": "Sursuroeste",
+                    "it": "Sud-sud-ovest",
+                    "da": "Sydsydvest",
+                    "sv": "Sydsydväst",
+                    "no": "Sørsørvest",
+                    "pl": "Południe-południowy zachód",
+                    "ru": "Юг-юго-запад",
+                    "ar": "جنوب-جنوب غرب",
+                    "ko": "남남서"
+                  }
+                },
+                {
+                  "id": "225",
+                  "label": {
+                    "en": "South-west",
+                    "nl": "Zuidwest",
+                    "de": "Südwest",
+                    "fr": "Sud-ouest",
+                    "es": "Suroeste",
+                    "it": "Sud-ovest",
+                    "da": "Sydvest",
+                    "sv": "Sydväst",
+                    "no": "Sørvest",
+                    "pl": "Południowy zachód",
+                    "ru": "Юго-запад",
+                    "ar": "جنوب غرب",
+                    "ko": "남서"
+                  }
+                },
+                {
+                  "id": "247.5",
+                  "label": {
+                    "en": "West-south-west",
+                    "nl": "West-zuidwest",
+                    "de": "Westsüdwest",
+                    "fr": "Ouest-sud-ouest",
+                    "es": "Oestesuroeste",
+                    "it": "Ovest-sud-ovest",
+                    "da": "Vestsydvest",
+                    "sv": "Västsydväst",
+                    "no": "Vestsørvest",
+                    "pl": "Zachód-południowy zachód",
+                    "ru": "Запад-юго-запад",
+                    "ar": "غرب-جنوب غرب",
+                    "ko": "서남서"
+                  }
+                },
+                {
+                  "id": "270",
+                  "label": {
+                    "en": "West",
+                    "nl": "West",
+                    "de": "West",
+                    "fr": "Ouest",
+                    "es": "Oeste",
+                    "it": "Ovest",
+                    "da": "Vest",
+                    "sv": "Väster",
+                    "no": "Vest",
+                    "pl": "Zachód",
+                    "ru": "Запад",
+                    "ar": "غرب",
+                    "ko": "서"
+                  }
+                },
+                {
+                  "id": "292.5",
+                  "label": {
+                    "en": "West-north-west",
+                    "nl": "West-noordwest",
+                    "de": "Westnordwest",
+                    "fr": "Ouest-nord-ouest",
+                    "es": "Oestenoroeste",
+                    "it": "Ovest-nord-ovest",
+                    "da": "Vestnordvest",
+                    "sv": "Västnordväst",
+                    "no": "Vestnordvest",
+                    "pl": "Zachód-północny zachód",
+                    "ru": "Запад-северо-запад",
+                    "ar": "غرب-شمال غرب",
+                    "ko": "서북서"
+                  }
+                },
+                {
+                  "id": "315",
+                  "label": {
+                    "en": "North-west",
+                    "nl": "Noordwest",
+                    "de": "Nordwest",
+                    "fr": "Nord-ouest",
+                    "es": "Noroeste",
+                    "it": "Nord-ovest",
+                    "da": "Nordvest",
+                    "sv": "Nordväst",
+                    "no": "Nordvest",
+                    "pl": "Północny zachód",
+                    "ru": "Северо-запад",
+                    "ar": "شمال غرب",
+                    "ko": "북서"
+                  }
+                },
+                {
+                  "id": "337.5",
+                  "label": {
+                    "en": "North-north-west",
+                    "nl": "Noord-noordwest",
+                    "de": "Nordnordwest",
+                    "fr": "Nord-nord-ouest",
+                    "es": "Nornoroeste",
+                    "it": "Nord-nord-ovest",
+                    "da": "Nordnordvest",
+                    "sv": "Nordnordväst",
+                    "no": "Nordnordvest",
+                    "pl": "Północ-północny zachód",
+                    "ru": "Север-северо-запад",
+                    "ar": "شمال-شمال غرب",
+                    "ko": "북북서"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Solar forecast: second group of panels",
+            "nl": "Zonneprognose: tweede groep panelen",
+            "de": "Solarprognose: zweite Modulgruppe",
+            "fr": "Prévision solaire : deuxième groupe de panneaux",
+            "es": "Previsión solar: segundo grupo de paneles",
+            "it": "Previsione solare: secondo gruppo di pannelli",
+            "da": "Solprognose: anden gruppe paneler",
+            "sv": "Solprognos: andra panelgruppen",
+            "no": "Solprognose: andre gruppe paneler",
+            "pl": "Prognoza słoneczna: druga grupa paneli",
+            "ru": "Солнечный прогноз: вторая группа панелей",
+            "ar": "التوقع الشمسي: المجموعة الثانية من الألواح",
+            "ko": "태양광 예측: 두 번째 패널 그룹"
+          },
+          "children": [
+            {
+              "id": "forecast_panels_2",
+              "type": "number",
+              "label": {
+                "en": "Number of panels",
+                "nl": "Aantal panelen",
+                "de": "Anzahl Module",
+                "fr": "Nombre de panneaux",
+                "es": "Número de paneles",
+                "it": "Numero di pannelli",
+                "da": "Antal paneler",
+                "sv": "Antal paneler",
+                "no": "Antall paneler",
+                "pl": "Liczba paneli",
+                "ru": "Количество панелей",
+                "ar": "عدد الألواح",
+                "ko": "패널 수"
+              },
+              "hint": {
+                "en": "Panels facing a second (or third) way. 0 when all your panels face the same way.",
+                "nl": "Panelen die een tweede (of derde) kant op wijzen. 0 als al je panelen dezelfde kant op wijzen.",
+                "de": "Module in einer zweiten (oder dritten) Richtung. 0, wenn alle Module in dieselbe Richtung zeigen.",
+                "fr": "Panneaux orientés dans une deuxième (ou troisième) direction. 0 si tous vos panneaux ont la même orientation.",
+                "es": "Paneles orientados en una segunda (o tercera) dirección. 0 si todos tus paneles miran hacia el mismo lado.",
+                "it": "Pannelli rivolti in una seconda (o terza) direzione. 0 se tutti i pannelli sono rivolti dalla stessa parte.",
+                "da": "Paneler, der vender en anden (eller tredje) vej. 0, når alle dine paneler vender samme vej.",
+                "sv": "Paneler som är vända åt ett andra (eller tredje) håll. 0 när alla dina paneler är vända åt samma håll.",
+                "no": "Paneler som vender en annen (eller tredje) vei. 0 når alle panelene dine vender samme vei.",
+                "pl": "Panele skierowane w drugą (lub trzecią) stronę. 0, gdy wszystkie panele są skierowane tak samo.",
+                "ru": "Панели, смотрящие во второе (или третье) направление. 0, если все панели смотрят в одну сторону.",
+                "ar": "الألواح المتجهة في اتجاه ثانٍ (أو ثالث). 0 عندما تتجه كل ألواحك في الاتجاه نفسه.",
+                "ko": "두 번째(또는 세 번째) 방향을 향한 패널. 모든 패널이 같은 방향이면 0."
+              },
+              "value": 0,
+              "min": 0,
+              "max": 500
+            },
+            {
+              "id": "forecast_tilt_2",
+              "type": "number",
+              "label": {
+                "en": "Panel tilt",
+                "nl": "Hellingshoek panelen",
+                "de": "Modulneigung",
+                "fr": "Inclinaison des panneaux",
+                "es": "Inclinación de los paneles",
+                "it": "Inclinazione dei pannelli",
+                "da": "Panelernes hældning",
+                "sv": "Panelernas lutning",
+                "no": "Panelenes helning",
+                "pl": "Nachylenie paneli",
+                "ru": "Наклон панелей",
+                "ar": "ميل الألواح",
+                "ko": "패널 기울기"
+              },
+              "hint": {
+                "en": "Angle of the panels from horizontal. Flat is 0°, a typical roof is 15–35°.",
+                "nl": "Hoek van de panelen ten opzichte van horizontaal. Plat is 0°, een gewoon dak 15–35°.",
+                "de": "Winkel der Module zur Horizontalen. Flach ist 0°, ein typisches Dach 15–35°.",
+                "fr": "Angle des panneaux par rapport à l’horizontale. À plat : 0°, un toit courant : 15–35°.",
+                "es": "Ángulo de los paneles respecto a la horizontal. Plano es 0°, un tejado típico 15–35°.",
+                "it": "Angolo dei pannelli rispetto all’orizzontale. Piano è 0°, un tetto tipico 15–35°.",
+                "da": "Panelernes vinkel fra vandret. Fladt er 0°, et typisk tag 15–35°.",
+                "sv": "Panelernas vinkel mot horisontalplanet. Platt är 0°, ett vanligt tak 15–35°.",
+                "no": "Panelenes vinkel fra vannrett. Flatt er 0°, et vanlig tak 15–35°.",
+                "pl": "Kąt paneli względem poziomu. Płasko to 0°, typowy dach 15–35°.",
+                "ru": "Угол панелей относительно горизонта. Плоско — 0°, обычная крыша — 15–35°.",
+                "ar": "زاوية الألواح عن الأفقي. المسطح 0°، والسقف المعتاد 15–35°.",
+                "ko": "수평 기준 패널 각도. 평평하면 0°, 일반 지붕은 15–35°."
+              },
+              "value": 20,
+              "min": 0,
+              "max": 90,
+              "units": {
+                "en": "°",
+                "nl": "°",
+                "de": "°",
+                "fr": "°",
+                "es": "°",
+                "it": "°",
+                "da": "°",
+                "sv": "°",
+                "no": "°",
+                "pl": "°",
+                "ru": "°",
+                "ar": "°",
+                "ko": "°"
+              }
+            },
+            {
+              "id": "forecast_orientation_2",
+              "type": "dropdown",
+              "label": {
+                "en": "Panel direction",
+                "nl": "Richting panelen",
+                "de": "Modulausrichtung",
+                "fr": "Orientation des panneaux",
+                "es": "Orientación de los paneles",
+                "it": "Orientamento dei pannelli",
+                "da": "Panelernes retning",
+                "sv": "Panelernas riktning",
+                "no": "Panelenes retning",
+                "pl": "Kierunek paneli",
+                "ru": "Направление панелей",
+                "ar": "اتجاه الألواح",
+                "ko": "패널 방향"
+              },
+              "hint": {
+                "en": "The way the panels face. The forecast learns from your production, so the nearest direction is fine.",
+                "nl": "De kant waar de panelen op wijzen. De prognose leert van je opbrengst, dus de dichtstbijzijnde richting is goed genoeg.",
+                "de": "Die Richtung, in die die Module zeigen. Die Prognose lernt aus Ihrem Ertrag, die nächstgelegene Richtung genügt also.",
+                "fr": "La direction vers laquelle les panneaux sont tournés. La prévision apprend de votre production : la direction la plus proche suffit.",
+                "es": "Hacia dónde miran los paneles. La previsión aprende de tu producción, así que basta con la dirección más cercana.",
+                "it": "La direzione verso cui sono rivolti i pannelli. La previsione impara dalla tua produzione, quindi basta la direzione più vicina.",
+                "da": "Den vej panelerne vender. Prognosen lærer af din produktion, så den nærmeste retning er fin.",
+                "sv": "Det håll panelerna är vända åt. Prognosen lär sig av din produktion, så närmaste riktning räcker.",
+                "no": "Veien panelene vender. Prognosen lærer av produksjonen din, så nærmeste retning holder.",
+                "pl": "Kierunek, w którym zwrócone są panele. Prognoza uczy się z Twojej produkcji, więc wystarczy najbliższy kierunek.",
+                "ru": "Куда направлены панели. Прогноз учится на вашей выработке, поэтому подойдёт ближайшее направление.",
+                "ar": "الاتجاه الذي تواجهه الألواح. يتعلم التوقع من إنتاجك، لذا يكفي أقرب اتجاه.",
+                "ko": "패널이 향한 방향. 예측은 실제 발전량에서 학습하므로 가장 가까운 방향이면 충분합니다."
+              },
+              "value": "auto",
+              "values": [
+                {
+                  "id": "auto",
+                  "label": {
+                    "en": "Automatic (facing the equator)",
+                    "nl": "Automatisch (richting de evenaar)",
+                    "de": "Automatisch (zum Äquator gerichtet)",
+                    "fr": "Automatique (face à l’équateur)",
+                    "es": "Automático (orientado al ecuador)",
+                    "it": "Automatico (rivolto all’equatore)",
+                    "da": "Automatisk (mod ækvator)",
+                    "sv": "Automatiskt (mot ekvatorn)",
+                    "no": "Automatisk (mot ekvator)",
+                    "pl": "Automatycznie (w stronę równika)",
+                    "ru": "Автоматически (к экватору)",
+                    "ar": "تلقائي (باتجاه خط الاستواء)",
+                    "ko": "자동 (적도 방향)"
+                  }
+                },
+                {
+                  "id": "0",
+                  "label": {
+                    "en": "North",
+                    "nl": "Noord",
+                    "de": "Nord",
+                    "fr": "Nord",
+                    "es": "Norte",
+                    "it": "Nord",
+                    "da": "Nord",
+                    "sv": "Norr",
+                    "no": "Nord",
+                    "pl": "Północ",
+                    "ru": "Север",
+                    "ar": "شمال",
+                    "ko": "북"
+                  }
+                },
+                {
+                  "id": "22.5",
+                  "label": {
+                    "en": "North-north-east",
+                    "nl": "Noord-noordoost",
+                    "de": "Nordnordost",
+                    "fr": "Nord-nord-est",
+                    "es": "Nornoreste",
+                    "it": "Nord-nord-est",
+                    "da": "Nordnordøst",
+                    "sv": "Nordnordost",
+                    "no": "Nordnordøst",
+                    "pl": "Północ-północny wschód",
+                    "ru": "Север-северо-восток",
+                    "ar": "شمال-شمال شرق",
+                    "ko": "북북동"
+                  }
+                },
+                {
+                  "id": "45",
+                  "label": {
+                    "en": "North-east",
+                    "nl": "Noordoost",
+                    "de": "Nordost",
+                    "fr": "Nord-est",
+                    "es": "Noreste",
+                    "it": "Nord-est",
+                    "da": "Nordøst",
+                    "sv": "Nordost",
+                    "no": "Nordøst",
+                    "pl": "Północny wschód",
+                    "ru": "Северо-восток",
+                    "ar": "شمال شرق",
+                    "ko": "북동"
+                  }
+                },
+                {
+                  "id": "67.5",
+                  "label": {
+                    "en": "East-north-east",
+                    "nl": "Oost-noordoost",
+                    "de": "Ostnordost",
+                    "fr": "Est-nord-est",
+                    "es": "Estenoreste",
+                    "it": "Est-nord-est",
+                    "da": "Østnordøst",
+                    "sv": "Ostnordost",
+                    "no": "Østnordøst",
+                    "pl": "Wschód-północny wschód",
+                    "ru": "Восток-северо-восток",
+                    "ar": "شرق-شمال شرق",
+                    "ko": "동북동"
+                  }
+                },
+                {
+                  "id": "90",
+                  "label": {
+                    "en": "East",
+                    "nl": "Oost",
+                    "de": "Ost",
+                    "fr": "Est",
+                    "es": "Este",
+                    "it": "Est",
+                    "da": "Øst",
+                    "sv": "Öster",
+                    "no": "Øst",
+                    "pl": "Wschód",
+                    "ru": "Восток",
+                    "ar": "شرق",
+                    "ko": "동"
+                  }
+                },
+                {
+                  "id": "112.5",
+                  "label": {
+                    "en": "East-south-east",
+                    "nl": "Oost-zuidoost",
+                    "de": "Ostsüdost",
+                    "fr": "Est-sud-est",
+                    "es": "Estesureste",
+                    "it": "Est-sud-est",
+                    "da": "Østsydøst",
+                    "sv": "Ostsydost",
+                    "no": "Østsørøst",
+                    "pl": "Wschód-południowy wschód",
+                    "ru": "Восток-юго-восток",
+                    "ar": "شرق-جنوب شرق",
+                    "ko": "동남동"
+                  }
+                },
+                {
+                  "id": "135",
+                  "label": {
+                    "en": "South-east",
+                    "nl": "Zuidoost",
+                    "de": "Südost",
+                    "fr": "Sud-est",
+                    "es": "Sureste",
+                    "it": "Sud-est",
+                    "da": "Sydøst",
+                    "sv": "Sydost",
+                    "no": "Sørøst",
+                    "pl": "Południowy wschód",
+                    "ru": "Юго-восток",
+                    "ar": "جنوب شرق",
+                    "ko": "남동"
+                  }
+                },
+                {
+                  "id": "157.5",
+                  "label": {
+                    "en": "South-south-east",
+                    "nl": "Zuid-zuidoost",
+                    "de": "Südsüdost",
+                    "fr": "Sud-sud-est",
+                    "es": "Sursureste",
+                    "it": "Sud-sud-est",
+                    "da": "Sydsydøst",
+                    "sv": "Sydsydost",
+                    "no": "Sørsørøst",
+                    "pl": "Południe-południowy wschód",
+                    "ru": "Юг-юго-восток",
+                    "ar": "جنوب-جنوب شرق",
+                    "ko": "남남동"
+                  }
+                },
+                {
+                  "id": "180",
+                  "label": {
+                    "en": "South",
+                    "nl": "Zuid",
+                    "de": "Süd",
+                    "fr": "Sud",
+                    "es": "Sur",
+                    "it": "Sud",
+                    "da": "Syd",
+                    "sv": "Söder",
+                    "no": "Sør",
+                    "pl": "Południe",
+                    "ru": "Юг",
+                    "ar": "جنوب",
+                    "ko": "남"
+                  }
+                },
+                {
+                  "id": "202.5",
+                  "label": {
+                    "en": "South-south-west",
+                    "nl": "Zuid-zuidwest",
+                    "de": "Südsüdwest",
+                    "fr": "Sud-sud-ouest",
+                    "es": "Sursuroeste",
+                    "it": "Sud-sud-ovest",
+                    "da": "Sydsydvest",
+                    "sv": "Sydsydväst",
+                    "no": "Sørsørvest",
+                    "pl": "Południe-południowy zachód",
+                    "ru": "Юг-юго-запад",
+                    "ar": "جنوب-جنوب غرب",
+                    "ko": "남남서"
+                  }
+                },
+                {
+                  "id": "225",
+                  "label": {
+                    "en": "South-west",
+                    "nl": "Zuidwest",
+                    "de": "Südwest",
+                    "fr": "Sud-ouest",
+                    "es": "Suroeste",
+                    "it": "Sud-ovest",
+                    "da": "Sydvest",
+                    "sv": "Sydväst",
+                    "no": "Sørvest",
+                    "pl": "Południowy zachód",
+                    "ru": "Юго-запад",
+                    "ar": "جنوب غرب",
+                    "ko": "남서"
+                  }
+                },
+                {
+                  "id": "247.5",
+                  "label": {
+                    "en": "West-south-west",
+                    "nl": "West-zuidwest",
+                    "de": "Westsüdwest",
+                    "fr": "Ouest-sud-ouest",
+                    "es": "Oestesuroeste",
+                    "it": "Ovest-sud-ovest",
+                    "da": "Vestsydvest",
+                    "sv": "Västsydväst",
+                    "no": "Vestsørvest",
+                    "pl": "Zachód-południowy zachód",
+                    "ru": "Запад-юго-запад",
+                    "ar": "غرب-جنوب غرب",
+                    "ko": "서남서"
+                  }
+                },
+                {
+                  "id": "270",
+                  "label": {
+                    "en": "West",
+                    "nl": "West",
+                    "de": "West",
+                    "fr": "Ouest",
+                    "es": "Oeste",
+                    "it": "Ovest",
+                    "da": "Vest",
+                    "sv": "Väster",
+                    "no": "Vest",
+                    "pl": "Zachód",
+                    "ru": "Запад",
+                    "ar": "غرب",
+                    "ko": "서"
+                  }
+                },
+                {
+                  "id": "292.5",
+                  "label": {
+                    "en": "West-north-west",
+                    "nl": "West-noordwest",
+                    "de": "Westnordwest",
+                    "fr": "Ouest-nord-ouest",
+                    "es": "Oestenoroeste",
+                    "it": "Ovest-nord-ovest",
+                    "da": "Vestnordvest",
+                    "sv": "Västnordväst",
+                    "no": "Vestnordvest",
+                    "pl": "Zachód-północny zachód",
+                    "ru": "Запад-северо-запад",
+                    "ar": "غرب-شمال غرب",
+                    "ko": "서북서"
+                  }
+                },
+                {
+                  "id": "315",
+                  "label": {
+                    "en": "North-west",
+                    "nl": "Noordwest",
+                    "de": "Nordwest",
+                    "fr": "Nord-ouest",
+                    "es": "Noroeste",
+                    "it": "Nord-ovest",
+                    "da": "Nordvest",
+                    "sv": "Nordväst",
+                    "no": "Nordvest",
+                    "pl": "Północny zachód",
+                    "ru": "Северо-запад",
+                    "ar": "شمال غرب",
+                    "ko": "북서"
+                  }
+                },
+                {
+                  "id": "337.5",
+                  "label": {
+                    "en": "North-north-west",
+                    "nl": "Noord-noordwest",
+                    "de": "Nordnordwest",
+                    "fr": "Nord-nord-ouest",
+                    "es": "Nornoroeste",
+                    "it": "Nord-nord-ovest",
+                    "da": "Nordnordvest",
+                    "sv": "Nordnordväst",
+                    "no": "Nordnordvest",
+                    "pl": "Północ-północny zachód",
+                    "ru": "Север-северо-запад",
+                    "ar": "شمال-شمال غرب",
+                    "ko": "북북서"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Solar forecast: third group of panels",
+            "nl": "Zonneprognose: derde groep panelen",
+            "de": "Solarprognose: dritte Modulgruppe",
+            "fr": "Prévision solaire : troisième groupe de panneaux",
+            "es": "Previsión solar: tercer grupo de paneles",
+            "it": "Previsione solare: terzo gruppo di pannelli",
+            "da": "Solprognose: tredje gruppe paneler",
+            "sv": "Solprognos: tredje panelgruppen",
+            "no": "Solprognose: tredje gruppe paneler",
+            "pl": "Prognoza słoneczna: trzecia grupa paneli",
+            "ru": "Солнечный прогноз: третья группа панелей",
+            "ar": "التوقع الشمسي: المجموعة الثالثة من الألواح",
+            "ko": "태양광 예측: 세 번째 패널 그룹"
+          },
+          "children": [
+            {
+              "id": "forecast_panels_3",
+              "type": "number",
+              "label": {
+                "en": "Number of panels",
+                "nl": "Aantal panelen",
+                "de": "Anzahl Module",
+                "fr": "Nombre de panneaux",
+                "es": "Número de paneles",
+                "it": "Numero di pannelli",
+                "da": "Antal paneler",
+                "sv": "Antal paneler",
+                "no": "Antall paneler",
+                "pl": "Liczba paneli",
+                "ru": "Количество панелей",
+                "ar": "عدد الألواح",
+                "ko": "패널 수"
+              },
+              "hint": {
+                "en": "Panels facing a second (or third) way. 0 when all your panels face the same way.",
+                "nl": "Panelen die een tweede (of derde) kant op wijzen. 0 als al je panelen dezelfde kant op wijzen.",
+                "de": "Module in einer zweiten (oder dritten) Richtung. 0, wenn alle Module in dieselbe Richtung zeigen.",
+                "fr": "Panneaux orientés dans une deuxième (ou troisième) direction. 0 si tous vos panneaux ont la même orientation.",
+                "es": "Paneles orientados en una segunda (o tercera) dirección. 0 si todos tus paneles miran hacia el mismo lado.",
+                "it": "Pannelli rivolti in una seconda (o terza) direzione. 0 se tutti i pannelli sono rivolti dalla stessa parte.",
+                "da": "Paneler, der vender en anden (eller tredje) vej. 0, når alle dine paneler vender samme vej.",
+                "sv": "Paneler som är vända åt ett andra (eller tredje) håll. 0 när alla dina paneler är vända åt samma håll.",
+                "no": "Paneler som vender en annen (eller tredje) vei. 0 når alle panelene dine vender samme vei.",
+                "pl": "Panele skierowane w drugą (lub trzecią) stronę. 0, gdy wszystkie panele są skierowane tak samo.",
+                "ru": "Панели, смотрящие во второе (или третье) направление. 0, если все панели смотрят в одну сторону.",
+                "ar": "الألواح المتجهة في اتجاه ثانٍ (أو ثالث). 0 عندما تتجه كل ألواحك في الاتجاه نفسه.",
+                "ko": "두 번째(또는 세 번째) 방향을 향한 패널. 모든 패널이 같은 방향이면 0."
+              },
+              "value": 0,
+              "min": 0,
+              "max": 500
+            },
+            {
+              "id": "forecast_tilt_3",
+              "type": "number",
+              "label": {
+                "en": "Panel tilt",
+                "nl": "Hellingshoek panelen",
+                "de": "Modulneigung",
+                "fr": "Inclinaison des panneaux",
+                "es": "Inclinación de los paneles",
+                "it": "Inclinazione dei pannelli",
+                "da": "Panelernes hældning",
+                "sv": "Panelernas lutning",
+                "no": "Panelenes helning",
+                "pl": "Nachylenie paneli",
+                "ru": "Наклон панелей",
+                "ar": "ميل الألواح",
+                "ko": "패널 기울기"
+              },
+              "hint": {
+                "en": "Angle of the panels from horizontal. Flat is 0°, a typical roof is 15–35°.",
+                "nl": "Hoek van de panelen ten opzichte van horizontaal. Plat is 0°, een gewoon dak 15–35°.",
+                "de": "Winkel der Module zur Horizontalen. Flach ist 0°, ein typisches Dach 15–35°.",
+                "fr": "Angle des panneaux par rapport à l’horizontale. À plat : 0°, un toit courant : 15–35°.",
+                "es": "Ángulo de los paneles respecto a la horizontal. Plano es 0°, un tejado típico 15–35°.",
+                "it": "Angolo dei pannelli rispetto all’orizzontale. Piano è 0°, un tetto tipico 15–35°.",
+                "da": "Panelernes vinkel fra vandret. Fladt er 0°, et typisk tag 15–35°.",
+                "sv": "Panelernas vinkel mot horisontalplanet. Platt är 0°, ett vanligt tak 15–35°.",
+                "no": "Panelenes vinkel fra vannrett. Flatt er 0°, et vanlig tak 15–35°.",
+                "pl": "Kąt paneli względem poziomu. Płasko to 0°, typowy dach 15–35°.",
+                "ru": "Угол панелей относительно горизонта. Плоско — 0°, обычная крыша — 15–35°.",
+                "ar": "زاوية الألواح عن الأفقي. المسطح 0°، والسقف المعتاد 15–35°.",
+                "ko": "수평 기준 패널 각도. 평평하면 0°, 일반 지붕은 15–35°."
+              },
+              "value": 20,
+              "min": 0,
+              "max": 90,
+              "units": {
+                "en": "°",
+                "nl": "°",
+                "de": "°",
+                "fr": "°",
+                "es": "°",
+                "it": "°",
+                "da": "°",
+                "sv": "°",
+                "no": "°",
+                "pl": "°",
+                "ru": "°",
+                "ar": "°",
+                "ko": "°"
+              }
+            },
+            {
+              "id": "forecast_orientation_3",
+              "type": "dropdown",
+              "label": {
+                "en": "Panel direction",
+                "nl": "Richting panelen",
+                "de": "Modulausrichtung",
+                "fr": "Orientation des panneaux",
+                "es": "Orientación de los paneles",
+                "it": "Orientamento dei pannelli",
+                "da": "Panelernes retning",
+                "sv": "Panelernas riktning",
+                "no": "Panelenes retning",
+                "pl": "Kierunek paneli",
+                "ru": "Направление панелей",
+                "ar": "اتجاه الألواح",
+                "ko": "패널 방향"
+              },
+              "hint": {
+                "en": "The way the panels face. The forecast learns from your production, so the nearest direction is fine.",
+                "nl": "De kant waar de panelen op wijzen. De prognose leert van je opbrengst, dus de dichtstbijzijnde richting is goed genoeg.",
+                "de": "Die Richtung, in die die Module zeigen. Die Prognose lernt aus Ihrem Ertrag, die nächstgelegene Richtung genügt also.",
+                "fr": "La direction vers laquelle les panneaux sont tournés. La prévision apprend de votre production : la direction la plus proche suffit.",
+                "es": "Hacia dónde miran los paneles. La previsión aprende de tu producción, así que basta con la dirección más cercana.",
+                "it": "La direzione verso cui sono rivolti i pannelli. La previsione impara dalla tua produzione, quindi basta la direzione più vicina.",
+                "da": "Den vej panelerne vender. Prognosen lærer af din produktion, så den nærmeste retning er fin.",
+                "sv": "Det håll panelerna är vända åt. Prognosen lär sig av din produktion, så närmaste riktning räcker.",
+                "no": "Veien panelene vender. Prognosen lærer av produksjonen din, så nærmeste retning holder.",
+                "pl": "Kierunek, w którym zwrócone są panele. Prognoza uczy się z Twojej produkcji, więc wystarczy najbliższy kierunek.",
+                "ru": "Куда направлены панели. Прогноз учится на вашей выработке, поэтому подойдёт ближайшее направление.",
+                "ar": "الاتجاه الذي تواجهه الألواح. يتعلم التوقع من إنتاجك، لذا يكفي أقرب اتجاه.",
+                "ko": "패널이 향한 방향. 예측은 실제 발전량에서 학습하므로 가장 가까운 방향이면 충분합니다."
+              },
+              "value": "auto",
+              "values": [
+                {
+                  "id": "auto",
+                  "label": {
+                    "en": "Automatic (facing the equator)",
+                    "nl": "Automatisch (richting de evenaar)",
+                    "de": "Automatisch (zum Äquator gerichtet)",
+                    "fr": "Automatique (face à l’équateur)",
+                    "es": "Automático (orientado al ecuador)",
+                    "it": "Automatico (rivolto all’equatore)",
+                    "da": "Automatisk (mod ækvator)",
+                    "sv": "Automatiskt (mot ekvatorn)",
+                    "no": "Automatisk (mot ekvator)",
+                    "pl": "Automatycznie (w stronę równika)",
+                    "ru": "Автоматически (к экватору)",
+                    "ar": "تلقائي (باتجاه خط الاستواء)",
+                    "ko": "자동 (적도 방향)"
+                  }
+                },
+                {
+                  "id": "0",
+                  "label": {
+                    "en": "North",
+                    "nl": "Noord",
+                    "de": "Nord",
+                    "fr": "Nord",
+                    "es": "Norte",
+                    "it": "Nord",
+                    "da": "Nord",
+                    "sv": "Norr",
+                    "no": "Nord",
+                    "pl": "Północ",
+                    "ru": "Север",
+                    "ar": "شمال",
+                    "ko": "북"
+                  }
+                },
+                {
+                  "id": "22.5",
+                  "label": {
+                    "en": "North-north-east",
+                    "nl": "Noord-noordoost",
+                    "de": "Nordnordost",
+                    "fr": "Nord-nord-est",
+                    "es": "Nornoreste",
+                    "it": "Nord-nord-est",
+                    "da": "Nordnordøst",
+                    "sv": "Nordnordost",
+                    "no": "Nordnordøst",
+                    "pl": "Północ-północny wschód",
+                    "ru": "Север-северо-восток",
+                    "ar": "شمال-شمال شرق",
+                    "ko": "북북동"
+                  }
+                },
+                {
+                  "id": "45",
+                  "label": {
+                    "en": "North-east",
+                    "nl": "Noordoost",
+                    "de": "Nordost",
+                    "fr": "Nord-est",
+                    "es": "Noreste",
+                    "it": "Nord-est",
+                    "da": "Nordøst",
+                    "sv": "Nordost",
+                    "no": "Nordøst",
+                    "pl": "Północny wschód",
+                    "ru": "Северо-восток",
+                    "ar": "شمال شرق",
+                    "ko": "북동"
+                  }
+                },
+                {
+                  "id": "67.5",
+                  "label": {
+                    "en": "East-north-east",
+                    "nl": "Oost-noordoost",
+                    "de": "Ostnordost",
+                    "fr": "Est-nord-est",
+                    "es": "Estenoreste",
+                    "it": "Est-nord-est",
+                    "da": "Østnordøst",
+                    "sv": "Ostnordost",
+                    "no": "Østnordøst",
+                    "pl": "Wschód-północny wschód",
+                    "ru": "Восток-северо-восток",
+                    "ar": "شرق-شمال شرق",
+                    "ko": "동북동"
+                  }
+                },
+                {
+                  "id": "90",
+                  "label": {
+                    "en": "East",
+                    "nl": "Oost",
+                    "de": "Ost",
+                    "fr": "Est",
+                    "es": "Este",
+                    "it": "Est",
+                    "da": "Øst",
+                    "sv": "Öster",
+                    "no": "Øst",
+                    "pl": "Wschód",
+                    "ru": "Восток",
+                    "ar": "شرق",
+                    "ko": "동"
+                  }
+                },
+                {
+                  "id": "112.5",
+                  "label": {
+                    "en": "East-south-east",
+                    "nl": "Oost-zuidoost",
+                    "de": "Ostsüdost",
+                    "fr": "Est-sud-est",
+                    "es": "Estesureste",
+                    "it": "Est-sud-est",
+                    "da": "Østsydøst",
+                    "sv": "Ostsydost",
+                    "no": "Østsørøst",
+                    "pl": "Wschód-południowy wschód",
+                    "ru": "Восток-юго-восток",
+                    "ar": "شرق-جنوب شرق",
+                    "ko": "동남동"
+                  }
+                },
+                {
+                  "id": "135",
+                  "label": {
+                    "en": "South-east",
+                    "nl": "Zuidoost",
+                    "de": "Südost",
+                    "fr": "Sud-est",
+                    "es": "Sureste",
+                    "it": "Sud-est",
+                    "da": "Sydøst",
+                    "sv": "Sydost",
+                    "no": "Sørøst",
+                    "pl": "Południowy wschód",
+                    "ru": "Юго-восток",
+                    "ar": "جنوب شرق",
+                    "ko": "남동"
+                  }
+                },
+                {
+                  "id": "157.5",
+                  "label": {
+                    "en": "South-south-east",
+                    "nl": "Zuid-zuidoost",
+                    "de": "Südsüdost",
+                    "fr": "Sud-sud-est",
+                    "es": "Sursureste",
+                    "it": "Sud-sud-est",
+                    "da": "Sydsydøst",
+                    "sv": "Sydsydost",
+                    "no": "Sørsørøst",
+                    "pl": "Południe-południowy wschód",
+                    "ru": "Юг-юго-восток",
+                    "ar": "جنوب-جنوب شرق",
+                    "ko": "남남동"
+                  }
+                },
+                {
+                  "id": "180",
+                  "label": {
+                    "en": "South",
+                    "nl": "Zuid",
+                    "de": "Süd",
+                    "fr": "Sud",
+                    "es": "Sur",
+                    "it": "Sud",
+                    "da": "Syd",
+                    "sv": "Söder",
+                    "no": "Sør",
+                    "pl": "Południe",
+                    "ru": "Юг",
+                    "ar": "جنوب",
+                    "ko": "남"
+                  }
+                },
+                {
+                  "id": "202.5",
+                  "label": {
+                    "en": "South-south-west",
+                    "nl": "Zuid-zuidwest",
+                    "de": "Südsüdwest",
+                    "fr": "Sud-sud-ouest",
+                    "es": "Sursuroeste",
+                    "it": "Sud-sud-ovest",
+                    "da": "Sydsydvest",
+                    "sv": "Sydsydväst",
+                    "no": "Sørsørvest",
+                    "pl": "Południe-południowy zachód",
+                    "ru": "Юг-юго-запад",
+                    "ar": "جنوب-جنوب غرب",
+                    "ko": "남남서"
+                  }
+                },
+                {
+                  "id": "225",
+                  "label": {
+                    "en": "South-west",
+                    "nl": "Zuidwest",
+                    "de": "Südwest",
+                    "fr": "Sud-ouest",
+                    "es": "Suroeste",
+                    "it": "Sud-ovest",
+                    "da": "Sydvest",
+                    "sv": "Sydväst",
+                    "no": "Sørvest",
+                    "pl": "Południowy zachód",
+                    "ru": "Юго-запад",
+                    "ar": "جنوب غرب",
+                    "ko": "남서"
+                  }
+                },
+                {
+                  "id": "247.5",
+                  "label": {
+                    "en": "West-south-west",
+                    "nl": "West-zuidwest",
+                    "de": "Westsüdwest",
+                    "fr": "Ouest-sud-ouest",
+                    "es": "Oestesuroeste",
+                    "it": "Ovest-sud-ovest",
+                    "da": "Vestsydvest",
+                    "sv": "Västsydväst",
+                    "no": "Vestsørvest",
+                    "pl": "Zachód-południowy zachód",
+                    "ru": "Запад-юго-запад",
+                    "ar": "غرب-جنوب غرب",
+                    "ko": "서남서"
+                  }
+                },
+                {
+                  "id": "270",
+                  "label": {
+                    "en": "West",
+                    "nl": "West",
+                    "de": "West",
+                    "fr": "Ouest",
+                    "es": "Oeste",
+                    "it": "Ovest",
+                    "da": "Vest",
+                    "sv": "Väster",
+                    "no": "Vest",
+                    "pl": "Zachód",
+                    "ru": "Запад",
+                    "ar": "غرب",
+                    "ko": "서"
+                  }
+                },
+                {
+                  "id": "292.5",
+                  "label": {
+                    "en": "West-north-west",
+                    "nl": "West-noordwest",
+                    "de": "Westnordwest",
+                    "fr": "Ouest-nord-ouest",
+                    "es": "Oestenoroeste",
+                    "it": "Ovest-nord-ovest",
+                    "da": "Vestnordvest",
+                    "sv": "Västnordväst",
+                    "no": "Vestnordvest",
+                    "pl": "Zachód-północny zachód",
+                    "ru": "Запад-северо-запад",
+                    "ar": "غرب-شمال غرب",
+                    "ko": "서북서"
+                  }
+                },
+                {
+                  "id": "315",
+                  "label": {
+                    "en": "North-west",
+                    "nl": "Noordwest",
+                    "de": "Nordwest",
+                    "fr": "Nord-ouest",
+                    "es": "Noroeste",
+                    "it": "Nord-ovest",
+                    "da": "Nordvest",
+                    "sv": "Nordväst",
+                    "no": "Nordvest",
+                    "pl": "Północny zachód",
+                    "ru": "Северо-запад",
+                    "ar": "شمال غرب",
+                    "ko": "북서"
+                  }
+                },
+                {
+                  "id": "337.5",
+                  "label": {
+                    "en": "North-north-west",
+                    "nl": "Noord-noordwest",
+                    "de": "Nordnordwest",
+                    "fr": "Nord-nord-ouest",
+                    "es": "Nornoroeste",
+                    "it": "Nord-nord-ovest",
+                    "da": "Nordnordvest",
+                    "sv": "Nordnordväst",
+                    "no": "Nordnordvest",
+                    "pl": "Północ-północny zachód",
+                    "ru": "Север-северо-запад",
+                    "ar": "شمال-شمال غرب",
+                    "ko": "북북서"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Solar forecast: accuracy",
+            "nl": "Zonneprognose: nauwkeurigheid",
+            "de": "Solarprognose: Genauigkeit",
+            "fr": "Prévision solaire : précision",
+            "es": "Previsión solar: precisión",
+            "it": "Previsione solare: precisione",
+            "da": "Solprognose: nøjagtighed",
+            "sv": "Solprognos: träffsäkerhet",
+            "no": "Solprognose: nøyaktighet",
+            "pl": "Prognoza słoneczna: dokładność",
+            "ru": "Солнечный прогноз: точность",
+            "ar": "التوقع الشمسي: الدقة",
+            "ko": "태양광 예측: 정확도"
+          },
+          "children": [
+            {
+              "id": "forecast_accuracy",
+              "type": "label",
+              "label": {
+                "en": "Last 30 days",
+                "nl": "Laatste 30 dagen",
+                "de": "Letzte 30 Tage",
+                "fr": "30 derniers jours",
+                "es": "Últimos 30 días",
+                "it": "Ultimi 30 giorni",
+                "da": "Sidste 30 dage",
+                "sv": "Senaste 30 dagarna",
+                "no": "Siste 30 dager",
+                "pl": "Ostatnie 30 dni",
+                "ru": "Последние 30 дней",
+                "ar": "آخر 30 يومًا",
+                "ko": "최근 30일"
+              },
+              "hint": {
+                "en": "The day-ahead forecast against what your panels produced. Updated each morning.",
+                "nl": "De prognose voor morgen vergeleken met wat je panelen opleverden. Elke ochtend bijgewerkt.",
+                "de": "Die Prognose für den Folgetag im Vergleich zum Ertrag Ihrer Module. Jeden Morgen aktualisiert.",
+                "fr": "La prévision de la veille comparée à la production de vos panneaux. Mise à jour chaque matin.",
+                "es": "La previsión del día anterior frente a lo que produjeron tus paneles. Se actualiza cada mañana.",
+                "it": "La previsione del giorno prima rispetto a quanto hanno prodotto i pannelli. Aggiornata ogni mattina.",
+                "da": "Prognosen for næste dag mod det, dine paneler producerede. Opdateres hver morgen.",
+                "sv": "Prognosen för nästa dag mot vad dina paneler producerade. Uppdateras varje morgon.",
+                "no": "Prognosen for neste dag mot det panelene dine produserte. Oppdateres hver morgen.",
+                "pl": "Prognoza na następny dzień w porównaniu z produkcją paneli. Aktualizowana każdego ranka.",
+                "ru": "Прогноз на следующий день в сравнении с выработкой панелей. Обновляется каждое утро.",
+                "ar": "توقع اليوم التالي مقارنة بما أنتجته ألواحك. يُحدَّث كل صباح.",
+                "ko": "하루 전 예측과 패널 실제 발전량 비교. 매일 아침 업데이트됩니다."
+              },
+              "value": ""
+            }
+          ]
         }
       ],
       "class": "solarpanel",
       "capabilities": [
         "measure_power",
-        "meter_power",
         "meter_power.day",
         "meter_power.month",
         "meter_power.year",
+        "meter_power",
         "alarm_problem",
         "alarm_connectivity"
       ],
@@ -4457,6 +6197,8 @@
         "measure_power.solar",
         "meter_power.imported",
         "meter_power.exported",
+        "solar_self_sufficiency",
+        "solar_self_consumption",
         "alarm_connectivity"
       ],
       "energy": {
@@ -5165,6 +6907,47 @@
     }
   ],
   "capabilities": {
+    "battery_backup_reserve": {
+      "type": "number",
+      "title": {
+        "en": "Backup reserve",
+        "nl": "Noodstroomreserve",
+        "de": "Notstromreserve",
+        "fr": "Réserve de secours",
+        "es": "Reserva de respaldo",
+        "it": "Riserva di backup",
+        "da": "Nødstrømsreserve",
+        "sv": "Reservkraft",
+        "no": "Nødstrømsreserve",
+        "pl": "Rezerwa awaryjna",
+        "ru": "Резерв на случай отключения",
+        "ar": "احتياطي الطوارئ",
+        "ko": "백업 예비량"
+      },
+      "units": {
+        "en": "%",
+        "nl": "%",
+        "de": "%",
+        "fr": "%",
+        "es": "%",
+        "it": "%",
+        "da": "%",
+        "sv": "%",
+        "no": "%",
+        "pl": "%",
+        "ru": "%",
+        "ar": "%",
+        "ko": "%"
+      },
+      "decimals": 0,
+      "min": 0,
+      "max": 100,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "./assets/battery_soc.svg"
+    },
     "battery_min_soc": {
       "type": "number",
       "title": {
@@ -5205,6 +6988,88 @@
       "setable": true,
       "insights": false,
       "uiComponent": "slider",
+      "icon": "./assets/battery_soc.svg"
+    },
+    "battery_soc": {
+      "type": "number",
+      "title": {
+        "en": "Battery SoC",
+        "nl": "Laadtoestand batterij",
+        "de": "Ladezustand Speicher",
+        "fr": "Charge batterie",
+        "es": "Carga de la batería",
+        "it": "Carica batteria",
+        "da": "Batteriets ladetilstand",
+        "sv": "Batteriets laddnivå",
+        "no": "Batteriets ladenivå",
+        "pl": "Naładowanie akumulatora",
+        "ru": "Заряд батареи",
+        "ar": "شحن البطارية",
+        "ko": "배터리 충전 상태"
+      },
+      "units": {
+        "en": "%",
+        "nl": "%",
+        "de": "%",
+        "fr": "%",
+        "es": "%",
+        "it": "%",
+        "da": "%",
+        "sv": "%",
+        "no": "%",
+        "pl": "%",
+        "ru": "%",
+        "ar": "%",
+        "ko": "%"
+      },
+      "decimals": 0,
+      "min": 0,
+      "max": 100,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "./assets/battery_soc.svg"
+    },
+    "battery_soh": {
+      "type": "number",
+      "title": {
+        "en": "State of Health (SoH)",
+        "nl": "Gezondheid (SoH)",
+        "de": "Gesundheitszustand (SoH)",
+        "fr": "État de santé (SoH)",
+        "es": "Estado de salud (SoH)",
+        "it": "Stato di salute (SoH)",
+        "da": "Sundhedstilstand (SoH)",
+        "sv": "Hälsotillstånd (SoH)",
+        "no": "Helsetilstand (SoH)",
+        "pl": "Stan zdrowia (SoH)",
+        "ru": "Состояние (SoH)",
+        "ar": "الحالة الصحية (SoH)",
+        "ko": "건강 상태 (SoH)"
+      },
+      "units": {
+        "en": "%",
+        "nl": "%",
+        "de": "%",
+        "fr": "%",
+        "es": "%",
+        "it": "%",
+        "da": "%",
+        "sv": "%",
+        "no": "%",
+        "pl": "%",
+        "ru": "%",
+        "ar": "%",
+        "ko": "%"
+      },
+      "decimals": 0,
+      "min": 0,
+      "max": 100,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "uiComponent": "sensor",
       "icon": "./assets/battery_soc.svg"
     },
     "ev_charge_mode": {
@@ -5686,6 +7551,457 @@
       "insights": false,
       "uiComponent": "slider",
       "icon": "./assets/session_energy_limit.svg"
+    },
+    "solar_forecast_accuracy": {
+      "type": "number",
+      "title": {
+        "en": "Forecast accuracy",
+        "nl": "Nauwkeurigheid prognose",
+        "de": "Prognosegenauigkeit",
+        "fr": "Précision des prévisions",
+        "es": "Precisión de la previsión",
+        "it": "Precisione della previsione",
+        "da": "Prognosens nøjagtighed",
+        "sv": "Prognosens träffsäkerhet",
+        "no": "Prognosens nøyaktighet",
+        "pl": "Dokładność prognozy",
+        "ru": "Точность прогноза",
+        "ar": "دقة التوقع",
+        "ko": "예측 정확도"
+      },
+      "desc": {
+        "en": "How close the day-ahead forecast came over the last 30 days: 100% less the daily error",
+        "nl": "Hoe dicht de prognose voor morgen de afgelopen 30 dagen zat: 100% min de dagelijkse afwijking",
+        "de": "Wie nah die Prognose für den Folgetag in den letzten 30 Tagen lag: 100 % minus die tägliche Abweichung",
+        "fr": "Écart de la prévision de la veille sur les 30 derniers jours : 100 % moins l’erreur quotidienne",
+        "es": "Lo cerca que estuvo la previsión del día anterior en los últimos 30 días: 100 % menos el error diario",
+        "it": "Quanto si è avvicinata la previsione del giorno prima negli ultimi 30 giorni: 100% meno l’errore giornaliero",
+        "da": "Hvor tæt prognosen for næste dag ramte de sidste 30 dage: 100 % minus den daglige fejl",
+        "sv": "Hur nära prognosen för nästa dag låg de senaste 30 dagarna: 100 % minus det dagliga felet",
+        "no": "Hvor nær prognosen for neste dag traff de siste 30 dagene: 100 % minus den daglige feilen",
+        "pl": "Jak blisko była prognoza na następny dzień w ostatnich 30 dniach: 100% minus dzienny błąd",
+        "ru": "Насколько точным был прогноз на следующий день за последние 30 дней: 100% минус дневная ошибка",
+        "ar": "مدى قرب توقع اليوم التالي خلال آخر 30 يومًا: 100% ناقص الخطأ اليومي",
+        "ko": "지난 30일 동안 하루 전 예측의 정확도: 100%에서 일일 오차를 뺀 값"
+      },
+      "units": {
+        "en": "%",
+        "nl": "%",
+        "de": "%",
+        "fr": "%",
+        "es": "%",
+        "it": "%",
+        "da": "%",
+        "sv": "%",
+        "no": "%",
+        "pl": "%",
+        "ru": "%",
+        "ar": "%",
+        "ko": "%"
+      },
+      "decimals": 0,
+      "min": 0,
+      "max": 100,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "./assets/solar_forecast.svg"
+    },
+    "solar_forecast_power": {
+      "type": "number",
+      "title": {
+        "en": "Forecast power",
+        "nl": "Verwacht vermogen",
+        "de": "Prognoseleistung",
+        "fr": "Puissance prévue",
+        "es": "Potencia prevista",
+        "it": "Potenza prevista",
+        "da": "Forventet effekt",
+        "sv": "Prognoseeffekt",
+        "no": "Prognosert effekt",
+        "pl": "Prognozowana moc",
+        "ru": "Прогноз мощности",
+        "ar": "القدرة المتوقعة",
+        "ko": "예상 출력"
+      },
+      "units": {
+        "en": "W",
+        "nl": "W",
+        "de": "W",
+        "fr": "W",
+        "es": "W",
+        "it": "W",
+        "da": "W",
+        "sv": "W",
+        "no": "W",
+        "pl": "W",
+        "ru": "W",
+        "ar": "W",
+        "ko": "W"
+      },
+      "decimals": 0,
+      "chartType": "spline",
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "./assets/solar_forecast.svg"
+    },
+    "solar_forecast_projected": {
+      "type": "number",
+      "title": {
+        "en": "Projected today",
+        "nl": "Verwacht vandaag",
+        "de": "Hochrechnung heute",
+        "fr": "Projection du jour",
+        "es": "Proyección de hoy",
+        "it": "Proiezione di oggi",
+        "da": "Forventet i dag",
+        "sv": "Beräknat idag",
+        "no": "Forventet i dag",
+        "pl": "Przewidywane dziś",
+        "ru": "Ожидается сегодня",
+        "ar": "المتوقع اليوم",
+        "ko": "오늘 예상 합계"
+      },
+      "desc": {
+        "en": "Produced so far plus the latest forecast for the rest of the day",
+        "nl": "Opbrengst tot nu toe plus de laatste prognose voor de rest van de dag",
+        "de": "Bisheriger Ertrag plus die neueste Prognose für den Rest des Tages",
+        "fr": "Production à ce stade plus la dernière prévision pour le reste de la journée",
+        "es": "Producción hasta ahora más la última previsión para el resto del día",
+        "it": "Produzione finora più l’ultima previsione per il resto della giornata",
+        "da": "Produceret indtil nu plus den seneste prognose for resten af dagen",
+        "sv": "Producerat hittills plus den senaste prognosen för resten av dagen",
+        "no": "Produsert hittil pluss den nyeste prognosen for resten av dagen",
+        "pl": "Dotychczasowa produkcja plus najnowsza prognoza na resztę dnia",
+        "ru": "Выработка на данный момент плюс последний прогноз на остаток дня",
+        "ar": "الإنتاج حتى الآن مضافًا إليه أحدث توقع لبقية اليوم",
+        "ko": "현재까지의 발전량과 남은 하루에 대한 최신 예측의 합"
+      },
+      "units": {
+        "en": "kWh",
+        "nl": "kWh",
+        "de": "kWh",
+        "fr": "kWh",
+        "es": "kWh",
+        "it": "kWh",
+        "da": "kWh",
+        "sv": "kWh",
+        "no": "kWh",
+        "pl": "kWh",
+        "ru": "кВт·ч",
+        "ar": "ك.و.س",
+        "ko": "kWh"
+      },
+      "decimals": 1,
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "uiComponent": "sensor",
+      "icon": "./assets/solar_forecast.svg"
+    },
+    "solar_forecast_remaining": {
+      "type": "number",
+      "title": {
+        "en": "Remaining today",
+        "nl": "Resterend vandaag",
+        "de": "Rest heute",
+        "fr": "Restant aujourd’hui",
+        "es": "Restante hoy",
+        "it": "Rimanente oggi",
+        "da": "Resterende i dag",
+        "sv": "Återstår idag",
+        "no": "Gjenstående i dag",
+        "pl": "Pozostało dziś",
+        "ru": "Осталось сегодня",
+        "ar": "المتبقي اليوم",
+        "ko": "오늘 남은 양"
+      },
+      "desc": {
+        "en": "The latest forecast for the rest of the day",
+        "nl": "De laatste prognose voor de rest van de dag",
+        "de": "Die neueste Prognose für den Rest des Tages",
+        "fr": "La dernière prévision pour le reste de la journée",
+        "es": "La última previsión para el resto del día",
+        "it": "L’ultima previsione per il resto della giornata",
+        "da": "Den seneste prognose for resten af dagen",
+        "sv": "Den senaste prognosen för resten av dagen",
+        "no": "Den nyeste prognosen for resten av dagen",
+        "pl": "Najnowsza prognoza na resztę dnia",
+        "ru": "Последний прогноз на остаток дня",
+        "ar": "أحدث توقع لبقية اليوم",
+        "ko": "남은 하루에 대한 최신 예측"
+      },
+      "units": {
+        "en": "kWh",
+        "nl": "kWh",
+        "de": "kWh",
+        "fr": "kWh",
+        "es": "kWh",
+        "it": "kWh",
+        "da": "kWh",
+        "sv": "kWh",
+        "no": "kWh",
+        "pl": "kWh",
+        "ru": "кВт·ч",
+        "ar": "ك.و.س",
+        "ko": "kWh"
+      },
+      "decimals": 1,
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "uiComponent": "sensor",
+      "icon": "./assets/solar_forecast.svg"
+    },
+    "solar_forecast_today": {
+      "type": "number",
+      "title": {
+        "en": "Forecast (today)",
+        "nl": "Prognose (vandaag)",
+        "de": "Prognose (heute)",
+        "fr": "Prévision (aujourd’hui)",
+        "es": "Previsión (hoy)",
+        "it": "Previsione (oggi)",
+        "da": "Prognose (i dag)",
+        "sv": "Prognos (idag)",
+        "no": "Prognose (i dag)",
+        "pl": "Prognoza (dziś)",
+        "ru": "Прогноз (сегодня)",
+        "ar": "التوقع (اليوم)",
+        "ko": "예측 (오늘)"
+      },
+      "units": {
+        "en": "kWh",
+        "nl": "kWh",
+        "de": "kWh",
+        "fr": "kWh",
+        "es": "kWh",
+        "it": "kWh",
+        "da": "kWh",
+        "sv": "kWh",
+        "no": "kWh",
+        "pl": "kWh",
+        "ru": "кВт·ч",
+        "ar": "ك.و.س",
+        "ko": "kWh"
+      },
+      "decimals": 1,
+      "chartType": "stepLine",
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "uiComponent": "sensor",
+      "icon": "./assets/solar_forecast.svg"
+    },
+    "solar_forecast_tomorrow": {
+      "type": "number",
+      "title": {
+        "en": "Forecast (tomorrow)",
+        "nl": "Prognose (morgen)",
+        "de": "Prognose (morgen)",
+        "fr": "Prévision (demain)",
+        "es": "Previsión (mañana)",
+        "it": "Previsione (domani)",
+        "da": "Prognose (i morgen)",
+        "sv": "Prognos (imorgon)",
+        "no": "Prognose (i morgen)",
+        "pl": "Prognoza (jutro)",
+        "ru": "Прогноз (завтра)",
+        "ar": "التوقع (غدًا)",
+        "ko": "예측 (내일)"
+      },
+      "units": {
+        "en": "kWh",
+        "nl": "kWh",
+        "de": "kWh",
+        "fr": "kWh",
+        "es": "kWh",
+        "it": "kWh",
+        "da": "kWh",
+        "sv": "kWh",
+        "no": "kWh",
+        "pl": "kWh",
+        "ru": "кВт·ч",
+        "ar": "ك.و.س",
+        "ko": "kWh"
+      },
+      "decimals": 1,
+      "chartType": "stepLine",
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "uiComponent": "sensor",
+      "icon": "./assets/solar_forecast.svg"
+    },
+    "solar_forecast_vs_actual": {
+      "type": "number",
+      "title": {
+        "en": "Today vs forecast",
+        "nl": "Vandaag t.o.v. prognose",
+        "de": "Heute gegenüber Prognose",
+        "fr": "Aujourd’hui vs prévision",
+        "es": "Hoy frente a la previsión",
+        "it": "Oggi rispetto alla previsione",
+        "da": "I dag mod prognose",
+        "sv": "Idag mot prognos",
+        "no": "I dag mot prognose",
+        "pl": "Dziś względem prognozy",
+        "ru": "Сегодня к прогнозу",
+        "ar": "اليوم مقابل التوقع",
+        "ko": "오늘 대비 예측"
+      },
+      "desc": {
+        "en": "Produced so far as a share of what last night’s forecast expected by now: 100% is on track",
+        "nl": "Opbrengst tot nu toe als deel van wat de prognose van gisteravond nu verwachtte: 100% is op koers",
+        "de": "Bisheriger Ertrag als Anteil dessen, was die Prognose von gestern Abend bis jetzt erwartet hat: 100 % liegt im Plan",
+        "fr": "Production à ce stade, en part de ce que la prévision d’hier soir attendait à cette heure : 100 % signifie dans les temps",
+        "es": "Producción hasta ahora como parte de lo que la previsión de anoche esperaba a esta hora: 100 % es lo previsto",
+        "it": "Produzione finora come quota di quanto la previsione di ieri sera si aspettava a quest’ora: 100% è in linea",
+        "da": "Produceret indtil nu som andel af det, gårsdagens prognose ventede på dette tidspunkt: 100 % er efter planen",
+        "sv": "Producerat hittills som andel av vad gårdagens prognos väntade sig vid det här laget: 100 % är enligt plan",
+        "no": "Produsert hittil som andel av det gårsdagens prognose ventet på dette tidspunktet: 100 % er etter planen",
+        "pl": "Dotychczasowa produkcja jako część tego, czego wczorajsza prognoza oczekiwała do teraz: 100% to zgodnie z planem",
+        "ru": "Выработка на данный момент как доля того, что ожидал вчерашний прогноз к этому часу: 100% — по плану",
+        "ar": "الإنتاج حتى الآن كنسبة مما توقعه تنبؤ الليلة الماضية حتى هذا الوقت: 100% يعني حسب الخطة",
+        "ko": "어젯밤 예측이 지금까지 예상한 양 대비 현재까지의 발전량: 100%면 예상대로입니다"
+      },
+      "units": {
+        "en": "%",
+        "nl": "%",
+        "de": "%",
+        "fr": "%",
+        "es": "%",
+        "it": "%",
+        "da": "%",
+        "sv": "%",
+        "no": "%",
+        "pl": "%",
+        "ru": "%",
+        "ar": "%",
+        "ko": "%"
+      },
+      "decimals": 0,
+      "min": 0,
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "uiComponent": "sensor",
+      "icon": "./assets/solar_forecast.svg"
+    },
+    "solar_self_consumption": {
+      "type": "number",
+      "title": {
+        "en": "Self-consumption (today)",
+        "nl": "Eigen verbruik (vandaag)",
+        "de": "Eigenverbrauch (heute)",
+        "fr": "Autoconsommation (aujourd’hui)",
+        "es": "Autoconsumo (hoy)",
+        "it": "Autoconsumo (oggi)",
+        "da": "Egetforbrug (i dag)",
+        "sv": "Egenanvändning (idag)",
+        "no": "Egetforbruk (i dag)",
+        "pl": "Autokonsumpcja (dziś)",
+        "ru": "Собственное потребление (сегодня)",
+        "ar": "الاستهلاك الذاتي (اليوم)",
+        "ko": "자가소비율 (오늘)"
+      },
+      "desc": {
+        "en": "Share of today’s solar production used at home or stored in the battery, rather than exported",
+        "nl": "Deel van de zonne-opbrengst van vandaag dat thuis is gebruikt of in de batterij opgeslagen, in plaats van teruggeleverd",
+        "de": "Anteil der heutigen Solarproduktion, der selbst verbraucht oder gespeichert statt eingespeist wurde",
+        "fr": "Part de la production solaire du jour consommée sur place ou stockée dans la batterie plutôt qu’injectée",
+        "es": "Parte de la producción solar de hoy usada en casa o almacenada en la batería en lugar de exportada",
+        "it": "Quota della produzione solare di oggi usata in casa o accumulata nella batteria invece che immessa in rete",
+        "da": "Andel af dagens solproduktion, der blev brugt hjemme eller lagret i batteriet i stedet for at blive eksporteret",
+        "sv": "Andel av dagens solproduktion som användes hemma eller lagrades i batteriet i stället för att exporteras",
+        "no": "Andel av dagens solproduksjon som ble brukt hjemme eller lagret i batteriet i stedet for å bli eksportert",
+        "pl": "Część dzisiejszej produkcji słonecznej zużyta w domu lub zmagazynowana w akumulatorze zamiast oddana do sieci",
+        "ru": "Доля сегодняшней солнечной выработки, использованная дома или сохранённая в батарее, а не отданная в сеть",
+        "ar": "نسبة إنتاج اليوم الشمسي المستخدمة في المنزل أو المخزنة في البطارية بدلًا من تصديرها",
+        "ko": "오늘 태양광 발전량 중 수출하지 않고 집에서 사용하거나 배터리에 저장한 비율"
+      },
+      "units": {
+        "en": "%",
+        "nl": "%",
+        "de": "%",
+        "fr": "%",
+        "es": "%",
+        "it": "%",
+        "da": "%",
+        "sv": "%",
+        "no": "%",
+        "pl": "%",
+        "ru": "%",
+        "ar": "%",
+        "ko": "%"
+      },
+      "decimals": 0,
+      "min": 0,
+      "max": 100,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "./assets/solar_self_sufficiency.svg"
+    },
+    "solar_self_sufficiency": {
+      "type": "number",
+      "title": {
+        "en": "Self-sufficiency (today)",
+        "nl": "Zelfvoorziening (vandaag)",
+        "de": "Autarkie (heute)",
+        "fr": "Autosuffisance (aujourd’hui)",
+        "es": "Autosuficiencia (hoy)",
+        "it": "Autosufficienza (oggi)",
+        "da": "Selvforsyning (i dag)",
+        "sv": "Självförsörjning (idag)",
+        "no": "Selvforsyning (i dag)",
+        "pl": "Samowystarczalność (dziś)",
+        "ru": "Самообеспеченность (сегодня)",
+        "ar": "الاكتفاء الذاتي (اليوم)",
+        "ko": "자급률 (오늘)"
+      },
+      "desc": {
+        "en": "Share of today’s consumption that came from your solar, directly or through the battery (grid-charged battery energy not counted)",
+        "nl": "Deel van het verbruik van vandaag dat uit je zonnepanelen kwam, direct of via de batterij (batterij-energie uit het net telt niet mee)",
+        "de": "Anteil des heutigen Verbrauchs aus Ihrer Solaranlage, direkt oder über den Speicher (aus dem Netz geladene Speicherenergie zählt nicht)",
+        "fr": "Part de la consommation du jour couverte par vos panneaux, directement ou via la batterie (l’énergie de batterie chargée sur le réseau n’est pas comptée)",
+        "es": "Parte del consumo de hoy que vino de tus paneles, directamente o a través de la batería (la energía de batería cargada de la red no cuenta)",
+        "it": "Quota del consumo di oggi coperta dai tuoi pannelli, direttamente o tramite la batteria (l’energia della batteria caricata dalla rete non conta)",
+        "da": "Andel af dagens forbrug, der kom fra dine solceller, direkte eller via batteriet (batterienergi ladet fra nettet tæller ikke)",
+        "sv": "Andel av dagens förbrukning som kom från dina solceller, direkt eller via batteriet (batterienergi laddad från nätet räknas inte)",
+        "no": "Andel av dagens forbruk som kom fra solcellene dine, direkte eller via batteriet (batterienergi ladet fra nettet teller ikke)",
+        "pl": "Część dzisiejszego zużycia pokryta przez panele, bezpośrednio lub przez akumulator (energia akumulatora ładowana z sieci się nie liczy)",
+        "ru": "Доля сегодняшнего потребления от ваших панелей, напрямую или через батарею (энергия батареи, заряженной от сети, не учитывается)",
+        "ar": "نسبة استهلاك اليوم التي جاءت من ألواحك الشمسية، مباشرة أو عبر البطارية (لا تُحتسب طاقة البطارية المشحونة من الشبكة)",
+        "ko": "오늘 소비량 중 태양광에서 직접 또는 배터리를 통해 공급된 비율 (전력망으로 충전한 배터리 에너지는 제외)"
+      },
+      "units": {
+        "en": "%",
+        "nl": "%",
+        "de": "%",
+        "fr": "%",
+        "es": "%",
+        "it": "%",
+        "da": "%",
+        "sv": "%",
+        "no": "%",
+        "pl": "%",
+        "ru": "%",
+        "ar": "%",
+        "ko": "%"
+      },
+      "decimals": 0,
+      "min": 0,
+      "max": 100,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "./assets/solar_self_sufficiency.svg"
     },
     "solaredge-home-load-controller-state": {
       "type": "enum",

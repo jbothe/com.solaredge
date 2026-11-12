@@ -27,7 +27,8 @@
     "noCarConnected": "Aucune voiture branchée.",
     "noChargingSession": "Aucune session de charge : branchez d'abord une voiture.",
     "phaseSwitchingOff": "Activez d'abord « Commutation de phases via Modbus » dans les réglages de l'appareil.",
-    "batteryMerged": "N'est plus utilisé : cette batterie fait maintenant partie du premier appareil batterie de son onduleur. Supprimez cet appareil."
+    "batteryMerged": "N'est plus utilisé : cette batterie fait maintenant partie du premier appareil batterie de son onduleur. Supprimez cet appareil.",
+    "forecastFirstGroup": "Indiquez combien de panneaux compte le premier groupe, pour pouvoir pondérer les groupes entre eux."
   },
   "migrating": "Mise à jour des capacités…",
   "pair": {
@@ -51,5 +52,10 @@
       "basic": "De base",
       "unavailable": "Non disponible"
     }
+  },
+  "forecast": {
+    "notReady": "La prévision solaire n’est pas encore disponible.",
+    "accuracyPending": "Pas encore assez de jours : l’évaluation commence après __needed__ jours de prévisions de la veille (__days__ jusqu’ici).",
+    "accuracySummary": "__accuracy__ % sur __days__ jours. Erreur quotidienne __error__ %, biais __bias__ % (au-dessus de 0, prévision trop haute). Production réelle dans la fourchette __coverage__ % des jours (80 % est idéal). Erreur horaire __hourly__ %."
   }
 }

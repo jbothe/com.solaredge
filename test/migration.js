@@ -31,7 +31,9 @@ const deviceCapabilities = require('../lib/deviceCapabilities');
 
 const ROOT = path.join(__dirname, '..');
 
-// v1.8.1 devices; the meter added measure_power.grid and .solar on its first poll
+// v1.8.1 devices; the meter added measure_power.grid and .solar on its first poll. The inverter's
+// energy meters are in the order of the fork (jbothe/com.solaredge) that this app continues: its
+// devices keep theirs, a v1.8.1 device (never paired with this app) has them rebuilt.
 const CASES = [
   {
     name: 'meter from 1.8.1',
@@ -40,7 +42,8 @@ const CASES = [
     values: {
       'meter_power.imported': 1234, 'meter_power.exported': 567, 'measure_power.grid': -800, 'measure_power.solar': 2400,
     },
-    expected: ['measure_power', 'measure_power.load', 'measure_power.solar', 'measure_power.grid', 'meter_power.imported', 'meter_power.exported', 'alarm_connectivity'],
+    expected: ['measure_power', 'measure_power.load', 'measure_power.solar', 'measure_power.grid', 'meter_power.imported', 'meter_power.exported',
+      'solar_self_sufficiency', 'solar_self_consumption', 'alarm_connectivity'],
     keep: [],
   },
   {
@@ -60,7 +63,8 @@ const CASES = [
     capabilities: ['measure_battery', 'measure_power', 'battery_charging_state'],
     energy: { homeBattery: true, batteries: ['INTERNAL'] },
     values: { measure_battery: 55 },
-    expected: ['measure_power', 'measure_battery', 'battery_charging_state', 'meter_power.charged', 'meter_power.discharged', 'alarm_connectivity'],
+    expected: ['measure_power', 'measure_battery', 'battery_charging_state', 'meter_power.charged', 'meter_power.discharged',
+      'meter_power.charged_solar_today', 'meter_power.charged_grid_today', 'alarm_connectivity'],
     keep: [],
   },
   {
@@ -69,8 +73,8 @@ const CASES = [
     capabilities: ['measure_power', 'meter_power', 'meter_power.day', 'meter_power.month', 'meter_power.year'],
     values: { meter_power: 29337.6, 'meter_power.day': 6.2 },
     options: { meter_power: { decimals: 2 } },
-    expected: ['measure_power', 'meter_power', 'meter_power.day', 'meter_power.month', 'meter_power.year', 'alarm_problem', 'alarm_connectivity'],
-    keep: ['measure_power', 'meter_power', 'meter_power.day', 'meter_power.month', 'meter_power.year'],
+    expected: ['measure_power', 'meter_power.day', 'meter_power.month', 'meter_power.year', 'meter_power', 'alarm_problem', 'alarm_connectivity'],
+    keep: ['measure_power'],
   },
   {
     name: 'inverter that reported phase 1 and temperature',
@@ -78,9 +82,9 @@ const CASES = [
     capabilities: ['measure_power', 'meter_power', 'meter_power.day', 'meter_power.month', 'meter_power.year', 'alarm_problem', 'alarm_connectivity'],
     store: { seenCaps: { 'measure_voltage.1': true, 'measure_temperature.max': true } },
     values: { alarm_problem: false },
-    expected: ['measure_power', 'meter_power', 'meter_power.day', 'meter_power.month', 'meter_power.year',
+    expected: ['measure_power', 'meter_power.day', 'meter_power.month', 'meter_power.year', 'meter_power',
       'measure_temperature.max', 'measure_voltage.1', 'alarm_problem', 'alarm_connectivity'],
-    keep: ['measure_power', 'meter_power', 'meter_power.day', 'meter_power.month', 'meter_power.year'],
+    keep: ['measure_power'],
   },
   {
     // paired before sunrise: the optimizer temperature comes in the morning
@@ -90,9 +94,9 @@ const CASES = [
       'measure_voltage.1', 'inverter_status', 'alarm_problem', 'alarm_connectivity'],
     store: { seenCaps: { 'measure_voltage.1': true, inverter_status: true, 'measure_temperature.max': true } },
     values: {},
-    expected: ['measure_power', 'meter_power', 'meter_power.day', 'meter_power.month', 'meter_power.year',
+    expected: ['measure_power', 'meter_power.day', 'meter_power.month', 'meter_power.year', 'meter_power',
       'measure_temperature.max', 'measure_voltage.1', 'inverter_status', 'alarm_problem', 'alarm_connectivity'],
-    keep: ['measure_power', 'meter_power', 'meter_power.day', 'meter_power.month', 'meter_power.year'],
+    keep: ['measure_power'],
   },
   {
     name: 'inverter with phase power, phase current and DC voltage',
@@ -105,9 +109,46 @@ const CASES = [
       },
     },
     values: { 'measure_voltage.1': 234.8, inverter_status: 'production' },
-    expected: ['measure_power', 'meter_power', 'meter_power.day', 'meter_power.month', 'meter_power.year', 'measure_temperature.max',
+    expected: ['measure_power', 'meter_power.day', 'meter_power.month', 'meter_power.year', 'meter_power', 'measure_temperature.max',
       'measure_voltage.1', 'inverter_status', 'alarm_problem', 'alarm_connectivity'],
-    keep: ['measure_power', 'meter_power', 'meter_power.day', 'meter_power.month', 'meter_power.year', 'measure_temperature.max', 'measure_voltage.1'],
+    keep: ['measure_power'],
+  },
+  // devices as the fork (bothe.family.solaredge before it was based on v2) left them
+  {
+    name: 'inverter from the fork, with its forecast',
+    driverId: 'inverter',
+    capabilities: ['measure_power', 'solar_forecast_power', 'solar_forecast_today', 'solar_forecast_tomorrow', 'meter_power.day', 'meter_power.month',
+      'meter_power.year', 'meter_power', 'solar_forecast_vs_actual', 'solar_forecast_projected', 'solar_forecast_remaining', 'solar_forecast_accuracy'],
+    values: { solar_forecast_accuracy: 84, meter_power: 41234.5 },
+    expected: ['measure_power', 'solar_forecast_power', 'solar_forecast_today', 'solar_forecast_tomorrow', 'meter_power.day', 'meter_power.month',
+      'meter_power.year', 'meter_power', 'solar_forecast_vs_actual', 'solar_forecast_projected', 'solar_forecast_remaining', 'solar_forecast_accuracy',
+      'alarm_problem', 'alarm_connectivity'],
+    keep: ['measure_power', 'solar_forecast_power', 'solar_forecast_today', 'solar_forecast_tomorrow', 'meter_power.day', 'meter_power.month',
+      'meter_power.year', 'meter_power', 'solar_forecast_vs_actual', 'solar_forecast_projected', 'solar_forecast_remaining', 'solar_forecast_accuracy'],
+  },
+  {
+    name: 'meter from the fork',
+    driverId: 'meter',
+    capabilities: ['measure_power', 'measure_power.consumption', 'alarm_generic', 'solar_self_sufficiency', 'solar_self_consumption',
+      'meter_power.imported_today', 'meter_power.exported_today', 'meter_power.imported_total', 'meter_power.exported_total'],
+    values: { solar_self_sufficiency: 16 },
+    expected: ['measure_power', 'measure_power.load', 'measure_power.solar', 'meter_power.imported', 'meter_power.exported',
+      'solar_self_sufficiency', 'solar_self_consumption', 'alarm_connectivity'],
+    keep: ['measure_power'],
+  },
+  {
+    name: 'battery from the fork',
+    driverId: 'battery',
+    capabilities: ['measure_battery', 'measure_power', 'battery_charging_state', 'meter_power.charged_today', 'meter_power.charged_solar_today',
+      'meter_power.charged_grid_today', 'meter_power.discharged_today', 'meter_power.charged_total', 'meter_power.discharged_total', 'battery_soh',
+      'battery_backup_reserve'],
+    energy: {
+      homeBattery: true, batteries: ['INTERNAL'], meterPowerImportedCapability: 'meter_power.charged_total', meterPowerExportedCapability: 'meter_power.discharged_total',
+    },
+    values: { measure_battery: 80, 'meter_power.charged_solar_today': 1.25 },
+    expected: ['measure_power', 'measure_battery', 'battery_charging_state', 'meter_power.charged', 'meter_power.discharged',
+      'meter_power.charged_solar_today', 'meter_power.charged_grid_today', 'alarm_connectivity'],
+    keep: [],
   },
   {
     name: 'battery that reported its health',
@@ -115,7 +156,8 @@ const CASES = [
     capabilities: ['measure_power', 'measure_battery', 'battery_charging_state', 'meter_power.charged', 'meter_power.discharged', 'alarm_connectivity'],
     store: { seenCaps: { measure_soh: true } },
     values: { 'meter_power.charged': 12.5 },
-    expected: ['measure_power', 'measure_battery', 'battery_charging_state', 'meter_power.charged', 'meter_power.discharged', 'measure_soh', 'alarm_connectivity'],
+    expected: ['measure_power', 'measure_battery', 'battery_charging_state', 'meter_power.charged', 'meter_power.discharged',
+      'meter_power.charged_solar_today', 'meter_power.charged_grid_today', 'measure_soh', 'alarm_connectivity'],
     keep: ['measure_power', 'measure_battery', 'battery_charging_state', 'meter_power.charged', 'meter_power.discharged'],
   },
   ...manifest.drivers.map((driver) => ({

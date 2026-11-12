@@ -167,6 +167,12 @@
         },
         "meter_power.discharged": {
           "title": "Entladene Energie"
+        },
+        "meter_power.charged_solar_today": {
+          "title": "Aus Solar geladen (heute)"
+        },
+        "meter_power.charged_grid_today": {
+          "title": "Aus dem Netz geladen (heute)"
         }
       }
     },

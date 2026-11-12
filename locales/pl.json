@@ -27,7 +27,8 @@
     "noCarConnected": "Brak podłączonego samochodu.",
     "noChargingSession": "Brak sesji ładowania: najpierw podłącz samochód.",
     "phaseSwitchingOff": "Najpierw włącz „Przełączanie faz przez Modbus” w ustawieniach urządzenia.",
-    "batteryMerged": "Nieużywane: ten magazyn energii jest teraz częścią pierwszego urządzenia magazynu energii falownika. Usuń to urządzenie."
+    "batteryMerged": "Nieużywane: ten magazyn energii jest teraz częścią pierwszego urządzenia magazynu energii falownika. Usuń to urządzenie.",
+    "forecastFirstGroup": "Podaj, ile paneli ma pierwsza grupa, aby można było zważyć grupy względem siebie."
   },
   "migrating": "Aktualizowanie funkcji…",
   "pair": {
@@ -51,5 +52,10 @@
       "basic": "Podstawowe",
       "unavailable": "Niedostępne"
     }
+  },
+  "forecast": {
+    "notReady": "Prognoza słoneczna nie jest jeszcze dostępna.",
+    "accuracyPending": "Za mało dni: ocena zaczyna się po __needed__ dniach prognoz na następny dzień (na razie __days__).",
+    "accuracySummary": "__accuracy__% w ciągu __days__ dni. Błąd dzienny __error__%, odchylenie __bias__% (powyżej 0 to prognoza zawyżona). Rzeczywista produkcja w zakresie prognozy przez __coverage__% dni (idealnie 80%). Błąd godzinowy __hourly__%."
   }
 }

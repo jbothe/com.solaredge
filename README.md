@@ -6,6 +6,13 @@ Powering People's Lives Around the World
 
 Connect your SolarEdge installation to [Homey](https://homey.app) and follow your solar production, battery, grid and EV charging live. Use the data in Flows and in Homey Energy.
 
+> **This fork** (app id `bothe.family.solaredge`, a separate app from the store's `com.solaredge`) is R.M. de Gruijter's [com.solaredge](https://github.com/gruijter/com.solaredge) v2.2.0 plus:
+>
+> - **Solar forecast** on the inverter: expected power now, today and tomorrow (with a low/high range), today against the forecast, projected and remaining today, and its accuracy over the last 30 days. It uses Open-Meteo's weather forecast (no key needed) and learns from the site's own production: a calibration factor, a seasonal profile and an hourly shading profile. Up to three panel groups (count, tilt, direction) are set in the inverter's settings. On a site with several inverters it runs on the one with the lowest serial number. Flow cards: *Tomorrow's solar forecast changed*, *Tomorrow's solar forecast is above…* and *Expected solar power at a time is above…*.
+> - **Self-sufficiency and self-consumption (today)** on the meter. Battery energy counts towards self-sufficiency only for the share of the battery's charge that came from solar.
+> - **Charged from solar / from grid (today)** on the battery.
+> - **Steady power kept current in Homey Energy:** Homey only marks a capability as updated when its value changes, and the Energy tab drops a power that has stayed the same for a while (a battery charging at a constant rate, say). A power held unchanged for 5 minutes is written 1 W towards zero and straight back. 0 W is left alone. A *power changed* Flow runs on both writes.
+
 The app connects in two ways:
 
 - **Cloud:** with your **mySolarEdge** account (the e-mail address and password of the mySolarEdge app). No API key or installer access needed. Works on every Homey, including Homey Cloud.

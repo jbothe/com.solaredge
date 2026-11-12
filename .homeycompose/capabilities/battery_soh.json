@@ -1,0 +1,41 @@
+{
+  "type": "number",
+  "title": {
+    "en": "State of Health (SoH)",
+    "nl": "Gezondheid (SoH)",
+    "de": "Gesundheitszustand (SoH)",
+    "fr": "État de santé (SoH)",
+    "es": "Estado de salud (SoH)",
+    "it": "Stato di salute (SoH)",
+    "da": "Sundhedstilstand (SoH)",
+    "sv": "Hälsotillstånd (SoH)",
+    "no": "Helsetilstand (SoH)",
+    "pl": "Stan zdrowia (SoH)",
+    "ru": "Состояние (SoH)",
+    "ar": "الحالة الصحية (SoH)",
+    "ko": "건강 상태 (SoH)"
+  },
+  "units": {
+    "en": "%",
+    "nl": "%",
+    "de": "%",
+    "fr": "%",
+    "es": "%",
+    "it": "%",
+    "da": "%",
+    "sv": "%",
+    "no": "%",
+    "pl": "%",
+    "ru": "%",
+    "ar": "%",
+    "ko": "%"
+  },
+  "decimals": 0,
+  "min": 0,
+  "max": 100,
+  "getable": true,
+  "setable": false,
+  "insights": true,
+  "uiComponent": "sensor",
+  "icon": "./assets/battery_soc.svg"
+}
