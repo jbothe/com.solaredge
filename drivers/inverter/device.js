@@ -296,7 +296,9 @@ module.exports = class SolarEdgeInverterDevice extends CommonDevice {
 
   /** For the condition 'tomorrow's solar forecast is above': estimate p10, p50 or p90. */
   forecastTomorrowAbove(estimate, kwh) {
-    return this.solarForecast.summary().tomorrow[estimate] / 1000 > kwh;
+    const { tomorrow } = this.solarForecast.summary();
+    if (!tomorrow) throw new Error(this.homey.__('forecast.notReady'));
+    return tomorrow[estimate] / 1000 > kwh;
   }
 
   /** For the condition 'expected solar power at a time is above': time 'HH:MM'. */

@@ -926,6 +926,69 @@ const test = (name, fn) => tests.push({ name, fn });
     assert.equal(device.getCapabilityValue('solar_forecast_projected'), null);
   });
 
+  test('a failed refresh keeps today\'s forecast and its tiles moving', async () => {
+    const { device, triggered, openMeteo } = newInverter();
+    const fc = device.solarForecast;
+    await fc.update();
+    const tomorrow = device.getCapabilityValue('solar_forecast_tomorrow');
+    openMeteo.getForecast = async () => {
+      throw new Error('Open-Meteo request timed out after 30000ms');
+    };
+
+    // the hourly refresh fails: the tiles are still set from the forecast it has, and it's logged
+    fc.fetchedAt = 0;
+    await device.setCapabilityValue('solar_forecast_power', -1);
+    await fc.update();
+    assert.equal(typeof device.getCapabilityValue('solar_forecast_power'), 'number');
+    assert.notEqual(device.getCapabilityValue('solar_forecast_power'), -1);
+    assert.equal(device.getCapabilityValue('solar_forecast_tomorrow'), tomorrow);
+    assert.equal(device.problems.length, 1);
+    assert.match(device.problems[0], /keeping the one from .*timed out/);
+    assert.equal(fc.fetchedAt, 0, 'tried again next tick');
+
+    // a new day with yesterday's forecast: today from it, tomorrow unknown rather than zero
+    const today = localDate(new Date(), TIME_ZONE);
+    delete fc.forecast.days[addDays(today, 1)];
+    fc.forecastDate = addDays(today, -1);
+    await fc.update();
+    assert.ok(device.getCapabilityValue('solar_forecast_today') > 0);
+    assert.equal(device.getCapabilityValue('solar_forecast_tomorrow'), null);
+    assert.throws(() => device.forecastTomorrowAbove('p50', 1), /isn’t available yet/);
+    assert.equal(triggered.length, 1, 'no trigger for an unknown tomorrow');
+
+    // nothing for today at all: the tiles are cleared and the conditions say so
+    delete fc.forecast.days[today];
+    await assert.rejects(fc.update(), /timed out/);
+    for (const capability of ['solar_forecast_power', 'solar_forecast_today', 'solar_forecast_tomorrow']) {
+      assert.equal(device.getCapabilityValue(capability), null, capability);
+    }
+    assert.throws(() => device.forecastPowerAtAbove('12:00', 1), /isn’t available yet/);
+
+    // once Open-Meteo answers again, all is back
+    openMeteo.getForecast = fakeOpenMeteo().getForecast;
+    await fc.update();
+    assert.equal(device.getCapabilityValue('solar_forecast_tomorrow'), tomorrow);
+  });
+
+  test('a failed calibration keeps the previous one and still forecasts', async () => {
+    const { device, openMeteo } = newInverter();
+    const fc = device.solarForecast;
+    await fc.update();
+    const calibration = device.getStoreValue('forecastCalibration');
+    // due again (another day's), but the history it needs doesn't come
+    await device.setStoreValue('forecastCalibration', { ...calibration, date: '2000-01-01' });
+    fc.calibrationAttempt = 0;
+    fc.timeZone = 'Etc/GMT-14'; // past CALIBRATE_AFTER_HOUR whenever the test runs
+    openMeteo.getDayAheadHistory = async () => {
+      throw new Error('previous-runs down');
+    };
+    fc.forecaster.history = null;
+    await fc.update();
+    assert.deepEqual(device.problems, ['error: Error calibrating the forecast: previous-runs down']);
+    assert.equal(device.getStoreValue('forecastCalibration').date, '2000-01-01');
+    assert.equal(typeof device.getCapabilityValue('solar_forecast_power'), 'number');
+  });
+
   test('on a site with several inverters only the lowest serial runs it', async () => {
     const serials = ['7E1DBB39-B2', '7E1DBB12-A1'];
     const first = newInverter({ data: { siteId: 1, serialNumber: '7E1DBB12-A1' }, client: fakeClient(serials) });
